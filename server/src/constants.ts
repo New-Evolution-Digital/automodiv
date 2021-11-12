@@ -1,7 +1,5 @@
-import dotenv from "dotenv-safe";
+import dotenv from "dotenv";
 
-const { required, error, parsed } = dotenv.config();
+dotenv.config();
 
-console.log(required, error, parsed);
-
-export const __prod__ = false;
+export const __prod__ = process.env.NODE_ENV === "production";
