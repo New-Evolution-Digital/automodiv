@@ -22,7 +22,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "allowJs": true
+    "allowJs": true,
+    "types": ["./src/types"]
   },
   "exclude": ["node_modules"],
   "include": ["./src/**/*.ts", "ormconfig.ts"]

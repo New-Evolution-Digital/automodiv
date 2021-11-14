@@ -1,19 +1,55 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Field, ID, ObjectType } from "type-graphql";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import { DealershipOrganization } from "./DealershipOrganization";
+import { IDealershipUser } from "../interfaces/IDealershipUser";
 
 @Entity()
-export class DealershipRootUser {
+@ObjectType()
+export class DealershipRootUser extends BaseEntity implements IDealershipUser {
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
-  id: number;
+  readonly id: number;
 
+  @Field()
   @Column()
   firstName: string;
 
+  @Field()
   @Column()
   lastName: string;
 
-  @Column()
+  @Field()
+  @Column({ unique: true })
   username: string;
+
+  @Field()
+  @Column({ unique: true })
+  email: string;
 
   @Column()
   password: string;
+
+  @Field(() => DealershipOrganization)
+  @OneToOne(() => DealershipOrganization, (org) => org.dealershipRootUser, {
+    cascade: ["insert"],
+  })
+  @JoinColumn()
+  dealershipOrganization: Lazy<DealershipOrganization>;
+
+  @Field()
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: string;
+
+  @Field()
+  @UpdateDateColumn({ type: "timestamp" })
+  updatedAt: string;
 }
