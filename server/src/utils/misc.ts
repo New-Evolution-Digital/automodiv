@@ -24,3 +24,7 @@ export function allStringsToLowerCase<T>(
   }
   return obj;
 }
+
+export function makeDbSearchable(str: string): string {
+  return str.trim().toLowerCase();
+}

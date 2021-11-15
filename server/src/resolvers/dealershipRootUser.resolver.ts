@@ -1,12 +1,24 @@
-import { Arg, Args, Int, Mutation, Query, Resolver } from "type-graphql";
-import agron from "argon2";
+import { Arg, Args, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import argon from "argon2";
 import { DealershipRootUser } from "../entities/DealershipRootUser";
-import { InputNewRootUser } from "./InputTypes";
+import { InputNewRootUser, UserLogin } from "./InputTypes";
 import * as misc from "../utils/misc";
 import { DealershipOrganization } from "../entities/DealershipOrganization";
+import { ApolloError } from "apollo-server-express";
 
 @Resolver(DealershipRootUser)
 export class DealershipRootDealerResolver {
+  @Query(() => DealershipRootUser)
+  async me(@Ctx() { req }: ServerContext) {
+    if (!req.session.userId) {
+      return new ApolloError("No authenticated user");
+    }
+
+    return await DealershipRootUser.findOne(req.session.userId, {
+      relations: ["dealershipOrganization"],
+    });
+  }
+
   @Query(() => [DealershipRootUser])
   async getAllRootUsers() {
     return await DealershipRootUser.find({
@@ -16,12 +28,29 @@ export class DealershipRootDealerResolver {
 
   @Mutation(() => DealershipRootUser)
   async registerRootUser(
-    @Args() { firstName, lastName, username, email, password }: InputNewRootUser
+    @Args()
+    { firstName, lastName, username, email, password }: InputNewRootUser,
+    @Ctx() { req }: ServerContext
   ) {
-    const pw = await agron.hash(password);
+    if (password.length < 6) {
+      return new ApolloError("Password is too short");
+    }
     const credentials = misc.allStringsToLowerCase(
       misc.trimStringsInObject({ firstName, lastName, username, email })
     );
+
+    if (credentials.username.length < 6) {
+      return new ApolloError("Username is too short");
+    }
+
+    if (/@\w+.\w+/g.test(credentials.username)) {
+      return new ApolloError("Username can't look like an email");
+    }
+
+    if (!/@\w+.\w+/g.test(credentials.email)) {
+      return new ApolloError("Email may not be valid");
+    }
+    const pw = await argon.hash(password);
 
     const org = DealershipOrganization.create();
     await org.save();
@@ -37,7 +66,50 @@ export class DealershipRootDealerResolver {
     org.rootUserId = newUser.id;
     await org.save();
 
+    req.session.userId = newUser.id;
+
     return newUser;
+  }
+
+  @Mutation(() => DealershipRootUser)
+  async login(
+    @Ctx() { req }: ServerContext,
+    @Arg("login") { password, username, email }: UserLogin
+  ) {
+    if (req.session.userId) {
+      return await DealershipRootUser.findOne(req.session.userId, {
+        relations: ["dealershipOrganization"],
+      });
+    }
+
+    if ((!email && !username) || !password) {
+      return new ApolloError("Missing Credentials");
+    }
+
+    let found: DealershipRootUser | undefined;
+
+    if (email)
+      found = await DealershipRootUser.findOne({
+        where: { email: misc.makeDbSearchable(email) },
+      });
+    else if (username)
+      found = await DealershipRootUser.findOne({
+        where: { username: misc.makeDbSearchable(username) },
+      });
+
+    if (!found) {
+      return new ApolloError("No user matching credentials");
+    }
+
+    if (!(await argon.verify(found.password, password))) {
+      return new ApolloError("No user matching credentials");
+    }
+
+    req.session.userId = found.id;
+
+    return await DealershipRootUser.findOne(found.id, {
+      relations: ["dealershipOrganization"],
+    });
   }
 
   @Mutation(() => Boolean)
