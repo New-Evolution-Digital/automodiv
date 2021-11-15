@@ -4,12 +4,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { DealershipRootUser } from ".";
 import { ILocation } from "../interfaces/ILocation";
-import { DealershipRootUser } from "./DealershipRootUser";
 
 @Entity()
 @ObjectType()
@@ -42,8 +43,17 @@ export class DealershipOrganization extends BaseEntity implements ILocation {
   @Column({ nullable: true })
   name?: string;
 
-  @OneToOne(() => DealershipRootUser, (user) => user.dealershipOrganization)
-  dealershipRootUser: Lazy<DealershipRootUser>;
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "int" })
+  default_dealer_number?: number;
+
+  @Column({ nullable: true })
+  rootUserId: number;
+
+  @Field({ nullable: true })
+  @OneToOne(() => DealershipRootUser, { eager: true })
+  @JoinColumn()
+  rootUser: DealershipRootUser;
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })

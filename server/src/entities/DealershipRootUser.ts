@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { DealershipOrganization } from "./DealershipOrganization";
+import { DealershipOrganization } from ".";
 import { IDealershipUser } from "../interfaces/IDealershipUser";
 
 @Entity()
@@ -38,12 +38,13 @@ export class DealershipRootUser extends BaseEntity implements IDealershipUser {
   @Column()
   password: string;
 
+  @Column({ nullable: true })
+  dealershipOrganizationId: number;
+
   @Field(() => DealershipOrganization)
-  @OneToOne(() => DealershipOrganization, (org) => org.dealershipRootUser, {
-    cascade: ["insert"],
-  })
+  @OneToOne(() => DealershipOrganization)
   @JoinColumn()
-  dealershipOrganization: Lazy<DealershipOrganization>;
+  dealershipOrganization: DealershipOrganization;
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })

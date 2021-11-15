@@ -1,3 +1,4 @@
-import TestResolver from "./test.resolver";
+import { OrganizationResolver } from "./dealershipOrganization.resolver";
+import { DealershipRootDealerResolver } from "./dealershipRootUser.resolver";
 
-export { TestResolver };
+export { OrganizationResolver, DealershipRootDealerResolver };

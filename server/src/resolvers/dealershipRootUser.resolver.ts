@@ -23,17 +23,21 @@ export class DealershipRootDealerResolver {
       misc.trimStringsInObject({ firstName, lastName, username, email })
     );
 
-    const newUser = new DealershipRootUser();
-    newUser.firstName = credentials.firstName;
-    newUser.lastName = credentials.lastName;
-    newUser.email = credentials.email;
-    newUser.username = credentials.username;
-    newUser.password = pw;
-    const newOrg = new DealershipOrganization();
-    newUser.dealershipOrganization = newOrg;
-    const user = await newUser.save();
+    const org = DealershipOrganization.create();
+    await org.save();
+    const newUser = DealershipRootUser.create({
+      firstName: credentials.firstName,
+      lastName: credentials.lastName,
+      email: credentials.email,
+      username: credentials.username,
+      password: pw,
+      dealershipOrganizationId: org.id,
+    });
+    await newUser.save();
+    org.rootUserId = newUser.id;
+    await org.save();
 
-    return await DealershipRootUser.findOne(user.id);
+    return newUser;
   }
 
   @Mutation(() => Boolean)
