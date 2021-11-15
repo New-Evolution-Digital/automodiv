@@ -1,8 +1,10 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
-import { Popover, Transition } from '@headlessui/react'
+import { Popover } from '@headlessui/react'
+import Link from 'next/link'
 
 import joinClasses from '../../../utils/joinClasses'
+import { PopOverMenu } from '../index'
 import { useMenuState } from './useMenuState'
 
 const DesktopMenu = () => {
@@ -28,6 +30,13 @@ const DesktopMenu = () => {
               {/* Flyout menus */}
               <Popover.Group className="px-4 bottom-0 inset-x-0">
                 <div className="h-full flex justify-center space-x-8">
+                  {get.pages.indexPages.map((page) => (
+                    <Link key={page.name} href={page.href} passHref>
+                      <a className="flex items-center text-sm font-medium text-white">
+                        {page.name}
+                      </a>
+                    </Link>
+                  ))}
                   {get.pages.catPages.map((category) => (
                     <Popover key={category.name} className="flex">
                       {() => (
@@ -45,66 +54,22 @@ const DesktopMenu = () => {
                             </Popover.Button>
                           </div>
 
-                          <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-200"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="transition ease-in duration-150"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                          >
-                            <Popover.Panel className="absolute top-full inset-x-0 text-sm text-gray-500">
-                              {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                              <div
-                                className="absolute inset-0 top-1/2 bg-white shadow"
-                                aria-hidden="true"
+                          <PopOverMenu.Panel>
+                            {category.featured.map((item) => (
+                              <PopOverMenu.MenuItem
+                                key={item.name}
+                                href="#"
+                                linkText={item.name}
+                                image={{
+                                  src: item.imageSrc,
+                                  alt: item.imageAlt
+                                }}
                               />
-
-                              <div className="relative bg-white">
-                                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                                  <div className="grid grid-cols-3 gap-y-10 gap-x-8 py-16">
-                                    {category.featured.map((item) => (
-                                      <div
-                                        key={item.name}
-                                        className="group relative"
-                                      >
-                                        <div className="aspect-w-1 aspect-h-1 rounded-md bg-gray-100 overflow-hidden group-hover:opacity-75">
-                                          <img
-                                            src={item.imageSrc}
-                                            alt={item.imageAlt}
-                                            className="object-center object-cover"
-                                          />
-                                        </div>
-                                        <a
-                                          href={item.href}
-                                          className="mt-4 block font-medium text-gray-900"
-                                        >
-                                          <span
-                                            className="absolute z-10 inset-0"
-                                            aria-hidden="true"
-                                          />
-                                          {item.name}
-                                        </a>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-                            </Popover.Panel>
-                          </Transition>
+                            ))}
+                          </PopOverMenu.Panel>
                         </>
                       )}
                     </Popover>
-                  ))}
-                  {get.pages.indexPages.map((page) => (
-                    <a
-                      key={page.name}
-                      href={page.href}
-                      className="flex items-center text-sm font-medium text-white"
-                    >
-                      {page.name}
-                    </a>
                   ))}
                 </div>
               </Popover.Group>
