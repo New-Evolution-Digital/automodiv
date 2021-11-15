@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { Menu } from './components'
+import { Menu, Nav } from './components'
 
 const index: FC = () => {
   return (
@@ -25,26 +25,7 @@ const index: FC = () => {
         <header className="relative z-10">
           <nav aria-label="Top">
             {/* Top navigation */}
-            <div className="bg-gray-900 flex">
-              <div className="flex-1" />
-              <div className="container-desktop h-10 px-4 flex items-center justify-between">
-                <div className="flex items-center space-x-6">
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-white hover:text-gray-100"
-                  >
-                    Sign in
-                  </a>
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-white hover:text-gray-100"
-                  >
-                    Create an account
-                  </a>
-                </div>
-              </div>
-            </div>
-
+            <Nav.AuthBar />
             <Menu.DesktopMenu />
           </nav>
         </header>
