@@ -1,0 +1,29 @@
+@tailwind base;
+
+a {
+  @apply text-blue-700;
+}
+
+a:hover {
+  @apply border-b-2 border-blue-700;
+}
+
+@tailwind components;
+
+@tailwind utilities;
+
+.content p {
+  @apply my-6;
+}
+
+.content ul {
+  @apply my-6;
+}
+
+.container-desktop {
+  @apply max-w-7xl mx-auto sm:px-6 lg:px-8;
+}
+
+.timed-transition {
+  @apply transition-opacity duration-300;
+}

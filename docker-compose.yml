@@ -1,5 +1,19 @@
 version: "3"
 services:
+  dealer_client:
+    build:
+      context: ./dealer_client
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - "3000:3000"
+    expose:
+      - 3000
+    depends_on:
+      - server
+    volumes:
+      - ./dealer_client:/app
+
   server:
     build:
       context: ./server
