@@ -6,13 +6,13 @@ const index: FC = () => {
   return (
     <div className="bg-white">
       <Menu.MobileMenu />
-      <div className="relative bg-gray-900">
+      <div className="relative bg-gray-900 h-screen">
         {/* Decorative image and overlay */}
         <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
           <img
             // src="https://images.unsplash.com/photo-1606423258821-621996281c0e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
             src="https://images.unsplash.com/photo-1634981297356-f9b4daa98a92?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
-            alt=""
+            alt="Care Dealership with people shopping in the corner"
             className="w-full h-full object-center object-cover"
           />
         </div>
@@ -34,7 +34,7 @@ const index: FC = () => {
           <h1 className="text-4xl font-extrabold tracking-tight text-white lg:text-6xl">
             Automodiv
           </h1>
-          <p className="mt-4 text-xl text-white">
+          <p className="mt-4 text-xl text-blue-300">
             Helping shoppers find your dealership one transaction at a time. A
             world class dealership platform built by sales driven development
             teams.
