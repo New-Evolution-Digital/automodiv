@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import { Popover } from '@headlessui/react'
 import { MenuIcon } from '@heroicons/react/outline'
@@ -8,11 +8,20 @@ import joinClasses from '../../utils/joinClasses'
 import { PopOverMenu } from '../index'
 import { useMenuState } from './useMenuState'
 
-const DesktopMenu = () => {
+interface IDesktopMenu {
+  light?: boolean
+}
+
+const DesktopMenu: FC<IDesktopMenu> = ({ light }) => {
   const { get, set } = useMenuState(false)
 
   return (
-    <div className="backdrop-blur-md backdrop-filter bg-opacity-10 bg-white">
+    <div
+      className={joinClasses(
+        'backdrop-blur-md backdrop-filter bg-opacity-10 bg-white',
+        light ? 'shadow-md' : ''
+      )}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div>
           <div className="h-16 flex items-center justify-between">
@@ -22,7 +31,9 @@ const DesktopMenu = () => {
                 <span className="sr-only">Workflow</span>
                 <img
                   className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
+                  src={`https://tailwindui.com/img/logos/workflow-mark.svg?color=${
+                    light ? 'black' : 'white'
+                  }`}
                   alt=""
                 />
               </a>
@@ -34,7 +45,12 @@ const DesktopMenu = () => {
                 <div className="h-full flex justify-center space-x-8">
                   {get.pages.indexPages.map((page) => (
                     <Link key={page.name} href={page.href} passHref>
-                      <a className="flex items-center text-sm font-medium text-white">
+                      <a
+                        className={joinClasses(
+                          'flex items-center text-sm font-medium',
+                          light ? 'text-gray-900' : 'text-white'
+                        )}
+                      >
                         {page.name}
                       </a>
                     </Link>
@@ -44,7 +60,12 @@ const DesktopMenu = () => {
                       {() => (
                         <>
                           <div className="relative flex">
-                            <Popover.Button className="relative z-10 flex items-center justify-center transition-colors ease-out duration-200 text-sm font-medium text-white">
+                            <Popover.Button
+                              className={joinClasses(
+                                'relative z-10 flex items-center justify-center transition-colors ease-out duration-200 text-sm font-medium',
+                                light ? 'text-gray-900' : 'text-white'
+                              )}
+                            >
                               {category.name}
                               <span
                                 className={joinClasses(

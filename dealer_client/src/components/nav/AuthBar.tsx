@@ -1,5 +1,7 @@
 import React from 'react'
 
+import Link from 'next/link'
+
 const AuthBar = () => {
   return (
     <div className="bg-gray-900">
@@ -7,18 +9,16 @@ const AuthBar = () => {
         <div className="flex-grow" />
         <div className="h-10 flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <a
-              href="#"
-              className="text-sm font-medium text-white hover:text-gray-100"
-            >
-              Sign in
-            </a>
-            <a
-              href="#"
-              className="text-sm font-medium text-white hover:text-gray-100"
-            >
-              Create an account
-            </a>
+            <Link href="/login" passHref>
+              <a className="text-sm font-medium text-white hover:text-gray-100">
+                Sign in
+              </a>
+            </Link>
+            <Link href="/join" passHref>
+              <a className="text-sm font-medium text-white hover:text-gray-100">
+                Create an account
+              </a>
+            </Link>
           </div>
         </div>
       </div>
