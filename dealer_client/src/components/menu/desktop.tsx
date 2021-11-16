@@ -1,14 +1,16 @@
 import React from 'react'
 
 import { Popover } from '@headlessui/react'
+import { MenuIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 
-import joinClasses from '../../../utils/joinClasses'
+import joinClasses from '../../utils/joinClasses'
 import { PopOverMenu } from '../index'
 import { useMenuState } from './useMenuState'
 
 const DesktopMenu = () => {
-  const { get } = useMenuState(false)
+  const { get, set } = useMenuState(false)
+
   return (
     <div className="backdrop-blur-md backdrop-filter bg-opacity-10 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,7 +30,7 @@ const DesktopMenu = () => {
 
             <div className="hidden h-full lg:flex">
               {/* Flyout menus */}
-              <Popover.Group className="px-4 bottom-0 inset-x-0">
+              <Popover.Group className="bottom-0 inset-x-0">
                 <div className="h-full flex justify-center space-x-8">
                   {get.pages.indexPages.map((page) => (
                     <Link key={page.name} href={page.href} passHref>
@@ -77,60 +79,14 @@ const DesktopMenu = () => {
 
             {/* Mobile menu and search (lg-) */}
             <div className="flex-1 flex items-center lg:hidden">
-              {/* <button type="button" className="-ml-2 p-2 text-white" onClick={() => setMobileMenuOpen(true)}> */}
-              <span className="sr-only">Open menu</span>
-              {/* <MenuIcon className="h-6 w-6" aria-hidden="true" /> */}
-              {/* </button> */}
-
-              {/* Search */}
-              <a href="#" className="ml-2 p-2 text-white">
-                <span className="sr-only">Search</span>
-                {/* <SearchIcon className="w-6 h-6" aria-hidden="true" /> */}
-              </a>
-            </div>
-
-            {/* Logo (lg-) */}
-            <a href="#" className="lg:hidden">
-              <span className="sr-only">Workflow</span>
-              <img
-                src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
-                alt=""
-                className="h-8 w-auto"
-              />
-            </a>
-
-            <div className="flex-1 flex items-center justify-end">
-              <a
-                href="#"
-                className="hidden text-sm font-medium text-white lg:block"
+              <button
+                type="button"
+                className="-ml-2 p-2 text-white"
+                onClick={() => set.open(true)}
               >
-                Search
-              </a>
-
-              <div className="flex items-center lg:ml-8">
-                {/* Help */}
-                <a href="#" className="p-2 text-white lg:hidden">
-                  <span className="sr-only">Help</span>
-                  {/* <QuestionMarkCircleIcon className="w-6 h-6" aria-hidden="true" /> */}
-                </a>
-                <a
-                  href="#"
-                  className="hidden text-sm font-medium text-white lg:block"
-                >
-                  Help
-                </a>
-
-                {/* Cart */}
-                <div className="ml-4 flow-root lg:ml-8">
-                  <a href="#" className="group -m-2 p-2 flex items-center">
-                    {/* <ShoppingBagIcon className="flex-shrink-0 h-6 w-6 text-white" aria-hidden="true" /> */}
-                    <span className="ml-2 text-sm font-medium text-white">
-                      0
-                    </span>
-                    <span className="sr-only">items in cart, view bag</span>
-                  </a>
-                </div>
-              </div>
+                <span className="sr-only">Open menu</span>
+                <MenuIcon className="h-6 w-6" aria-hidden="true" />
+              </button>
             </div>
           </div>
         </div>
