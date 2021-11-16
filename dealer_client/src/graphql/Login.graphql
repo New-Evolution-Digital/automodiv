@@ -1,0 +1,14 @@
+mutation Login($userLogin: UserLogin!) {
+  login(login: $userLogin) {
+    id
+    firstName
+    lastName
+    email
+    username
+    dealershipOrganization {
+      id
+    }
+    createdAt
+    updatedAt
+  }
+}
