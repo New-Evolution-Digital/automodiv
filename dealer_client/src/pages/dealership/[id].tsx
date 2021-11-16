@@ -1,10 +1,12 @@
 import React from 'react'
 
+import { Dashboard } from '../../layout'
+
 const DealershipDashboard = () => {
   return (
-    <div>
+    <Dashboard>
       <h2>Welcome To Your Dealership</h2>
-    </div>
+    </Dashboard>
   )
 }
 
