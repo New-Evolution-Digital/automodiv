@@ -5,7 +5,10 @@ import { useRouter } from 'next/router'
 
 import joinClasses from '../utils/joinClasses'
 
-const navigation: LinkTypes[] = [{ name: 'Home', href: 'dealership/:id' }]
+const navigation: LinkTypes[] = [
+  { name: 'Home', href: '/' },
+  { name: 'Settings', href: '/settings' }
+]
 
 interface IDashboard {
   dashboardTitle?: string
@@ -35,7 +38,7 @@ const Dashboard: FC<IDashboard> = ({
                   {navigation.map((item) => (
                     <a
                       key={item.name}
-                      href={item.href}
+                      href={`${pathname}/${item.href}`}
                       className={joinClasses(
                         item.name === pathname
                           ? 'bg-gray-900 text-white'

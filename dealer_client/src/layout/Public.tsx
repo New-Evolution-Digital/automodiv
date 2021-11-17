@@ -6,7 +6,7 @@ import joinClasses from '../utils/joinClasses'
 interface PublicProps {
   heroOverlay?: React.ReactNode
   hero?: React.ReactNode
-  children?: React.ReactChild
+  children?: React.ReactNode
 }
 
 const Public: FC<PublicProps> = ({ children, heroOverlay, hero }) => {
