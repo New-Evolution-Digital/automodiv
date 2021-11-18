@@ -13,6 +13,8 @@ services:
       - server
     volumes:
       - ./dealer_client:/app
+    environment:
+      - SERVER_URL=http://localhost:4000
 
   server:
     build:
