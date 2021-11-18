@@ -14,9 +14,9 @@ const AuthBar = () => {
                 Sign in
               </a>
             </Link>
-            <Link href="/join/account" passHref>
+            <Link href="/join" passHref>
               <a className="text-sm font-medium text-white hover:text-gray-100">
-                Create New Organization
+                Create An Account
               </a>
             </Link>
           </div>

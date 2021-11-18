@@ -13,6 +13,34 @@ declare global {
       href: string
     }
   }
+
+  type RegContextValueType = {
+    state: InitialStateType
+    dispatch: React.Dispatch<any>
+  }
+
+  type Steps = {
+    id: number
+    name: string
+    href: string
+    status: 'completed' | 'current' | 'upcoming'
+  }
+
+  type RegisterInitialStateType = {
+    steps: Steps[]
+    currentStep: number
+  }
+
+  type RegistrationStepReducerState = {
+    steps: Steps[]
+  }
+
+  type RegStepActions = {
+    type: 'updateUserStatus'
+    payload: 'completed' | 'current' | 'upcoming'
+  }
+
+  type UserTypes = 'root' | 'member' | ''
 }
 
 export {}
