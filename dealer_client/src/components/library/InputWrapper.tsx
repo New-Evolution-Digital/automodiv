@@ -1,7 +1,29 @@
 import React, { FC } from 'react'
+import joinClasses from '../../utils/joinClasses'
 
-const InputWrapper: FC = ({ children }) => {
-  return <div className="rounded-md h-full flex">{children}</div>
+type InputWrapperProps = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+> & {
+  overrideClass?: boolean
+}
+
+const InputWrapper: FC<InputWrapperProps> = ({
+  children,
+  className = '',
+  overrideClass = false
+}) => {
+  return (
+    <div
+      className={
+        overrideClass
+          ? className
+          : joinClasses('rounded-md h-full flex', className)
+      }
+    >
+      {children}
+    </div>
+  )
 }
 
 export default InputWrapper

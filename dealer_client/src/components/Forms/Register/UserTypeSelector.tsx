@@ -56,9 +56,9 @@ const UserTypeSelector: FC<UserTypeSelectorType> = ({ setUserType }) => {
               ))}
             </ul>
           </div>
-          <div className="rounded-md shadow">
+          <div className="rounded-md shadow cursor-default">
             <span
-              className="flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-150"
+              className="flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-150 cursor-default"
               onClick={() => setUserType('root')}
             >
               Root Account
@@ -90,9 +90,9 @@ const UserTypeSelector: FC<UserTypeSelectorType> = ({ setUserType }) => {
               ))}
             </ul>
           </div>
-          <div className="rounded-md shadow">
+          <div className="rounded-md shadow cursor-default">
             <span
-              className="flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-150"
+              className="flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-150 cursor-default"
               onClick={() => setUserType('member')}
             >
               Member

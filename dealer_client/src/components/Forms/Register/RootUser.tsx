@@ -1,19 +1,25 @@
-import React, { FC } from 'react'
+import React, { FC, FormEvent } from 'react'
 
 import { Input, InputWrapper, Label, Panel } from '../../library'
 
 interface RootUserFormProps {
-  onSubmit?: React.FormEventHandler<HTMLFormElement> | undefined
+  handleSubmit: (e: FormEvent) => void
 }
 
-const RootUserForm: FC<RootUserFormProps> = ({ onSubmit }) => {
+const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
   return (
     <Panel>
       <div className="space-y-8 p-0 md:px-4 md:py-2">
         <h2 className="text-center text-3xl font-extralight text-gray-900">
           New User Registration
         </h2>
-        <form className="space-y-6" {...onSubmit}>
+        <form
+          className="space-y-6"
+          onSubmit={(e) => {
+            e.preventDefault()
+            handleSubmit(e)
+          }}
+        >
           <div className="grid grid-cols-2 items-stretch gap-4">
             <InputWrapper>
               <Label htmlFor="firstName" className="sr-only">

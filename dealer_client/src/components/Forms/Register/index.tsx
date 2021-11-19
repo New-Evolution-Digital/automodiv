@@ -1,4 +1,5 @@
-import { FC, useState } from 'react'
+import { FC, FormEvent, useState } from 'react'
+import OrganizationForm from './OrganizationForm'
 
 import RootUserForm from './RootUser'
 import UserTypeSelector from './UserTypeSelector'
@@ -10,11 +11,25 @@ interface IRootRegisterForm {
 const RootRegisterForm: FC<IRootRegisterForm> = ({ values }) => {
   const { state, dispatch } = values
   const { currentStep }: RegisterInitialStateType = state
-  const [userType, setUserType] = useState<UserTypes>('')
+  const [userType, setUserType] = useState<UserTypes>('root')
+
+  const nextPage = () => {
+    dispatch({ type: 'nextStep' })
+  }
 
   const handleUserSelected = (user: UserTypes) => {
     setUserType(user)
-    dispatch({ type: 'nextStep' })
+    nextPage()
+  }
+
+  const handleRootUserSubmit = (e: FormEvent): void => {
+    e.preventDefault()
+    nextPage()
+  }
+
+  const handleOrgSubmit = (e: FormEvent): void => {
+    e.preventDefault()
+    nextPage()
   }
 
   const getCurrentStep = () => {
@@ -23,14 +38,15 @@ const RootRegisterForm: FC<IRootRegisterForm> = ({ values }) => {
         return <UserTypeSelector setUserType={handleUserSelected} />
       }
       case 1: {
-        return <RootUserForm />
+        return <RootUserForm handleSubmit={handleRootUserSubmit} />
       }
       case 2: {
         if (userType === 'root') {
-          return <h2>This will be the org detail submission page</h2>
+          return <OrganizationForm handleSubmit={handleOrgSubmit} />
+        } else {
+          nextPage()
+          return <></>
         }
-
-        return <></>
       }
       default: {
         window.location.href = '/'
@@ -38,6 +54,8 @@ const RootRegisterForm: FC<IRootRegisterForm> = ({ values }) => {
       }
     }
   }
+
+  console.log(currentStep)
 
   return <>{getCurrentStep()}</>
 }
