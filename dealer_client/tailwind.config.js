@@ -39,7 +39,8 @@ module.exports = {
           800: '#2c5282',
           900: '#2a4365'
         }
-      }
+      },
+      border: ['group-focus']
     }
   },
   variants: {},

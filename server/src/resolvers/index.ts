@@ -1,4 +1,2 @@
-import { OrganizationResolver } from "./dealershipOrganization.resolver";
-import { DealershipRootDealerResolver } from "./dealershipRootUser.resolver";
-
-export { OrganizationResolver, DealershipRootDealerResolver };
+export { default as OrgResolver } from "./dealershipOrganization.resolver";
+export { default as RootUserResolver } from "./dealershipRootUser.resolver";

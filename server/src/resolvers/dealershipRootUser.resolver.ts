@@ -7,7 +7,7 @@ import { DealershipOrganization } from "../entities/DealershipOrganization";
 import { ApolloError } from "apollo-server-express";
 
 @Resolver(DealershipRootUser)
-export class DealershipRootDealerResolver {
+class RootUserResolver {
   @Query(() => DealershipRootUser)
   async me(@Ctx() { req }: ServerContext) {
     if (!req.session.userId) {
@@ -68,7 +68,9 @@ export class DealershipRootDealerResolver {
 
     req.session.userId = newUser.id;
 
-    return newUser;
+    return await DealershipRootUser.findOne(newUser, {
+      loadEagerRelations: true,
+    });
   }
 
   @Mutation(() => DealershipRootUser)
@@ -122,3 +124,5 @@ export class DealershipRootDealerResolver {
     }
   }
 }
+
+export default RootUserResolver;

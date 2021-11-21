@@ -1,14 +1,13 @@
 const RegInitState: RegisterInitialStateType = {
   steps: [
-    { id: 1, name: 'Define User Type', href: '/join', status: 'current' },
-    { id: 1, name: 'User Details', href: '/join/user', status: 'upcoming' },
+    { id: 1, name: 'Define User Type', status: 'current' },
+    { id: 1, name: 'User Details', status: 'upcoming' },
     {
       id: 2,
       name: 'Organization Details',
-      href: '/join/organization',
       status: 'upcoming'
     },
-    { id: 3, name: 'Review', href: '/join/review', status: 'upcoming' }
+    { id: 3, name: 'Review', status: 'upcoming' }
   ],
   currentStep: 0
 }

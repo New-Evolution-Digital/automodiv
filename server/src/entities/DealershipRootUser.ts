@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { DealershipOrganization } from ".";
+import { DealershipOrganization } from "./DealershipOrganization";
 import { IDealershipUser } from "../interfaces/IDealershipUser";
 
 @Entity()
@@ -20,11 +20,11 @@ export class DealershipRootUser extends BaseEntity implements IDealershipUser {
   readonly id: number;
 
   @Field()
-  @Column()
+  @Column("text")
   firstName: string;
 
   @Field()
-  @Column()
+  @Column("text")
   lastName: string;
 
   @Field()

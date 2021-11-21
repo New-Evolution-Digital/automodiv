@@ -22,7 +22,6 @@ declare global {
   type Steps = {
     id: number
     name: string
-    href: string
     status: 'completed' | 'current' | 'upcoming'
   }
 
