@@ -13,7 +13,6 @@
     "clean": "rimraf .next out",
     "lint": "next lint",
     "build-types": "tsc --noEmit --pretty",
-    "prepare": "husky install",
     "gql-codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {

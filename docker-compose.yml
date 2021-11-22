@@ -12,7 +12,7 @@ services:
     depends_on:
       - server
     volumes:
-      - ./dealer_client:/app
+      - ./dealer_client:/usr/src/app
     environment:
       - SERVER_URL=http://localhost:4000
 
@@ -29,7 +29,7 @@ services:
       - server_db
       - server_redis
     volumes:
-      - ./server:/app
+      - ./server:/usr/src/app
 
   server_db:
     image: mysql:latest
