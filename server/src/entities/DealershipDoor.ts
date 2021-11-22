@@ -28,6 +28,10 @@ export class DealershipDoor extends BaseEntity implements ILocation {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
+  name?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   streetAddress?: string;
 
   @Field({ nullable: true })
@@ -46,6 +50,12 @@ export class DealershipDoor extends BaseEntity implements ILocation {
   @Column({ nullable: true })
   zip?: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  dealerNumber?: string;
+
   @ManyToOne(() => DealershipOrganization, (org) => org.dealershipDoors)
   dealershipOrganization: DealershipOrganization;
+
+  [key: string]: any;
 }

@@ -1,5 +1,5 @@
 import { ArgsType, Field, ID, InputType } from "type-graphql";
-import { Employee } from "../entities";
+import { DealershipDoor, Employee } from "../entities";
 import { DealershipOrganization } from "../entities/DealershipOrganization";
 import { DealershipRootUser } from "../entities/DealershipRootUser";
 
@@ -83,4 +83,30 @@ export class orgIndexables {
 
   @Field({ nullable: true })
   readonly key?: string;
+}
+
+@InputType()
+export class doorInputParams implements Partial<DealershipDoor> {
+  @Field({ nullable: true })
+  readonly name?: string;
+
+  @Field({ nullable: true })
+  readonly streetAddress?: string;
+
+  @Field({ nullable: true })
+  readonly streetAddressTwo?: string;
+
+  @Field({ nullable: true })
+  readonly city?: string;
+
+  @Field({ nullable: true })
+  readonly state?: string;
+
+  @Field({ nullable: true })
+  readonly zip?: string;
+
+  @Field({ nullable: true })
+  readonly dealerNumber?: string;
+
+  [key: string]: string | undefined;
 }

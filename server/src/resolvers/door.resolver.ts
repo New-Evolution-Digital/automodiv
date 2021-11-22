@@ -1,7 +1,9 @@
 import { ApolloError } from "apollo-server-express";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, ID, Mutation, Query, Resolver } from "type-graphql";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { DealershipDoor, DealershipOrganization } from "../entities";
-import { orgIndexables } from "./InputTypes";
+import { makeDbSearchable } from "../utils/misc";
+import { doorInputParams, orgIndexables } from "./InputTypes";
 
 @Resolver(() => DealershipDoor)
 class DoorResolver {
@@ -29,6 +31,11 @@ class DoorResolver {
     return foundOrg?.dealershipDoors;
   }
 
+  /**
+   * Currently only root user can add doors
+   * @param param0
+   * @returns
+   */
   @Mutation(() => DealershipDoor)
   async createDoor(@Ctx() { req }: ServerContext) {
     if (!req.session.userId) {
@@ -62,6 +69,42 @@ class DoorResolver {
     }
 
     return savedDoor;
+  }
+
+  @Mutation(() => DealershipDoor, { nullable: true })
+  async updateDoorById(
+    @Ctx() { req }: ServerContext,
+    @Arg("doorId", () => ID) doorId: number,
+    @Arg("doorParameters", () => doorInputParams)
+    doorParams: Partial<QueryDeepPartialEntity<doorInputParams>>
+  ): Promise<DealershipDoor | undefined> {
+    if (!req.session.userId) {
+      throw new ApolloError("Not Authorized");
+    }
+
+    const foundDoor = await DealershipDoor.findOne({
+      relations: ["dealershipOrganization", "dealershipOrganization.rootUser"],
+      where: [
+        {
+          id: doorId,
+          dealershipOrganization: { rootUser: { id: req.session.userId } },
+        },
+      ],
+    });
+
+    if (!foundDoor) {
+      throw new ApolloError("No door matching credentials");
+    }
+
+    for (const key in doorParams) {
+      if (Object.prototype.hasOwnProperty.call(foundDoor, key)) {
+        if (!!doorParams[key]) {
+          foundDoor[key] = makeDbSearchable(doorParams[key] as string);
+        }
+      }
+    }
+
+    return await foundDoor.save();
   }
 }
 

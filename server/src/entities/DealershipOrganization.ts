@@ -68,7 +68,7 @@ export class DealershipOrganization extends BaseEntity implements ILocation {
   )
   dealershipDoors: DealershipDoor[];
 
-  @Field(() => [Employee], { nullable: true })
+  @Field(() => [Employee || DealershipRootUser], { nullable: true })
   @OneToMany(() => Employee, (employee) => employee.dealershipOrganization, {
     eager: true,
     nullable: true,
@@ -76,7 +76,7 @@ export class DealershipOrganization extends BaseEntity implements ILocation {
     onUpdate: "CASCADE",
   })
   @JoinColumn()
-  employees?: Employee[];
+  employees?: (Employee | DealershipRootUser)[];
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })
