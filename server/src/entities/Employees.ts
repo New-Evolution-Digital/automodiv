@@ -47,7 +47,7 @@ class Employee extends BaseEntity implements IUser {
 
   @Field(() => DealershipOrganization)
   @ManyToOne(() => DealershipOrganization, (org) => org.employees, {
-    cascade: true,
+    cascade: ["insert"],
   })
   dealershipOrganization: DealershipOrganization;
 }

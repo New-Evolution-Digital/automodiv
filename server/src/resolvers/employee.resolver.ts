@@ -7,21 +7,16 @@ import { NewEmployeeCredentials } from "./InputTypes";
 
 @Resolver(() => Employee)
 class EmployeeResolver {
-  @Query(() => Employee, { nullable: true })
+  @Query(() => [Employee], { nullable: true })
   async getEmployeesByOrgKey(
     @Arg("key") key: string
   ): Promise<Employee[] | undefined> {
-    const org: DealershipOrganization | undefined =
-      await DealershipOrganization.findOne(
-        { key },
-        { loadEagerRelations: true }
-      );
+    const org = await DealershipOrganization.findOne(
+      { key },
+      { loadEagerRelations: true }
+    );
 
-    if (org?.employees === [] || typeof org === "undefined") {
-      return undefined;
-    }
-
-    return org.employees;
+    return org?.employees;
   }
 
   @Mutation(() => Employee)
@@ -30,10 +25,10 @@ class EmployeeResolver {
     @Ctx() { req }: ServerContext,
     @Arg("credentials", () => NewEmployeeCredentials)
     credentials: NewEmployeeCredentials
-  ) {
-    const foundOrg = await DealershipOrganization.findOne(
+  ): Promise<Employee> {
+    let foundOrg = await DealershipOrganization.findOne(
       { key },
-      { loadEagerRelations: true }
+      { relations: ["employees", "rootUser"] }
     );
 
     if (!foundOrg) {
@@ -44,7 +39,7 @@ class EmployeeResolver {
       throw new ApolloError("No Matching Organization Credentials");
     }
 
-    let params: { [key: string]: string } = {
+    let params: Partial<NewEmployeeCredentials> & { [key: string]: string } = {
       firstName: "",
       lastName: "",
       username: "",
@@ -58,12 +53,30 @@ class EmployeeResolver {
       }
     }
 
+    const password = await argon.hash(credentials.password.trim());
     const newEmployee = Employee.create({
-      ...params,
-      password: await argon.hash(credentials.password),
+      firstName: params.firstName,
+      lastName: params.lastName,
+      email: params.email,
+      username: params.email,
+      password,
       dealershipOrganization: foundOrg,
     });
-    return await newEmployee.save();
+
+    const saved = await newEmployee.save();
+
+    if (!saved.id) {
+      throw new ApolloError("No user was created");
+    }
+
+    if (!foundOrg.employees) {
+      await DealershipOrganization.update({ key }, { employees: [saved] });
+    } else {
+      foundOrg.employees = [...foundOrg.employees, saved];
+    }
+    console.log("saved user", saved.id);
+    await foundOrg.save();
+    return saved;
   }
 }
 

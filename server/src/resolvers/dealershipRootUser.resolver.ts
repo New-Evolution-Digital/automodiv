@@ -14,9 +14,12 @@ class RootUserResolver {
       return new ApolloError("No authenticated user");
     }
 
-    return await DealershipRootUser.findOne(req.session.userId, {
-      relations: ["dealershipOrganization"],
+    const user = await DealershipRootUser.findOne(req.session.userId, {
+      relations: ["dealershipOrganization", "dealershipOrganization.employees"],
+      loadEagerRelations: true,
     });
+    console.log(user);
+    return user;
   }
 
   @Query(() => [DealershipRootUser])
