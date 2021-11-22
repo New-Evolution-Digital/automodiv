@@ -1,4 +1,4 @@
-import { ArgsType, Field, InputType } from "type-graphql";
+import { ArgsType, Field, ID, InputType } from "type-graphql";
 import { Employee } from "../entities";
 import { DealershipOrganization } from "../entities/DealershipOrganization";
 import { DealershipRootUser } from "../entities/DealershipRootUser";
@@ -74,4 +74,13 @@ export class UserLogin {
 
   @Field()
   readonly password!: string;
+}
+
+@InputType()
+export class orgIndexables {
+  @Field(() => ID, { nullable: true })
+  readonly id?: number;
+
+  @Field({ nullable: true })
+  readonly key?: string;
 }
