@@ -62,7 +62,6 @@ class RootUserResolver {
     const pw = await argon.hash(password);
 
     const org = DealershipOrganization.create();
-    await org.save();
     const newUser = DealershipRootUser.create({
       firstName: credentials.firstName,
       lastName: credentials.lastName,
@@ -71,6 +70,8 @@ class RootUserResolver {
       password: pw,
       dealershipOrganization: org,
     });
+    org.employees = [newUser];
+    await org.save();
     const savedUser = await newUser.save();
 
     req.session.userId = savedUser.id;

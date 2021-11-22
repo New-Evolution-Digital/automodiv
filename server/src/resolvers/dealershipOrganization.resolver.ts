@@ -38,10 +38,18 @@ class OrganizationResolver {
 
   @Mutation(() => DealershipOrganization)
   async updateDealerOrg(
+    @Ctx() { req }: ServerContext,
     @Arg("org_id") orgId: number,
     @Args() props: OrganizationInput
   ) {
-    const found = await DealershipOrganization.findOne(orgId);
+    if (!req.session.userId) {
+      throw new ApolloError("Not Authorized");
+    }
+
+    const found = await DealershipOrganization.findOne({
+      where: [{ id: orgId, rootUser: { id: req.session.userId } }],
+      relations: ["rootUser"],
+    });
 
     if (!found) {
       return new ApolloError("No dealer organization found");

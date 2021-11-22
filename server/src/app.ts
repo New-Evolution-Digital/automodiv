@@ -8,7 +8,12 @@ import session from "express-session";
 import Redis from "ioredis";
 import morgan from "morgan";
 
-import { EmployeeResolver, OrgResolver, RootUserResolver } from "./resolvers";
+import {
+  DoorResolver,
+  EmployeeResolver,
+  OrgResolver,
+  RootUserResolver,
+} from "./resolvers";
 import { __postgres__, __prod__ } from "./constants";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { DealershipOrganization } from "./entities/DealershipOrganization";
@@ -40,7 +45,7 @@ export const createServer = async () => {
   else redis = new Redis(6379, "automodiv_server_redis_1");
 
   const schema = await buildSchema({
-    resolvers: [OrgResolver, RootUserResolver, EmployeeResolver],
+    resolvers: [OrgResolver, RootUserResolver, EmployeeResolver, DoorResolver],
     dateScalarMode: "timestamp",
   });
 

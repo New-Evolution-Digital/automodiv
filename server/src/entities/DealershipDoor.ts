@@ -26,29 +26,36 @@ export class DealershipDoor extends BaseEntity implements ILocation {
   @UpdateDateColumn()
   updatedAt: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  name?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   streetAddress?: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   streetAddressTwo?: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   city?: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   state?: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   zip?: string;
 
-  @Column("int")
-  orgId: number;
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  dealerNumber?: string;
 
   @ManyToOne(() => DealershipOrganization, (org) => org.dealershipDoors)
   dealershipOrganization: DealershipOrganization;
+
+  [key: string]: any;
 }
