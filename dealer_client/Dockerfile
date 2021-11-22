@@ -6,7 +6,7 @@ RUN apt-get install bash -y
 RUN mkdir /usr/src/cache
 WORKDIR /usr/src/cache
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm install
 RUN npm install -g ts-node
