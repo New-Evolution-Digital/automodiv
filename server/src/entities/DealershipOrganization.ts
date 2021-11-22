@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -59,7 +60,7 @@ export class DealershipOrganization extends BaseEntity implements ILocation {
   @OneToOne(() => DealershipRootUser, (root) => root.dealershipOrganization)
   rootUser: DealershipRootUser;
 
-  @Field(() => DealershipDoor, { nullable: true })
+  @Field(() => [DealershipDoor], { nullable: true })
   @OneToMany(
     () => DealershipDoor,
     (doors: DealershipDoor) => doors.dealershipOrganization,
@@ -67,13 +68,14 @@ export class DealershipOrganization extends BaseEntity implements ILocation {
   )
   dealershipDoors: DealershipDoor[];
 
-  @Field(() => Employee, { nullable: true })
+  @Field(() => [Employee], { nullable: true })
   @OneToMany(() => Employee, (employee) => employee.dealershipOrganization, {
     eager: true,
     nullable: true,
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
+  @JoinColumn()
   employees?: Employee[];
 
   @Field()
