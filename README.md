@@ -3,6 +3,7 @@
 Master Git Repository for Automodiv including Backend, Frontend for Dealers and Shoppers, and DS
 
 - [Install Instructions for Development](#install-instructions-for-development)
+- [Restarting Dev Server](#restarting-dev-server)
 - [Branch Naming Conventions](#branch-naming-conventions)
 
 ## Install Instructions for Development
@@ -25,6 +26,14 @@ The install instruction are as follow:
 5. If you have any issues, first `ctrl + c`, then run `docker-compose down`. Repeat steps 3 and 4.
 6. Then code
 7. Still having issues submit the issue to @kyleswillard or @jtamedrano with screen shots or screen record of your issue.
+
+## Restarting Dev Server
+
+There is a sh script in the root of the project. By running the command `/bin/sh ./restart.sh` the server will do all the command above. This will also restart the database, so any data you have in your own container will disappear.
+
+This does require that you have a .env file in the root. If you need a copy of what the env should look like, please contact @jtamedrano.
+
+_This is useful if you want to restart your work, if you edit any dockerfiles, or if you just want a clean database_
 
 ## Branch Naming Conventions
 

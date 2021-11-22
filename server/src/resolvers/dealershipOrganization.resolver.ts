@@ -1,5 +1,5 @@
 import { ApolloError } from "apollo-server-express";
-import { Arg, Args, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Args, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { DealershipRootUser } from "../entities";
 import { DealershipOrganization } from "../entities/DealershipOrganization";
 import * as misc from "../utils/misc";
@@ -36,10 +36,16 @@ class OrganizationResolver {
     }
   }
 
+  /**
+   * Root User Mutation to update Dealer Org
+   * @param param0
+   * @param orgId
+   * @param props
+   * @returns
+   */
   @Mutation(() => DealershipOrganization)
   async updateDealerOrg(
     @Ctx() { req }: ServerContext,
-    @Arg("org_id") orgId: number,
     @Args() props: OrganizationInput
   ) {
     if (!req.session.userId) {
@@ -47,7 +53,7 @@ class OrganizationResolver {
     }
 
     const found = await DealershipOrganization.findOne({
-      where: [{ id: orgId, rootUser: { id: req.session.userId } }],
+      where: [{ rootUser: { id: req.session.userId } }],
       relations: ["rootUser"],
     });
 

@@ -71,6 +71,13 @@ class DoorResolver {
     return savedDoor;
   }
 
+  /**
+   * Updates Parameters
+   * @param param0
+   * @param doorId
+   * @param doorParams
+   * @returns
+   */
   @Mutation(() => DealershipDoor, { nullable: true })
   async updateDoorById(
     @Ctx() { req }: ServerContext,
@@ -99,7 +106,11 @@ class DoorResolver {
     for (const key in doorParams) {
       if (Object.prototype.hasOwnProperty.call(foundDoor, key)) {
         if (!!doorParams[key]) {
-          foundDoor[key] = makeDbSearchable(doorParams[key] as string);
+          if (key !== "name") {
+            foundDoor[key] = makeDbSearchable(doorParams[key] as string);
+          } else {
+            foundDoor[key] = doorParams[key] as string;
+          }
         }
       }
     }
