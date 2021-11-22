@@ -16,8 +16,6 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-ENTRYPOINT [ "sh", "-c" ]
-
 FROM base as dev
 
 EXPOSE 4000
@@ -28,4 +26,4 @@ RUN npm install --only=dev
 
 ENTRYPOINT [ "sh", "-c" ]
 
-CMD [ "./wait.sh server_db:3306 -- npm run dev" ]
+CMD [ "./install.sh && ./wait.sh server_db:3306 -- npm run dev" ]
