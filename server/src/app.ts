@@ -8,12 +8,13 @@ import session from "express-session";
 import Redis from "ioredis";
 import morgan from "morgan";
 
-import { OrgResolver, RootUserResolver } from "./resolvers";
+import { EmployeeResolver, OrgResolver, RootUserResolver } from "./resolvers";
 import { __postgres__, __prod__ } from "./constants";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { DealershipOrganization } from "./entities/DealershipOrganization";
 import { DealershipRootUser } from "./entities/DealershipRootUser";
 import { DealershipDoor } from "./entities/DealershipDoor";
+import { Employee } from "./entities";
 
 export const createServer = async () => {
   await createConnection({
@@ -22,7 +23,12 @@ export const createServer = async () => {
     username: "root",
     password: "password",
     database: "automodiv",
-    entities: [DealershipOrganization, DealershipRootUser, DealershipDoor],
+    entities: [
+      DealershipOrganization,
+      DealershipRootUser,
+      DealershipDoor,
+      Employee,
+    ],
     logging: !__prod__ && "all",
     logger: "advanced-console",
     synchronize: true,
@@ -34,8 +40,7 @@ export const createServer = async () => {
   else redis = new Redis(6379, "automodiv_server_redis_1");
 
   const schema = await buildSchema({
-    resolvers: [OrgResolver, RootUserResolver],
-    orphanedTypes: [DealershipOrganization, DealershipRootUser],
+    resolvers: [OrgResolver, RootUserResolver, EmployeeResolver],
     dateScalarMode: "timestamp",
   });
 

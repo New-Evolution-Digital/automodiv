@@ -1,5 +1,18 @@
 version: "3"
 services:
+  server_db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+
+  server_redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
   dealer_client:
     build:
       context: ./dealer_client
@@ -29,6 +42,7 @@ services:
       - server_db
       - server_redis
     volumes:
+<<<<<<< Updated upstream
       - ./server:/usr/src/app
 
   server_db:
@@ -43,3 +57,6 @@ services:
     image: redis:latest
     ports:
       - "6379:6379"
+=======
+      - ./server:/app
+>>>>>>> Stashed changes

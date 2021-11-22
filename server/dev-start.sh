@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/bin/sh
 
-exec npm run dev
+/bin/sh ./install.sh

@@ -26,6 +26,12 @@ class RootUserResolver {
     });
   }
 
+  /**
+   * Create A New Root User Account and Organization asynchronously
+   * @param param0
+   * @param param1
+   * @returns
+   */
   @Mutation(() => DealershipRootUser)
   async registerRootUser(
     @Args()
@@ -60,15 +66,13 @@ class RootUserResolver {
       email: credentials.email,
       username: credentials.username,
       password: pw,
-      dealershipOrganizationId: org.id,
+      dealershipOrganization: org,
     });
-    await newUser.save();
-    org.rootUserId = newUser.id;
-    await org.save();
+    const savedUser = await newUser.save();
 
-    req.session.userId = newUser.id;
+    req.session.userId = savedUser.id;
 
-    return await DealershipRootUser.findOne(newUser, {
+    return await DealershipRootUser.findOne(savedUser, {
       loadEagerRelations: true,
     });
   }

@@ -1,7 +1,7 @@
 FROM node as base
 
 RUN apt-get update -y
-RUN apt-get install bash -y
+RUN apt install -y netcat
 
 RUN mkdir /usr/src/cache
 WORKDIR /usr/src/cache
@@ -14,15 +14,9 @@ RUN npm install -g ts-node
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 
-RUN ls
-
 COPY . .
 
-RUN chmod +x wait.sh
-
-RUN /bin/bash install.sh
-
-ENTRYPOINT [ "/bin/bash" ]
+ENTRYPOINT [ "sh", "-c" ]
 
 FROM base as dev
 
@@ -32,4 +26,6 @@ RUN npm install -g nodemon
 
 RUN npm install --only=dev
 
-CMD [ "./build-then-start.sh" ]
+ENTRYPOINT [ "sh", "-c" ]
+
+CMD [ "./wait.sh server_db:3306 -- npm run dev" ]

@@ -1,8 +1,9 @@
-import { Field } from "type-graphql";
+import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -10,6 +11,8 @@ import {
 import { DealershipOrganization } from "./DealershipOrganization";
 import { ILocation } from "../interfaces/ILocation";
 
+@Entity()
+@ObjectType()
 export class DealershipDoor extends BaseEntity implements ILocation {
   @Field()
   @PrimaryGeneratedColumn()
@@ -46,6 +49,6 @@ export class DealershipDoor extends BaseEntity implements ILocation {
   @Column("int")
   orgId: number;
 
-  @ManyToOne(() => DealershipOrganization, (org) => org.DealershipDoor)
+  @ManyToOne(() => DealershipOrganization, (org) => org.dealershipDoors)
   dealershipOrganization: DealershipOrganization;
 }

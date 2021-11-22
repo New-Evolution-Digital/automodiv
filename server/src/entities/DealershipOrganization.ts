@@ -5,7 +5,6 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
-  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -14,6 +13,7 @@ import {
 import { DealershipRootUser } from "./DealershipRootUser";
 import { ILocation } from "../interfaces/ILocation";
 import { DealershipDoor } from "./DealershipDoor";
+import Employee from "./Employees";
 
 @Entity()
 @ObjectType()
@@ -55,18 +55,26 @@ export class DealershipOrganization extends BaseEntity implements ILocation {
   @Column({ nullable: true, type: "int" })
   default_dealer_number?: number;
 
-  @Column({ nullable: true })
-  rootUserId: number;
-
   @Field(() => DealershipRootUser, { nullable: true })
-  @OneToOne(() => DealershipRootUser, { eager: true })
-  @JoinColumn()
+  @OneToOne(() => DealershipRootUser, (root) => root.dealershipOrganization)
   rootUser: DealershipRootUser;
 
-  @OneToMany(() => DealershipDoor, (doors) => doors.dealershipOrganization, {
+  @Field(() => DealershipDoor, { nullable: true })
+  @OneToMany(
+    () => DealershipDoor,
+    (doors: DealershipDoor) => doors.dealershipOrganization,
+    { onDelete: "CASCADE", onUpdate: "CASCADE", nullable: true, eager: true }
+  )
+  dealershipDoors: DealershipDoor[];
+
+  @Field(() => Employee, { nullable: true })
+  @OneToMany(() => Employee, (employee) => employee.dealershipOrganization, {
     eager: true,
+    nullable: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
-  DealershipDoor: DealershipDoor[];
+  employees?: Employee[];
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })

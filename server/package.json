@@ -27,7 +27,8 @@
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
-    "typeorm": "^0.2.40"
+    "typeorm": "^0.2.40",
+    "wait-on": "^6.0.0"
   },
   "devDependencies": {
     "@types/connect-redis": "^0.0.17",
@@ -36,6 +37,7 @@
     "@types/graphql": "^14.5.0",
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.11.7",
+    "@types/wait-on": "^5.3.1",
     "concurrently": "^6.3.0",
     "nodemon": "^2.0.15",
     "ts-node": "^10.4.0",

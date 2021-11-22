@@ -20,10 +20,14 @@ class OrganizationResolver {
       );
 
       if (found && found.dealershipOrganization.id !== null) {
-        return await DealershipOrganization.findOne(
-          found.dealershipOrganization.id,
+        const org = await DealershipOrganization.findOne(
+          found.dealershipOrganization,
           { loadEagerRelations: true }
         );
+        if (!org) {
+          return undefined;
+        }
+        return org;
       } else {
         return null;
       }

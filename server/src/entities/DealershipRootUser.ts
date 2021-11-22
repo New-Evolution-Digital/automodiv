@@ -38,11 +38,12 @@ export class DealershipRootUser extends BaseEntity implements IDealershipUser {
   @Column()
   password: string;
 
-  @Column({ nullable: true })
-  dealershipOrganizationId: number;
-
   @Field(() => DealershipOrganization)
-  @OneToOne(() => DealershipOrganization)
+  @OneToOne(() => DealershipOrganization, (org) => org.rootUser, {
+    eager: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
   @JoinColumn()
   dealershipOrganization: DealershipOrganization;
 

@@ -1,4 +1,5 @@
 import { ArgsType, Field, InputType } from "type-graphql";
+import { Employee } from "../entities";
 import { DealershipOrganization } from "../entities/DealershipOrganization";
 import { DealershipRootUser } from "../entities/DealershipRootUser";
 
@@ -44,6 +45,25 @@ export class OrganizationInput implements Partial<DealershipOrganization> {
   readonly default_dealer_number?: number;
 }
 
+@InputType()
+export class NewEmployeeCredentials implements Partial<Employee> {
+  @Field()
+  readonly firstName: string;
+
+  @Field()
+  readonly lastName: string;
+
+  @Field()
+  readonly email: string;
+
+  @Field()
+  readonly username: string;
+
+  @Field()
+  readonly password: string;
+
+  [key: string]: string;
+}
 @InputType()
 export class UserLogin {
   @Field({ nullable: true })
