@@ -1,6 +1,6 @@
 module.exports = {
   // Configuration for JavaScript files
-  extends: ['airbnb-base', 'plugin:prettier/recommended'],
+  extends: ['airbnb-base', 'plugin:prettier/recommended', 'next', 'prettier'],
   rules: {
     'prettier/prettier': [
       'error',
@@ -58,6 +58,7 @@ module.exports = {
             }
           }
         ],
+        'import/no-cycle': 'off',
         'import/prefer-default-export': 'off', // Named export is easier to refactor automatically
         'class-methods-use-this': 'off', // _document.tsx use render method without `this` keyword
         '@typescript-eslint/no-unused-vars': 'off',

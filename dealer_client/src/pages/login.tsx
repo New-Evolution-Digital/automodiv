@@ -24,7 +24,13 @@ const Login: FC = () => {
       return
     }
     await login({ variables: { userLogin: credentials } }).then(({ data }) => {
-      Router.replace(`/dealership/${data?.login.dealershipOrganization.id}`)
+      if (data) {
+        localStorage.setItem(
+          'organization',
+          data.login.dealershipOrganization.key
+        )
+        Router.replace(`/dealership`)
+      }
     })
   }
 

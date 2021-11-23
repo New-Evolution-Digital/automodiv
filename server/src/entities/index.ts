@@ -1,4 +1,3 @@
 export * from "./DealershipOrganization";
-export * from "./DealershipRootUser";
+export * from "./DealershipUser";
 export * from "./DealershipDoor";
-export { default as Employee } from "./Employees";

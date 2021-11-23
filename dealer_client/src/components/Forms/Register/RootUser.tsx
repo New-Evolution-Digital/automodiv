@@ -1,25 +1,61 @@
-import React, { FC, FormEvent } from 'react'
+import React, { ChangeEvent, FC, FormEvent, useState } from 'react'
+import { useRegisterRootUserMutation } from '../../../generated/types'
 
 import { Input, InputWrapper, Label, Panel } from '../../library'
 
 interface RootUserFormProps {
-  handleSubmit: (e: FormEvent) => void
+  handleSubmit: () => void
 }
 
 const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
+  const [register] = useRegisterRootUserMutation()
+
+  const [credentials, setCredentials] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: ''
+  })
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value.trim() })
+  }
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault()
+    if (credentials.password !== credentials.confirmPassword) {
+      return
+    }
+
+    await register({
+      variables: {
+        credentials: {
+          email: credentials.email,
+          username: credentials.username,
+          firstName: credentials.firstName,
+          lastName: credentials.lastName,
+          password: credentials.password
+        }
+      }
+    }).then((res) => {
+      if (res.data)
+        window.localStorage.setItem(
+          'organization',
+          res.data.registerRootUser.dealershipOrganization.key
+        )
+      handleSubmit()
+    })
+  }
+
   return (
     <Panel>
       <div className="space-y-8 p-0 md:px-4 md:py-2">
         <h2 className="text-center text-3xl font-extralight text-gray-900">
           New User Registration
         </h2>
-        <form
-          className="space-y-6"
-          onSubmit={(e) => {
-            e.preventDefault()
-            handleSubmit(e)
-          }}
-        >
+        <form className="space-y-6" onSubmit={submit}>
           <div className="grid grid-cols-2 items-stretch gap-4">
             <InputWrapper>
               <Label htmlFor="firstName" className="sr-only">
@@ -33,6 +69,8 @@ const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
                 autoCapitalize="on"
                 placeholder="First Name"
                 required
+                value={credentials.firstName}
+                onChange={handleOnChange}
               />
             </InputWrapper>
             <InputWrapper>
@@ -46,6 +84,8 @@ const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
                 autoComplete="family-name"
                 placeholder="Last Name"
                 required
+                value={credentials.lastName}
+                onChange={handleOnChange}
               />
             </InputWrapper>
           </div>
@@ -61,6 +101,8 @@ const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
               autoComplete="email"
               placeholder="Email"
               required
+              value={credentials.email}
+              onChange={handleOnChange}
             />
           </InputWrapper>
           <InputWrapper>
@@ -69,11 +111,13 @@ const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
             </Label>
             <Input
               id="username"
-              name="email"
+              name="username"
               autoCapitalize="off"
               autoComplete="off"
               placeholder="Username"
               required
+              value={credentials.username}
+              onChange={handleOnChange}
             />
           </InputWrapper>
           <div className="grid grid-cols-2 gap-4">
@@ -89,6 +133,8 @@ const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
                 autoComplete="new-password"
                 placeholder="Password"
                 required
+                value={credentials.password}
+                onChange={handleOnChange}
               />
             </InputWrapper>
             <InputWrapper>
@@ -103,11 +149,16 @@ const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
                 autoComplete="new-password"
                 placeholder="Confirm password"
                 required
+                value={credentials.confirmPassword}
+                onChange={handleOnChange}
               />
             </InputWrapper>
           </div>
           <div>
-            <button className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600">
+            <button
+              className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600"
+              type="submit"
+            >
               Submit
             </button>
           </div>

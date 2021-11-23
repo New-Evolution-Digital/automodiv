@@ -18,7 +18,7 @@ export function allStringsToLowerCase<T>(
     if (Object.prototype.hasOwnProperty.call(obj, k)) {
       const element = obj[k];
       if (typeof obj[k] === "string") {
-        obj[k] = element.toLowerCase();
+        obj[k] = element.toLowerCase().trim();
       }
     }
   }

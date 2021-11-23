@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react'
+import React, { FC, Fragment } from 'react'
 
 import { Dialog, Tab, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 
 import { useMenuState } from './useMenuState'
 
-const MobileMenu = () => {
+const MobileMenu: FC = () => {
   const { get, set } = useMenuState(false)
   return (
     <Transition.Root show={get.open} as={Fragment}>

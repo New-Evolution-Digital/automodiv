@@ -33,7 +33,7 @@
     "jsx": "preserve",
     "noEmit": true,
     "isolatedModules": true,
-    "types": ["./src/types"]
+    "types": ["./src/types", "./src/generated/types"]
   },
   "exclude": ["./out/**/*", "./node_modules/**/*"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/generated/types.ts"]

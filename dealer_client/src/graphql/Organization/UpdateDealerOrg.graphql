@@ -1,0 +1,28 @@
+mutation UpdateDealerOrg(
+  $DealerKey: String!
+  $OrganizationInput: OrganizationInput!
+) {
+  updateDealerOrg(
+    dealerKey: $DealerKey
+    organizationInput: $OrganizationInput
+  ) {
+    id
+    key
+    streetAddress
+    streetAddressTwo
+    city
+    state
+    zip
+    name
+    default_dealer_number
+    createdAt
+    updatedAt
+    employees {
+      id
+      firstName
+      lastName
+      username
+      role
+    }
+  }
+}

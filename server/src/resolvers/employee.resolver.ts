@@ -1,45 +1,60 @@
 import { ApolloError } from "apollo-server-express";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import argon from "argon2";
-import { DealershipOrganization, Employee } from "../entities";
+import {
+  DealershipDoor,
+  DealershipOrganization,
+  DealershipUser,
+} from "../entities";
 import { makeDbSearchable } from "../utils/misc";
-import { NewEmployeeCredentials } from "./InputTypes";
+import { InputNewUser } from "./InputTypes";
 
-@Resolver(() => Employee)
+@Resolver(() => DealershipUser)
 class EmployeeResolver {
-  @Query(() => [Employee], { nullable: true })
+  @Query(() => [DealershipUser], { nullable: true })
   async getEmployeesByOrgKey(
     @Arg("key") key: string
-  ): Promise<Employee[] | undefined> {
+  ): Promise<DealershipDoor[] | undefined> {
     const org = await DealershipOrganization.findOne(
       { key },
-      { loadEagerRelations: true }
+      { relations: ["employees"] }
     );
 
     return org?.employees;
   }
 
-  @Mutation(() => Employee)
+  @Mutation(() => DealershipUser)
   async addEmployeeByOrgKey(
     @Arg("key") key: string,
     @Ctx() { req }: ServerContext,
-    @Arg("credentials", () => NewEmployeeCredentials)
-    credentials: NewEmployeeCredentials
-  ): Promise<Employee> {
+    @Arg("credentials", () => InputNewUser) credentials: InputNewUser,
+    @Arg("employeeRole") employeeRole: "admin" | "manager" | "employee"
+  ): Promise<DealershipUser> {
     let foundOrg = await DealershipOrganization.findOne(
       { key },
-      { relations: ["employees", "rootUser"] }
+      { relations: ["employees"] }
     );
+
+    if (!req.session.userId) {
+      throw new ApolloError("Not Authorized");
+    }
 
     if (!foundOrg) {
       throw new ApolloError("No Matching Organization Credentials");
     }
 
-    if (foundOrg.rootUser.id !== req.session.userId) {
+    if (
+      !foundOrg.employees.find((emp) => {
+        return (
+          emp.id === req.session.userId &&
+          (emp.role === "admin" || emp.role === "root")
+        );
+      })
+    ) {
       throw new ApolloError("No Matching Organization Credentials");
     }
 
-    let params: Partial<NewEmployeeCredentials> & { [key: string]: string } = {
+    let params: Partial<InputNewUser> & { [key: string]: string } = {
       firstName: "",
       lastName: "",
       username: "",
@@ -54,12 +69,13 @@ class EmployeeResolver {
     }
 
     const password = await argon.hash(credentials.password.trim());
-    const newEmployee = Employee.create({
+    const newEmployee = DealershipUser.create({
       firstName: params.firstName,
       lastName: params.lastName,
       email: params.email,
       username: params.email,
       password,
+      role: employeeRole,
       dealershipOrganization: foundOrg,
     });
 

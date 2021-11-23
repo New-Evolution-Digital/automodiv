@@ -17,9 +17,8 @@ import {
 import { __postgres__, __prod__, __mysql__ } from "./constants";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { DealershipOrganization } from "./entities/DealershipOrganization";
-import { DealershipRootUser } from "./entities/DealershipRootUser";
+import { DealershipUser } from "./entities/DealershipUser";
 import { DealershipDoor } from "./entities/DealershipDoor";
-import { Employee } from "./entities";
 
 export const createServer = async () => {
   await createConnection({
@@ -29,12 +28,7 @@ export const createServer = async () => {
     port: 3306,
     password: __mysql__.MYSQL_PASSWORD,
     database: "automodiv",
-    entities: [
-      DealershipOrganization,
-      DealershipRootUser,
-      DealershipDoor,
-      Employee,
-    ],
+    entities: [DealershipOrganization, DealershipUser, DealershipDoor],
     logging: !__prod__ && "all",
     logger: "advanced-console",
     synchronize: true,
