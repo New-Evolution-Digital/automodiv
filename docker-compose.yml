@@ -6,8 +6,9 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=password
 
   server_redis:
     image: redis:latest
@@ -46,5 +47,5 @@ services:
       - ./server:/usr/src/app
     environment:
       - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}

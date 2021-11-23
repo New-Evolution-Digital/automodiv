@@ -66,7 +66,7 @@ wait_for() {
         nc -w 1 -z "$HOST" "$PORT" > /dev/null 2>&1
         ;;
       http)
-        wget --timeout=10 -q "$HOST" -O /dev/null > /dev/null 2>&1
+        wget --timeout=1 -q "$HOST" -O /dev/null > /dev/null 2>&1
         ;;
       *)
         echoerr "Unknown protocol '$PROTOCOL'"

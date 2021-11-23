@@ -28,7 +28,7 @@ export const createServer = async () => {
     username: __mysql__.MYSQL_USER,
     port: 3306,
     password: __mysql__.MYSQL_PASSWORD,
-    database: __mysql__.MYSQL_DB,
+    database: "automodiv",
     entities: [
       DealershipOrganization,
       DealershipRootUser,

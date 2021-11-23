@@ -26,4 +26,4 @@ RUN npm install --only=dev
 
 ENTRYPOINT [ "sh", "-c" ]
 
-CMD [ "./install.sh && ./wait.sh server_db:3306 -- npm run dev" ]
+CMD [ "./install.sh && ./wait.sh server_db:3306 --timeout=45 -- npm run dev" ]
