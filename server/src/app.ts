@@ -14,7 +14,7 @@ import {
   OrgResolver,
   RootUserResolver,
 } from "./resolvers";
-import { __postgres__, __prod__ } from "./constants";
+import { __postgres__, __prod__, __mysql__ } from "./constants";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { DealershipOrganization } from "./entities/DealershipOrganization";
 import { DealershipRootUser } from "./entities/DealershipRootUser";
@@ -25,8 +25,9 @@ export const createServer = async () => {
   await createConnection({
     type: "mysql",
     host: "automodiv_server_db_1",
-    username: "root",
-    password: "password",
+    username: __mysql__.MYSQL_USER,
+    port: 3306,
+    password: __mysql__.MYSQL_PASSWORD,
     database: "automodiv",
     entities: [
       DealershipOrganization,
