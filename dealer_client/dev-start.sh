@@ -1,3 +1,3 @@
 #!/bin/bash
 
-exec npm start
+exec npm run dev

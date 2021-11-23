@@ -1,30 +1,28 @@
-import { Arg, Args, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
 import argon from "argon2";
-import { DealershipRootUser } from "../entities/DealershipRootUser";
-import { InputNewRootUser, UserLogin } from "./InputTypes";
+import { DealershipUser } from "../entities/DealershipUser";
+import { InputNewUser, UserLogin } from "./InputTypes";
 import * as misc from "../utils/misc";
 import { DealershipOrganization } from "../entities/DealershipOrganization";
 import { ApolloError } from "apollo-server-express";
 
-@Resolver(DealershipRootUser)
+@Resolver(DealershipUser)
 class RootUserResolver {
-  @Query(() => DealershipRootUser)
+  @Query(() => DealershipUser)
   async me(@Ctx() { req }: ServerContext) {
     if (!req.session.userId) {
       return new ApolloError("No authenticated user");
     }
 
-    const user = await DealershipRootUser.findOne(req.session.userId, {
+    const user = await DealershipUser.findOne(req.session.userId, {
       relations: ["dealershipOrganization", "dealershipOrganization.employees"],
-      loadEagerRelations: true,
     });
-    console.log(user);
     return user;
   }
 
-  @Query(() => [DealershipRootUser])
+  @Query(() => [DealershipUser])
   async getAllRootUsers() {
-    return await DealershipRootUser.find({
+    return await DealershipUser.find({
       relations: ["dealershipOrganization"],
     });
   }
@@ -35,10 +33,10 @@ class RootUserResolver {
    * @param param1
    * @returns
    */
-  @Mutation(() => DealershipRootUser)
+  @Mutation(() => DealershipUser)
   async registerRootUser(
-    @Args()
-    { firstName, lastName, username, email, password }: InputNewRootUser,
+    @Arg("credentials")
+    { firstName, lastName, username, email, password }: InputNewUser,
     @Ctx() { req }: ServerContext
   ) {
     if (password.length < 6) {
@@ -62,33 +60,34 @@ class RootUserResolver {
     const pw = await argon.hash(password);
 
     const org = DealershipOrganization.create();
-    const newUser = DealershipRootUser.create({
+    await org.save();
+    const newUser = DealershipUser.create({
       firstName: credentials.firstName,
       lastName: credentials.lastName,
       email: credentials.email,
       username: credentials.username,
       password: pw,
       dealershipOrganization: org,
+      role: "root",
     });
-    org.employees = [newUser];
-    await org.save();
     const savedUser = await newUser.save();
 
     req.session.userId = savedUser.id;
 
-    return await DealershipRootUser.findOne(savedUser, {
-      loadEagerRelations: true,
-    });
+    return savedUser;
   }
 
-  @Mutation(() => DealershipRootUser)
+  @Mutation(() => DealershipUser)
   async login(
     @Ctx() { req }: ServerContext,
     @Arg("login") { password, username, email }: UserLogin
   ) {
     if (req.session.userId) {
-      return await DealershipRootUser.findOne(req.session.userId, {
-        relations: ["dealershipOrganization"],
+      return await DealershipUser.findOne(req.session.userId, {
+        relations: [
+          "dealershipOrganization",
+          "dealershipOrganization.employees",
+        ],
       });
     }
 
@@ -96,14 +95,14 @@ class RootUserResolver {
       return new ApolloError("Missing Credentials");
     }
 
-    let found: DealershipRootUser | undefined;
+    let found: DealershipUser | undefined;
 
     if (email)
-      found = await DealershipRootUser.findOne({
+      found = await DealershipUser.findOne({
         where: { email: misc.makeDbSearchable(email) },
       });
     else if (username)
-      found = await DealershipRootUser.findOne({
+      found = await DealershipUser.findOne({
         where: { username: misc.makeDbSearchable(username) },
       });
 
@@ -117,15 +116,15 @@ class RootUserResolver {
 
     req.session.userId = found.id;
 
-    return await DealershipRootUser.findOne(found.id, {
-      relations: ["dealershipOrganization"],
+    return await DealershipUser.findOne(found.id, {
+      relations: ["dealershipOrganization", "dealershipOrganization.employees"],
     });
   }
 
   @Mutation(() => Boolean)
   async deleteRootUser(@Arg("id", () => Int) id: number) {
     try {
-      await DealershipRootUser.delete(id);
+      await DealershipUser.delete(id);
       return true;
     } catch (error) {
       return false;

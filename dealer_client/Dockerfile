@@ -16,8 +16,6 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN /bin/bash install.sh
-
 ENTRYPOINT [ "/bin/bash" ]
 
 FROM base as dev

@@ -5,16 +5,15 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { DealershipOrganization } from "./DealershipOrganization";
-import { IDealershipUser } from "../interfaces/IDealershipUser";
 
 @Entity()
 @ObjectType()
-export class DealershipRootUser extends BaseEntity implements IDealershipUser {
+export class DealershipUser extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   readonly id: number;
@@ -39,13 +38,16 @@ export class DealershipRootUser extends BaseEntity implements IDealershipUser {
   password: string;
 
   @Field(() => DealershipOrganization)
-  @OneToOne(() => DealershipOrganization, (org) => org.rootUser, {
+  @ManyToOne(() => DealershipOrganization, (org) => org.employees, {
     eager: true,
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
+    cascade: true,
   })
   @JoinColumn()
   dealershipOrganization: DealershipOrganization;
+
+  @Field()
+  @Column({ default: "employee" })
+  role: "root" | "admin" | "manager" | "employee";
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })

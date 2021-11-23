@@ -1,0 +1,15 @@
+mutation RegisterRootUser($credentials: InputNewUser!) {
+  registerRootUser(credentials: $credentials) {
+    id
+    firstName
+    lastName
+    username
+    email
+    createdAt
+    updatedAt
+    dealershipOrganization {
+      id
+      key
+    }
+  }
+}

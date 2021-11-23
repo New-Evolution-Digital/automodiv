@@ -1,10 +1,10 @@
-import { ArgsType, Field, ID, InputType } from "type-graphql";
-import { DealershipDoor, Employee } from "../entities";
+import { Field, ID, InputType } from "type-graphql";
+import { DealershipDoor } from "../entities";
 import { DealershipOrganization } from "../entities/DealershipOrganization";
-import { DealershipRootUser } from "../entities/DealershipRootUser";
+import { DealershipUser } from "../entities/DealershipUser";
 
-@ArgsType()
-export class InputNewRootUser implements Partial<DealershipRootUser> {
+@InputType()
+export class InputNewUser implements Partial<DealershipUser> {
   @Field()
   readonly firstName: string;
 
@@ -19,9 +19,11 @@ export class InputNewRootUser implements Partial<DealershipRootUser> {
 
   @Field()
   readonly password: string;
+
+  [key: string]: string;
 }
 
-@ArgsType()
+@InputType()
 export class OrganizationInput implements Partial<DealershipOrganization> {
   @Field({ nullable: true })
   readonly name?: string;
@@ -42,28 +44,9 @@ export class OrganizationInput implements Partial<DealershipOrganization> {
   readonly zip?: string;
 
   @Field({ nullable: true })
-  readonly default_dealer_number?: number;
+  readonly default_dealer_number?: string;
 }
 
-@InputType()
-export class NewEmployeeCredentials implements Partial<Employee> {
-  @Field()
-  readonly firstName: string;
-
-  @Field()
-  readonly lastName: string;
-
-  @Field()
-  readonly email: string;
-
-  @Field()
-  readonly username: string;
-
-  @Field()
-  readonly password: string;
-
-  [key: string]: string;
-}
 @InputType()
 export class UserLogin {
   @Field({ nullable: true })

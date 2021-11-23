@@ -14,14 +14,13 @@ export type Scalars = {
   Float: number;
 };
 
-export type DealershipOrganization = {
-  __typename?: 'DealershipOrganization';
+export type DealershipDoor = {
+  __typename?: 'DealershipDoor';
   city?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
-  default_dealer_number?: Maybe<Scalars['Float']>;
-  id: Scalars['ID'];
+  dealerNumber?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
   name?: Maybe<Scalars['String']>;
-  rootUser?: Maybe<DealershipRootUser>;
   state?: Maybe<Scalars['String']>;
   streetAddress?: Maybe<Scalars['String']>;
   streetAddressTwo?: Maybe<Scalars['String']>;
@@ -29,24 +28,60 @@ export type DealershipOrganization = {
   zip?: Maybe<Scalars['String']>;
 };
 
-export type DealershipRootUser = {
-  __typename?: 'DealershipRootUser';
+export type DealershipOrganization = {
+  __typename?: 'DealershipOrganization';
+  city?: Maybe<Scalars['String']>;
+  createdAt: Scalars['String'];
+  dealershipDoors?: Maybe<Array<DealershipDoor>>;
+  default_dealer_number?: Maybe<Scalars['String']>;
+  employees: Array<DealershipUser>;
+  id: Scalars['ID'];
+  key: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  streetAddress?: Maybe<Scalars['String']>;
+  streetAddressTwo?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['String'];
+  zip?: Maybe<Scalars['String']>;
+};
+
+export type DealershipUser = {
+  __typename?: 'DealershipUser';
   createdAt: Scalars['String'];
   dealershipOrganization: DealershipOrganization;
   email: Scalars['String'];
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
+  role: Scalars['String'];
   updatedAt: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type InputNewUser = {
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  password: Scalars['String'];
   username: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addEmployeeByOrgKey: DealershipUser;
+  createDoor: DealershipDoor;
   deleteRootUser: Scalars['Boolean'];
-  login: DealershipRootUser;
-  registerRootUser: DealershipRootUser;
+  login: DealershipUser;
+  registerRootUser: DealershipUser;
   updateDealerOrg: DealershipOrganization;
+  updateDoorById?: Maybe<DealershipDoor>;
+};
+
+
+export type MutationAddEmployeeByOrgKeyArgs = {
+  credentials: InputNewUser;
+  employeeRole: Scalars['String'];
+  key: Scalars['String'];
 };
 
 
@@ -61,19 +96,25 @@ export type MutationLoginArgs = {
 
 
 export type MutationRegisterRootUserArgs = {
-  email: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  password: Scalars['String'];
-  username: Scalars['String'];
+  credentials: InputNewUser;
 };
 
 
 export type MutationUpdateDealerOrgArgs = {
+  dealerKey: Scalars['String'];
+  organizationInput: OrganizationInput;
+};
+
+
+export type MutationUpdateDoorByIdArgs = {
+  doorId: Scalars['ID'];
+  doorParameters: DoorInputParams;
+};
+
+export type OrganizationInput = {
   city?: Maybe<Scalars['String']>;
-  default_dealer_number?: Maybe<Scalars['Float']>;
+  default_dealer_number?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
-  org_id: Scalars['Float'];
   state?: Maybe<Scalars['String']>;
   streetAddress?: Maybe<Scalars['String']>;
   streetAddressTwo?: Maybe<Scalars['String']>;
@@ -82,8 +123,21 @@ export type MutationUpdateDealerOrgArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  getAllRootUsers: Array<DealershipRootUser>;
-  me: DealershipRootUser;
+  getAllRootUsers: Array<DealershipUser>;
+  getDealershipOrgById: DealershipOrganization;
+  getDoorsByOrgId: Array<DealershipDoor>;
+  getEmployeesByOrgKey?: Maybe<Array<DealershipUser>>;
+  me: DealershipUser;
+};
+
+
+export type QueryGetDoorsByOrgIdArgs = {
+  orgCredentials: OrgIndexables;
+};
+
+
+export type QueryGetEmployeesByOrgKeyArgs = {
+  key: Scalars['String'];
 };
 
 export type UserLogin = {
@@ -92,14 +146,143 @@ export type UserLogin = {
   username?: Maybe<Scalars['String']>;
 };
 
+export type DoorInputParams = {
+  city?: Maybe<Scalars['String']>;
+  dealerNumber?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  streetAddress?: Maybe<Scalars['String']>;
+  streetAddressTwo?: Maybe<Scalars['String']>;
+  zip?: Maybe<Scalars['String']>;
+};
+
+export type OrgIndexables = {
+  id?: Maybe<Scalars['ID']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+export type UpdateDealerOrgMutationVariables = Exact<{
+  DealerKey: Scalars['String'];
+  OrganizationInput: OrganizationInput;
+}>;
+
+
+export type UpdateDealerOrgMutation = { __typename?: 'Mutation', updateDealerOrg: { __typename?: 'DealershipOrganization', id: string, key: string, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, name?: string | null | undefined, default_dealer_number?: string | null | undefined, createdAt: string, updatedAt: string, employees: Array<{ __typename?: 'DealershipUser', id: string, firstName: string, lastName: string, username: string, role: string }> } };
+
+export type RegisterRootUserMutationVariables = Exact<{
+  credentials: InputNewUser;
+}>;
+
+
+export type RegisterRootUserMutation = { __typename?: 'Mutation', registerRootUser: { __typename?: 'DealershipUser', id: string, firstName: string, lastName: string, username: string, email: string, createdAt: string, updatedAt: string, dealershipOrganization: { __typename?: 'DealershipOrganization', id: string, key: string } } };
+
 export type LoginMutationVariables = Exact<{
   userLogin: UserLogin;
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'DealershipRootUser', id: string, firstName: string, lastName: string, email: string, username: string, createdAt: string, updatedAt: string, dealershipOrganization: { __typename?: 'DealershipOrganization', id: string } } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'DealershipUser', id: string, firstName: string, lastName: string, email: string, username: string, createdAt: string, updatedAt: string, dealershipOrganization: { __typename?: 'DealershipOrganization', id: string, key: string, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, name?: string | null | undefined, default_dealer_number?: string | null | undefined, updatedAt: string, createdAt: string, employees: Array<{ __typename?: 'DealershipUser', id: string, firstName: string, lastName: string }> } } };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'DealershipUser', username: string, dealershipOrganization: { __typename?: 'DealershipOrganization', id: string, key: string, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, name?: string | null | undefined, default_dealer_number?: string | null | undefined, createdAt: string, updatedAt: string } } };
+
+
+export const UpdateDealerOrgDocument = gql`
+    mutation UpdateDealerOrg($DealerKey: String!, $OrganizationInput: OrganizationInput!) {
+  updateDealerOrg(dealerKey: $DealerKey, organizationInput: $OrganizationInput) {
+    id
+    key
+    streetAddress
+    streetAddressTwo
+    city
+    state
+    zip
+    name
+    default_dealer_number
+    createdAt
+    updatedAt
+    employees {
+      id
+      firstName
+      lastName
+      username
+      role
+    }
+  }
+}
+    `;
+export type UpdateDealerOrgMutationFn = Apollo.MutationFunction<UpdateDealerOrgMutation, UpdateDealerOrgMutationVariables>;
+
+/**
+ * __useUpdateDealerOrgMutation__
+ *
+ * To run a mutation, you first call `useUpdateDealerOrgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDealerOrgMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDealerOrgMutation, { data, loading, error }] = useUpdateDealerOrgMutation({
+ *   variables: {
+ *      DealerKey: // value for 'DealerKey'
+ *      OrganizationInput: // value for 'OrganizationInput'
+ *   },
+ * });
+ */
+export function useUpdateDealerOrgMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDealerOrgMutation, UpdateDealerOrgMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateDealerOrgMutation, UpdateDealerOrgMutationVariables>(UpdateDealerOrgDocument, options);
+      }
+export type UpdateDealerOrgMutationHookResult = ReturnType<typeof useUpdateDealerOrgMutation>;
+export type UpdateDealerOrgMutationResult = Apollo.MutationResult<UpdateDealerOrgMutation>;
+export type UpdateDealerOrgMutationOptions = Apollo.BaseMutationOptions<UpdateDealerOrgMutation, UpdateDealerOrgMutationVariables>;
+export const RegisterRootUserDocument = gql`
+    mutation RegisterRootUser($credentials: InputNewUser!) {
+  registerRootUser(credentials: $credentials) {
+    id
+    firstName
+    lastName
+    username
+    email
+    createdAt
+    updatedAt
+    dealershipOrganization {
+      id
+      key
+    }
+  }
+}
+    `;
+export type RegisterRootUserMutationFn = Apollo.MutationFunction<RegisterRootUserMutation, RegisterRootUserMutationVariables>;
+
+/**
+ * __useRegisterRootUserMutation__
+ *
+ * To run a mutation, you first call `useRegisterRootUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterRootUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerRootUserMutation, { data, loading, error }] = useRegisterRootUserMutation({
+ *   variables: {
+ *      credentials: // value for 'credentials'
+ *   },
+ * });
+ */
+export function useRegisterRootUserMutation(baseOptions?: Apollo.MutationHookOptions<RegisterRootUserMutation, RegisterRootUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterRootUserMutation, RegisterRootUserMutationVariables>(RegisterRootUserDocument, options);
+      }
+export type RegisterRootUserMutationHookResult = ReturnType<typeof useRegisterRootUserMutation>;
+export type RegisterRootUserMutationResult = Apollo.MutationResult<RegisterRootUserMutation>;
+export type RegisterRootUserMutationOptions = Apollo.BaseMutationOptions<RegisterRootUserMutation, RegisterRootUserMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($userLogin: UserLogin!) {
   login(login: $userLogin) {
@@ -110,6 +293,21 @@ export const LoginDocument = gql`
     username
     dealershipOrganization {
       id
+      key
+      streetAddress
+      streetAddressTwo
+      city
+      state
+      zip
+      name
+      default_dealer_number
+      updatedAt
+      createdAt
+      employees {
+        id
+        firstName
+        lastName
+      }
     }
     createdAt
     updatedAt
@@ -142,3 +340,50 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const MeDocument = gql`
+    query Me {
+  me {
+    username
+    dealershipOrganization {
+      id
+      key
+      streetAddress
+      streetAddressTwo
+      city
+      state
+      zip
+      name
+      default_dealer_number
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;

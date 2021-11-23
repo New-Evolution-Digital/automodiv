@@ -1,0 +1,18 @@
+query Me {
+  me {
+    username
+    dealershipOrganization {
+      id
+      key
+      streetAddress
+      streetAddressTwo
+      city
+      state
+      zip
+      name
+      default_dealer_number
+      createdAt
+      updatedAt
+    }
+  }
+}

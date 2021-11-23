@@ -1,6 +1,6 @@
 import { ApolloError } from "apollo-server-express";
-import { Args, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { DealershipRootUser } from "../entities";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { DealershipUser } from "../entities";
 import { DealershipOrganization } from "../entities/DealershipOrganization";
 import * as misc from "../utils/misc";
 import { OrganizationInput } from "./InputTypes";
@@ -14,7 +14,7 @@ class OrganizationResolver {
     @Ctx() { req }: ServerContext
   ) {
     if (req.session.userId) {
-      const found: DealershipRootUser = await DealershipRootUser.findOne(
+      const found: DealershipUser = await DealershipUser.findOne(
         req.session.userId,
         { loadEagerRelations: true }
       );
@@ -46,24 +46,39 @@ class OrganizationResolver {
   @Mutation(() => DealershipOrganization)
   async updateDealerOrg(
     @Ctx() { req }: ServerContext,
-    @Args() props: OrganizationInput
+    @Arg("dealerKey") key: string,
+    @Arg("organizationInput", () => OrganizationInput) props: OrganizationInput
   ) {
     if (!req.session.userId) {
       throw new ApolloError("Not Authorized");
     }
 
     const found = await DealershipOrganization.findOne({
-      where: [{ rootUser: { id: req.session.userId } }],
-      relations: ["rootUser"],
+      where: [{ key }],
+      relations: ["employees"],
     });
 
     if (!found) {
       return new ApolloError("No dealer organization found");
     }
 
+    if (
+      !found.employees.find((emp) => {
+        return (
+          emp.id === req.session.userId &&
+          (emp.role === "admin" || emp.role === "root")
+        );
+      })
+    ) {
+      throw new Error("Not Authorized");
+    }
+
     const params = misc.allStringsToLowerCase(misc.trimStringsInObject(props));
 
-    return await DealershipOrganization.update(found.id, params);
+    await DealershipOrganization.update(found.id, params);
+    return await DealershipOrganization.findOne(found.id, {
+      relations: ["employees", "dealershipDoors"],
+    });
   }
 }
 

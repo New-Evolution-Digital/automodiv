@@ -7,14 +7,12 @@ import {
   Generated,
   JoinColumn,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { DealershipRootUser } from "./DealershipRootUser";
 import { ILocation } from "../interfaces/ILocation";
 import { DealershipDoor } from "./DealershipDoor";
-import Employee from "./Employees";
+import { DealershipUser } from "./DealershipUser";
 
 @Entity()
 @ObjectType()
@@ -53,12 +51,8 @@ export class DealershipOrganization extends BaseEntity implements ILocation {
   name?: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true, type: "int" })
-  default_dealer_number?: number;
-
-  @Field(() => DealershipRootUser, { nullable: true })
-  @OneToOne(() => DealershipRootUser, (root) => root.dealershipOrganization)
-  rootUser: DealershipRootUser;
+  @Column({ nullable: true })
+  default_dealer_number?: string;
 
   @Field(() => [DealershipDoor], { nullable: true })
   @OneToMany(
@@ -68,15 +62,13 @@ export class DealershipOrganization extends BaseEntity implements ILocation {
   )
   dealershipDoors: DealershipDoor[];
 
-  @Field(() => [Employee || DealershipRootUser], { nullable: true })
-  @OneToMany(() => Employee, (employee) => employee.dealershipOrganization, {
-    eager: true,
-    nullable: true,
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
+  @Field(() => [DealershipUser])
+  @OneToMany(
+    () => DealershipUser,
+    (employee) => employee.dealershipOrganization
+  )
   @JoinColumn()
-  employees?: (Employee | DealershipRootUser)[];
+  employees: DealershipUser[];
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })

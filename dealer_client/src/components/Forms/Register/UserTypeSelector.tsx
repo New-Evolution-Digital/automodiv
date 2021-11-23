@@ -15,7 +15,7 @@ const MemberFeatures = [
 ]
 
 interface UserTypeSelectorType {
-  setUserType: (userType: UserTypes) => void
+  setUserType: () => void
 }
 
 const UserTypeSelector: FC<UserTypeSelectorType> = ({ setUserType }) => {
@@ -59,7 +59,7 @@ const UserTypeSelector: FC<UserTypeSelectorType> = ({ setUserType }) => {
           <div className="rounded-md shadow cursor-default">
             <span
               className="flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-150 cursor-default"
-              onClick={() => setUserType('root')}
+              onClick={() => setUserType()}
             >
               Root Account
             </span>
@@ -93,7 +93,7 @@ const UserTypeSelector: FC<UserTypeSelectorType> = ({ setUserType }) => {
           <div className="rounded-md shadow cursor-default">
             <span
               className="flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-150 cursor-default"
-              onClick={() => setUserType('member')}
+              onClick={() => setUserType()}
             >
               Member
             </span>
