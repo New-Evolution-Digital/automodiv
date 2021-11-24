@@ -37,20 +37,51 @@ class DoorResolver {
    * @returns
    */
   @Mutation(() => DealershipDoor)
-  async createDoor(@Ctx() { req }: ServerContext) {
+  async createDoor(
+    @Ctx() { req }: ServerContext,
+    @Arg("key") key: string,
+    @Arg("doorParams") doorParams: doorInputParams
+  ) {
     if (!req.session.userId) {
       throw new ApolloError("Not Authorized");
     }
 
     const dealershipOrganization = await DealershipOrganization.findOne({
-      where: { rootUser: { id: req.session.userId } },
-      relations: ["rootUser"],
+      where: { key: key },
+      relations: ["employees", "dealershipDoors"],
     });
 
     if (!dealershipOrganization) {
       throw new ApolloError("Organization not found");
     }
-    const newDoor = DealershipDoor.create({ dealershipOrganization });
+
+    const isAuthorized = () => {
+      for (const emp of dealershipOrganization.employees) {
+        if (
+          emp.id === req.session.userId &&
+          (emp.role === "root" || emp.role === "admin")
+        )
+          return true;
+      }
+      return false;
+    };
+
+    if (!isAuthorized) {
+      throw new Error("Not Authorized");
+    }
+
+    for (const key in doorParams) {
+      if (Object.prototype.hasOwnProperty.call(doorParams, key)) {
+        const element = doorParams[key];
+
+        doorParams[key] = makeDbSearchable(element as string);
+      }
+    }
+
+    const newDoor = DealershipDoor.create({
+      dealershipOrganization,
+      ...doorParams,
+    });
     const savedDoor = await newDoor.save();
 
     if (!savedDoor) {

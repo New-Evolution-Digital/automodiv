@@ -1,0 +1,14 @@
+query GetDoorsByOrgId($OrgCredenials: orgIndexables!) {
+  getDoorsByOrgId(orgCredentials: $OrgCredenials) {
+    id
+    createdAt
+    updatedAt
+    name
+    streetAddress
+    streetAddressTwo
+    city
+    state
+    zip
+    dealerNumber
+  }
+}

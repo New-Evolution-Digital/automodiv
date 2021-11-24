@@ -26,6 +26,7 @@
     "@tailwindcss/forms": "^0.3.4",
     "apollo-upload-client": "^16.0.0",
     "deepmerge": "^4.2.2",
+    "dotenv": "^10.0.0",
     "formik": "^2.2.9",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.5",
