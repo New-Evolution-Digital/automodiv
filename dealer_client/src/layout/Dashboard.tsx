@@ -20,7 +20,7 @@ const Dashboard: FC<IDashboard> = ({
 }) => {
   const { pathname } = useRouter()
   return (
-    <div className="min-h-full">
+    <div className="min-h-screen flex flex-col">
       {/* NavBar */}
       <Disclosure as="nav" className="bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,7 +43,7 @@ const Dashboard: FC<IDashboard> = ({
                         item.name === pathname
                           ? 'bg-gray-900 text-white'
                           : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'px-3py-2 rounded-md text-sm font-medium'
+                        'px-3 py-2 rounded-md text-sm font-medium'
                       )}
                     >
                       {item.name}
@@ -60,9 +60,12 @@ const Dashboard: FC<IDashboard> = ({
           <h1 className="text-3xl font-bold text-gray-900">{dashboardTitle}</h1>
         </div>
       </header>
-      <main>
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">{children}</div>
-      </main>
+      <main className="h-full py-6 sm:px-6 lg:px-8 flex-grow">{children}</main>
+      <footer className="bg-gray-800 flex-shrink">
+        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+          <p className="text-white">Automodiv</p>
+        </div>
+      </footer>
     </div>
   )
 }

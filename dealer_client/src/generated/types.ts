@@ -85,6 +85,12 @@ export type MutationAddEmployeeByOrgKeyArgs = {
 };
 
 
+export type MutationCreateDoorArgs = {
+  doorParams: DoorInputParams;
+  key: Scalars['String'];
+};
+
+
 export type MutationDeleteRootUserArgs = {
   id: Scalars['Int'];
 };
@@ -161,6 +167,21 @@ export type OrgIndexables = {
   key?: Maybe<Scalars['String']>;
 };
 
+export type CreateDoorMutationVariables = Exact<{
+  key: Scalars['String'];
+  DoorParams: DoorInputParams;
+}>;
+
+
+export type CreateDoorMutation = { __typename?: 'Mutation', createDoor: { __typename?: 'DealershipDoor', id: number, createdAt: string, updatedAt: string, name?: string | null | undefined, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, dealerNumber?: string | null | undefined } };
+
+export type GetDoorsByOrgIdQueryVariables = Exact<{
+  OrgCredenials: OrgIndexables;
+}>;
+
+
+export type GetDoorsByOrgIdQuery = { __typename?: 'Query', getDoorsByOrgId: Array<{ __typename?: 'DealershipDoor', id: number, createdAt: string, updatedAt: string, name?: string | null | undefined, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, dealerNumber?: string | null | undefined }> };
+
 export type UpdateDealerOrgMutationVariables = Exact<{
   DealerKey: Scalars['String'];
   OrganizationInput: OrganizationInput;
@@ -189,6 +210,93 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'DealershipUser', username: string, dealershipOrganization: { __typename?: 'DealershipOrganization', id: string, key: string, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, name?: string | null | undefined, default_dealer_number?: string | null | undefined, createdAt: string, updatedAt: string } } };
 
 
+export const CreateDoorDocument = gql`
+    mutation CreateDoor($key: String!, $DoorParams: doorInputParams!) {
+  createDoor(doorParams: $DoorParams, key: $key) {
+    id
+    createdAt
+    updatedAt
+    name
+    streetAddress
+    streetAddressTwo
+    city
+    state
+    zip
+    dealerNumber
+  }
+}
+    `;
+export type CreateDoorMutationFn = Apollo.MutationFunction<CreateDoorMutation, CreateDoorMutationVariables>;
+
+/**
+ * __useCreateDoorMutation__
+ *
+ * To run a mutation, you first call `useCreateDoorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDoorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDoorMutation, { data, loading, error }] = useCreateDoorMutation({
+ *   variables: {
+ *      key: // value for 'key'
+ *      DoorParams: // value for 'DoorParams'
+ *   },
+ * });
+ */
+export function useCreateDoorMutation(baseOptions?: Apollo.MutationHookOptions<CreateDoorMutation, CreateDoorMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDoorMutation, CreateDoorMutationVariables>(CreateDoorDocument, options);
+      }
+export type CreateDoorMutationHookResult = ReturnType<typeof useCreateDoorMutation>;
+export type CreateDoorMutationResult = Apollo.MutationResult<CreateDoorMutation>;
+export type CreateDoorMutationOptions = Apollo.BaseMutationOptions<CreateDoorMutation, CreateDoorMutationVariables>;
+export const GetDoorsByOrgIdDocument = gql`
+    query GetDoorsByOrgId($OrgCredenials: orgIndexables!) {
+  getDoorsByOrgId(orgCredentials: $OrgCredenials) {
+    id
+    createdAt
+    updatedAt
+    name
+    streetAddress
+    streetAddressTwo
+    city
+    state
+    zip
+    dealerNumber
+  }
+}
+    `;
+
+/**
+ * __useGetDoorsByOrgIdQuery__
+ *
+ * To run a query within a React component, call `useGetDoorsByOrgIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDoorsByOrgIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDoorsByOrgIdQuery({
+ *   variables: {
+ *      OrgCredenials: // value for 'OrgCredenials'
+ *   },
+ * });
+ */
+export function useGetDoorsByOrgIdQuery(baseOptions: Apollo.QueryHookOptions<GetDoorsByOrgIdQuery, GetDoorsByOrgIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDoorsByOrgIdQuery, GetDoorsByOrgIdQueryVariables>(GetDoorsByOrgIdDocument, options);
+      }
+export function useGetDoorsByOrgIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDoorsByOrgIdQuery, GetDoorsByOrgIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDoorsByOrgIdQuery, GetDoorsByOrgIdQueryVariables>(GetDoorsByOrgIdDocument, options);
+        }
+export type GetDoorsByOrgIdQueryHookResult = ReturnType<typeof useGetDoorsByOrgIdQuery>;
+export type GetDoorsByOrgIdLazyQueryHookResult = ReturnType<typeof useGetDoorsByOrgIdLazyQuery>;
+export type GetDoorsByOrgIdQueryResult = Apollo.QueryResult<GetDoorsByOrgIdQuery, GetDoorsByOrgIdQueryVariables>;
 export const UpdateDealerOrgDocument = gql`
     mutation UpdateDealerOrg($DealerKey: String!, $OrganizationInput: OrganizationInput!) {
   updateDealerOrg(dealerKey: $DealerKey, organizationInput: $OrganizationInput) {

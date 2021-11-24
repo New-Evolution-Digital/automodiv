@@ -1,0 +1,14 @@
+mutation CreateDoor($key: String!, $DoorParams: doorInputParams!) {
+  createDoor(doorParams: $DoorParams, key: $key) {
+    id
+    createdAt
+    updatedAt
+    name
+    streetAddress
+    streetAddressTwo
+    city
+    state
+    zip
+    dealerNumber
+  }
+}
