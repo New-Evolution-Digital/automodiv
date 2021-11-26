@@ -48,8 +48,8 @@ const DealershipDashboard: FC = () => {
             )}
           </h2>
         </div>
-        <div className="max-w-7xl mx-auto py-2">
-          <div className="sm:max-w-md">
+        <div className="max-w-7xl mx-auto py-2 flex gap-3">
+          <div className="w-full sm:max-w-md">
             <div className="flex gap-3">
               <h2 className="text-3xl mb-3">Doors</h2>
               <Link href="/dealership/door/add" passHref>
@@ -93,35 +93,41 @@ const DealershipDashboard: FC = () => {
                         {doorsExist() ? (
                           <>
                             {doors.data?.getDoorsByOrgId.map(
-                              (door, doorIdx) => (
-                                <tr
-                                  key={door.id}
-                                  className={
-                                    doorIdx % 2 === 0
-                                      ? 'bg-white'
-                                      : 'bg-gray-50'
-                                  }
-                                >
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {doorIdx + 1}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-center text-gray-900">
-                                    {su.capitalize(door.name as string)}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-center text-gray-900">
-                                    {su.capitalize(
-                                      door.streetAddress as string
-                                    )}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                    <Link href="#">
-                                      <a className="text-blue-600 hover:text-blue-900">
-                                        View
-                                      </a>
-                                    </Link>
-                                  </td>
-                                </tr>
-                              )
+                              (door, doorIdx) => {
+                                const id = door.id
+                                return (
+                                  <tr
+                                    key={`${door.id}-${doorIdx}`}
+                                    className={
+                                      doorIdx % 2 === 0
+                                        ? 'bg-white'
+                                        : 'bg-gray-50'
+                                    }
+                                  >
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                      {doorIdx + 1}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-center text-gray-900">
+                                      {su.capitalize(door.name as string)}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-center text-gray-900">
+                                      {su.capitalize(
+                                        door.streetAddress as string
+                                      )}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                      <Link
+                                        href={`/dealership/door/${id}`}
+                                        passHref
+                                      >
+                                        <a className="text-blue-600 hover:text-blue-900">
+                                          View
+                                        </a>
+                                      </Link>
+                                    </td>
+                                  </tr>
+                                )
+                              }
                             )}
                           </>
                         ) : (
@@ -137,6 +143,18 @@ const DealershipDashboard: FC = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="w-full sm:max-w-md">
+            <div className="flex gap-3">
+              <h2 className="text-3xl mb-3">Employees</h2>
+              <Link href="/dealership/employee/add" passHref>
+                <a className="flex items-center">
+                  <PlusCircleIcon className="h-4 w-4 mr-2" />
+                  <span>Add An Employee</span>
+                </a>
+              </Link>
+            </div>
+            <div className="flex flex-col"></div>
           </div>
         </div>
       </Dashboard>

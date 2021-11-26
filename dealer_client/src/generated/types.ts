@@ -131,9 +131,16 @@ export type Query = {
   __typename?: 'Query';
   getAllRootUsers: Array<DealershipUser>;
   getDealershipOrgById: DealershipOrganization;
+  getDoorById: DealershipDoor;
   getDoorsByOrgId: Array<DealershipDoor>;
   getEmployeesByOrgKey?: Maybe<Array<DealershipUser>>;
   me: DealershipUser;
+};
+
+
+export type QueryGetDoorByIdArgs = {
+  doorId: Scalars['Int'];
+  orgCredentials: OrgIndexables;
 };
 
 
@@ -174,6 +181,14 @@ export type CreateDoorMutationVariables = Exact<{
 
 
 export type CreateDoorMutation = { __typename?: 'Mutation', createDoor: { __typename?: 'DealershipDoor', id: number, createdAt: string, updatedAt: string, name?: string | null | undefined, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, dealerNumber?: string | null | undefined } };
+
+export type GetDoorByIdQueryVariables = Exact<{
+  doorId: Scalars['Int'];
+  orgCredentials: OrgIndexables;
+}>;
+
+
+export type GetDoorByIdQuery = { __typename?: 'Query', getDoorById: { __typename?: 'DealershipDoor', id: number, createdAt: string, updatedAt: string, name?: string | null | undefined, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, dealerNumber?: string | null | undefined } };
 
 export type GetDoorsByOrgIdQueryVariables = Exact<{
   OrgCredenials: OrgIndexables;
@@ -253,6 +268,51 @@ export function useCreateDoorMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateDoorMutationHookResult = ReturnType<typeof useCreateDoorMutation>;
 export type CreateDoorMutationResult = Apollo.MutationResult<CreateDoorMutation>;
 export type CreateDoorMutationOptions = Apollo.BaseMutationOptions<CreateDoorMutation, CreateDoorMutationVariables>;
+export const GetDoorByIdDocument = gql`
+    query GetDoorById($doorId: Int!, $orgCredentials: orgIndexables!) {
+  getDoorById(doorId: $doorId, orgCredentials: $orgCredentials) {
+    id
+    createdAt
+    updatedAt
+    name
+    streetAddress
+    streetAddressTwo
+    city
+    state
+    zip
+    dealerNumber
+  }
+}
+    `;
+
+/**
+ * __useGetDoorByIdQuery__
+ *
+ * To run a query within a React component, call `useGetDoorByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDoorByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDoorByIdQuery({
+ *   variables: {
+ *      doorId: // value for 'doorId'
+ *      orgCredentials: // value for 'orgCredentials'
+ *   },
+ * });
+ */
+export function useGetDoorByIdQuery(baseOptions: Apollo.QueryHookOptions<GetDoorByIdQuery, GetDoorByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDoorByIdQuery, GetDoorByIdQueryVariables>(GetDoorByIdDocument, options);
+      }
+export function useGetDoorByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDoorByIdQuery, GetDoorByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDoorByIdQuery, GetDoorByIdQueryVariables>(GetDoorByIdDocument, options);
+        }
+export type GetDoorByIdQueryHookResult = ReturnType<typeof useGetDoorByIdQuery>;
+export type GetDoorByIdLazyQueryHookResult = ReturnType<typeof useGetDoorByIdLazyQuery>;
+export type GetDoorByIdQueryResult = Apollo.QueryResult<GetDoorByIdQuery, GetDoorByIdQueryVariables>;
 export const GetDoorsByOrgIdDocument = gql`
     query GetDoorsByOrgId($OrgCredenials: orgIndexables!) {
   getDoorsByOrgId(orgCredentials: $OrgCredenials) {
