@@ -1,12 +1,19 @@
 import { ApolloError } from "apollo-server-express";
-import { Arg, Ctx, ID, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, ID, Int, Mutation, Query, Resolver } from "type-graphql";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
+import * as _ from "lodash";
 import { DealershipDoor, DealershipOrganization } from "../entities";
 import { makeDbSearchable } from "../utils/misc";
 import { doorInputParams, orgIndexables } from "./InputTypes";
 
 @Resolver(() => DealershipDoor)
 class DoorResolver {
+  /**
+   * Gets all the doors related to an organization id or key
+   * @param param0
+   * @param orgCredentials
+   * @returns
+   */
   @Query(() => [DealershipDoor])
   async getDoorsByOrgId(
     @Ctx() { req }: ServerContext,
@@ -29,6 +36,30 @@ class DoorResolver {
     });
 
     return foundOrg?.dealershipDoors;
+  }
+
+  @Query(() => DealershipDoor)
+  async getDoorById(
+    @Ctx() { req }: ServerContext,
+    @Arg("orgCredentials") orgCredentials: orgIndexables,
+    @Arg("doorId", () => Int) id: number
+  ): Promise<DealershipDoor | undefined> {
+    if (!req.session.userId) {
+      throw new ApolloError("Not authorized");
+    }
+
+    const foundOrg = await DealershipOrganization.findOne({
+      where: [{ id: orgCredentials.id }, { key: orgCredentials.key }],
+      relations: ["dealershipDoors"],
+    });
+
+    if (!foundOrg || !foundOrg.dealershipDoors) {
+      throw new ApolloError("No data found");
+    }
+
+    const doors = foundOrg.dealershipDoors;
+
+    return _.find(doors, { id: id });
   }
 
   /**

@@ -62,7 +62,7 @@ export type InputNewUser = {
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
-  password: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
   username: Scalars['String'];
 };
 
@@ -131,14 +131,28 @@ export type Query = {
   __typename?: 'Query';
   getAllRootUsers: Array<DealershipUser>;
   getDealershipOrgById: DealershipOrganization;
+  getDoorById: DealershipDoor;
   getDoorsByOrgId: Array<DealershipDoor>;
+  getEmployeeById?: Maybe<DealershipUser>;
   getEmployeesByOrgKey?: Maybe<Array<DealershipUser>>;
   me: DealershipUser;
 };
 
 
+export type QueryGetDoorByIdArgs = {
+  doorId: Scalars['Int'];
+  orgCredentials: OrgIndexables;
+};
+
+
 export type QueryGetDoorsByOrgIdArgs = {
   orgCredentials: OrgIndexables;
+};
+
+
+export type QueryGetEmployeeByIdArgs = {
+  employeeId: Scalars['ID'];
+  orgKey: Scalars['String'];
 };
 
 
@@ -175,12 +189,27 @@ export type CreateDoorMutationVariables = Exact<{
 
 export type CreateDoorMutation = { __typename?: 'Mutation', createDoor: { __typename?: 'DealershipDoor', id: number, createdAt: string, updatedAt: string, name?: string | null | undefined, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, dealerNumber?: string | null | undefined } };
 
+export type GetDoorByIdQueryVariables = Exact<{
+  doorId: Scalars['Int'];
+  orgCredentials: OrgIndexables;
+}>;
+
+
+export type GetDoorByIdQuery = { __typename?: 'Query', getDoorById: { __typename?: 'DealershipDoor', id: number, createdAt: string, updatedAt: string, name?: string | null | undefined, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, dealerNumber?: string | null | undefined } };
+
 export type GetDoorsByOrgIdQueryVariables = Exact<{
   OrgCredenials: OrgIndexables;
 }>;
 
 
 export type GetDoorsByOrgIdQuery = { __typename?: 'Query', getDoorsByOrgId: Array<{ __typename?: 'DealershipDoor', id: number, createdAt: string, updatedAt: string, name?: string | null | undefined, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, dealerNumber?: string | null | undefined }> };
+
+export type GetEmployeeByOrgKeyQueryVariables = Exact<{
+  key: Scalars['String'];
+}>;
+
+
+export type GetEmployeeByOrgKeyQuery = { __typename?: 'Query', getEmployeesByOrgKey?: Array<{ __typename?: 'DealershipUser', id: string, firstName: string, lastName: string, username: string, email: string, role: string, createdAt: string, updatedAt: string }> | null | undefined };
 
 export type UpdateDealerOrgMutationVariables = Exact<{
   DealerKey: Scalars['String'];
@@ -196,6 +225,23 @@ export type RegisterRootUserMutationVariables = Exact<{
 
 
 export type RegisterRootUserMutation = { __typename?: 'Mutation', registerRootUser: { __typename?: 'DealershipUser', id: string, firstName: string, lastName: string, username: string, email: string, createdAt: string, updatedAt: string, dealershipOrganization: { __typename?: 'DealershipOrganization', id: string, key: string } } };
+
+export type AddEmployeeByOrgKeyMutationVariables = Exact<{
+  EmployeeRole: Scalars['String'];
+  Credentials: InputNewUser;
+  Key: Scalars['String'];
+}>;
+
+
+export type AddEmployeeByOrgKeyMutation = { __typename?: 'Mutation', addEmployeeByOrgKey: { __typename?: 'DealershipUser', id: string, firstName: string, lastName: string, username: string, email: string, createdAt: string, updatedAt: string } };
+
+export type GetEmployeeByIdQueryVariables = Exact<{
+  EmployeeId: Scalars['ID'];
+  OrgKey: Scalars['String'];
+}>;
+
+
+export type GetEmployeeByIdQuery = { __typename?: 'Query', getEmployeeById?: { __typename?: 'DealershipUser', id: string, firstName: string, lastName: string, username: string, email: string, role: string, createdAt: string, updatedAt: string } | null | undefined };
 
 export type LoginMutationVariables = Exact<{
   userLogin: UserLogin;
@@ -253,6 +299,51 @@ export function useCreateDoorMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateDoorMutationHookResult = ReturnType<typeof useCreateDoorMutation>;
 export type CreateDoorMutationResult = Apollo.MutationResult<CreateDoorMutation>;
 export type CreateDoorMutationOptions = Apollo.BaseMutationOptions<CreateDoorMutation, CreateDoorMutationVariables>;
+export const GetDoorByIdDocument = gql`
+    query GetDoorById($doorId: Int!, $orgCredentials: orgIndexables!) {
+  getDoorById(doorId: $doorId, orgCredentials: $orgCredentials) {
+    id
+    createdAt
+    updatedAt
+    name
+    streetAddress
+    streetAddressTwo
+    city
+    state
+    zip
+    dealerNumber
+  }
+}
+    `;
+
+/**
+ * __useGetDoorByIdQuery__
+ *
+ * To run a query within a React component, call `useGetDoorByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDoorByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDoorByIdQuery({
+ *   variables: {
+ *      doorId: // value for 'doorId'
+ *      orgCredentials: // value for 'orgCredentials'
+ *   },
+ * });
+ */
+export function useGetDoorByIdQuery(baseOptions: Apollo.QueryHookOptions<GetDoorByIdQuery, GetDoorByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDoorByIdQuery, GetDoorByIdQueryVariables>(GetDoorByIdDocument, options);
+      }
+export function useGetDoorByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDoorByIdQuery, GetDoorByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDoorByIdQuery, GetDoorByIdQueryVariables>(GetDoorByIdDocument, options);
+        }
+export type GetDoorByIdQueryHookResult = ReturnType<typeof useGetDoorByIdQuery>;
+export type GetDoorByIdLazyQueryHookResult = ReturnType<typeof useGetDoorByIdLazyQuery>;
+export type GetDoorByIdQueryResult = Apollo.QueryResult<GetDoorByIdQuery, GetDoorByIdQueryVariables>;
 export const GetDoorsByOrgIdDocument = gql`
     query GetDoorsByOrgId($OrgCredenials: orgIndexables!) {
   getDoorsByOrgId(orgCredentials: $OrgCredenials) {
@@ -297,6 +388,48 @@ export function useGetDoorsByOrgIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetDoorsByOrgIdQueryHookResult = ReturnType<typeof useGetDoorsByOrgIdQuery>;
 export type GetDoorsByOrgIdLazyQueryHookResult = ReturnType<typeof useGetDoorsByOrgIdLazyQuery>;
 export type GetDoorsByOrgIdQueryResult = Apollo.QueryResult<GetDoorsByOrgIdQuery, GetDoorsByOrgIdQueryVariables>;
+export const GetEmployeeByOrgKeyDocument = gql`
+    query GetEmployeeByOrgKey($key: String!) {
+  getEmployeesByOrgKey(key: $key) {
+    id
+    firstName
+    lastName
+    username
+    email
+    role
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetEmployeeByOrgKeyQuery__
+ *
+ * To run a query within a React component, call `useGetEmployeeByOrgKeyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEmployeeByOrgKeyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEmployeeByOrgKeyQuery({
+ *   variables: {
+ *      key: // value for 'key'
+ *   },
+ * });
+ */
+export function useGetEmployeeByOrgKeyQuery(baseOptions: Apollo.QueryHookOptions<GetEmployeeByOrgKeyQuery, GetEmployeeByOrgKeyQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEmployeeByOrgKeyQuery, GetEmployeeByOrgKeyQueryVariables>(GetEmployeeByOrgKeyDocument, options);
+      }
+export function useGetEmployeeByOrgKeyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEmployeeByOrgKeyQuery, GetEmployeeByOrgKeyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEmployeeByOrgKeyQuery, GetEmployeeByOrgKeyQueryVariables>(GetEmployeeByOrgKeyDocument, options);
+        }
+export type GetEmployeeByOrgKeyQueryHookResult = ReturnType<typeof useGetEmployeeByOrgKeyQuery>;
+export type GetEmployeeByOrgKeyLazyQueryHookResult = ReturnType<typeof useGetEmployeeByOrgKeyLazyQuery>;
+export type GetEmployeeByOrgKeyQueryResult = Apollo.QueryResult<GetEmployeeByOrgKeyQuery, GetEmployeeByOrgKeyQueryVariables>;
 export const UpdateDealerOrgDocument = gql`
     mutation UpdateDealerOrg($DealerKey: String!, $OrganizationInput: OrganizationInput!) {
   updateDealerOrg(dealerKey: $DealerKey, organizationInput: $OrganizationInput) {
@@ -391,6 +524,94 @@ export function useRegisterRootUserMutation(baseOptions?: Apollo.MutationHookOpt
 export type RegisterRootUserMutationHookResult = ReturnType<typeof useRegisterRootUserMutation>;
 export type RegisterRootUserMutationResult = Apollo.MutationResult<RegisterRootUserMutation>;
 export type RegisterRootUserMutationOptions = Apollo.BaseMutationOptions<RegisterRootUserMutation, RegisterRootUserMutationVariables>;
+export const AddEmployeeByOrgKeyDocument = gql`
+    mutation AddEmployeeByOrgKey($EmployeeRole: String!, $Credentials: InputNewUser!, $Key: String!) {
+  addEmployeeByOrgKey(
+    employeeRole: $EmployeeRole
+    credentials: $Credentials
+    key: $Key
+  ) {
+    id
+    firstName
+    lastName
+    username
+    email
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type AddEmployeeByOrgKeyMutationFn = Apollo.MutationFunction<AddEmployeeByOrgKeyMutation, AddEmployeeByOrgKeyMutationVariables>;
+
+/**
+ * __useAddEmployeeByOrgKeyMutation__
+ *
+ * To run a mutation, you first call `useAddEmployeeByOrgKeyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddEmployeeByOrgKeyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addEmployeeByOrgKeyMutation, { data, loading, error }] = useAddEmployeeByOrgKeyMutation({
+ *   variables: {
+ *      EmployeeRole: // value for 'EmployeeRole'
+ *      Credentials: // value for 'Credentials'
+ *      Key: // value for 'Key'
+ *   },
+ * });
+ */
+export function useAddEmployeeByOrgKeyMutation(baseOptions?: Apollo.MutationHookOptions<AddEmployeeByOrgKeyMutation, AddEmployeeByOrgKeyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddEmployeeByOrgKeyMutation, AddEmployeeByOrgKeyMutationVariables>(AddEmployeeByOrgKeyDocument, options);
+      }
+export type AddEmployeeByOrgKeyMutationHookResult = ReturnType<typeof useAddEmployeeByOrgKeyMutation>;
+export type AddEmployeeByOrgKeyMutationResult = Apollo.MutationResult<AddEmployeeByOrgKeyMutation>;
+export type AddEmployeeByOrgKeyMutationOptions = Apollo.BaseMutationOptions<AddEmployeeByOrgKeyMutation, AddEmployeeByOrgKeyMutationVariables>;
+export const GetEmployeeByIdDocument = gql`
+    query GetEmployeeById($EmployeeId: ID!, $OrgKey: String!) {
+  getEmployeeById(employeeId: $EmployeeId, orgKey: $OrgKey) {
+    id
+    firstName
+    lastName
+    username
+    email
+    role
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetEmployeeByIdQuery__
+ *
+ * To run a query within a React component, call `useGetEmployeeByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEmployeeByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEmployeeByIdQuery({
+ *   variables: {
+ *      EmployeeId: // value for 'EmployeeId'
+ *      OrgKey: // value for 'OrgKey'
+ *   },
+ * });
+ */
+export function useGetEmployeeByIdQuery(baseOptions: Apollo.QueryHookOptions<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>(GetEmployeeByIdDocument, options);
+      }
+export function useGetEmployeeByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>(GetEmployeeByIdDocument, options);
+        }
+export type GetEmployeeByIdQueryHookResult = ReturnType<typeof useGetEmployeeByIdQuery>;
+export type GetEmployeeByIdLazyQueryHookResult = ReturnType<typeof useGetEmployeeByIdLazyQuery>;
+export type GetEmployeeByIdQueryResult = Apollo.QueryResult<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($userLogin: UserLogin!) {
   login(login: $userLogin) {

@@ -1,13 +1,14 @@
 import { ApolloError } from "apollo-server-express";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, ID, Mutation, Query, Resolver } from "type-graphql";
 import argon from "argon2";
 import {
   DealershipDoor,
   DealershipOrganization,
   DealershipUser,
 } from "../entities";
-import { makeDbSearchable } from "../utils/misc";
+import { genPassword, makeDbSearchable } from "../utils/misc";
 import { InputNewUser } from "./InputTypes";
+import _ from "lodash";
 
 @Resolver(() => DealershipUser)
 class EmployeeResolver {
@@ -21,6 +22,42 @@ class EmployeeResolver {
     );
 
     return org?.employees;
+  }
+
+  @Query(() => DealershipUser, { nullable: true })
+  async getEmployeeById(
+    @Ctx() { req }: ServerContext,
+    @Arg("orgKey") orgKey: string,
+    @Arg("employeeId", () => ID) empId: number
+  ) {
+    if (!req.session.userId) {
+      throw new ApolloError("Not authorized");
+    }
+
+    if (!orgKey || !empId) {
+      throw new ApolloError("None Found");
+    }
+
+    const org = await DealershipOrganization.findOne({
+      where: [{ key: orgKey }],
+      relations: ["employees"],
+    });
+
+    if (org === undefined) {
+      throw new ApolloError("None Found");
+    }
+
+    console.log("Employees", org.employees);
+
+    if (!_.find(org.employees, { id: req.session.userId })) {
+      throw new ApolloError("Not Authorized");
+    }
+
+    const emp = await DealershipUser.findOne(empId);
+    console.log("employee id", empId);
+    console.log("Employee", emp);
+
+    return emp;
   }
 
   @Mutation(() => DealershipUser)
@@ -68,7 +105,7 @@ class EmployeeResolver {
       }
     }
 
-    const password = await argon.hash(credentials.password.trim());
+    const password = await argon.hash(genPassword());
     const newEmployee = DealershipUser.create({
       firstName: params.firstName,
       lastName: params.lastName,

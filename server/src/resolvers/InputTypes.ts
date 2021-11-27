@@ -17,7 +17,7 @@ export class InputNewUser implements Partial<DealershipUser> {
   @Field()
   readonly username: string;
 
-  @Field()
+  @Field({ nullable: true })
   readonly password: string;
 
   [key: string]: string;

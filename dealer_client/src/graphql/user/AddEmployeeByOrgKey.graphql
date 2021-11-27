@@ -1,0 +1,19 @@
+mutation AddEmployeeByOrgKey(
+  $EmployeeRole: String!
+  $Credentials: InputNewUser!
+  $Key: String!
+) {
+  addEmployeeByOrgKey(
+    employeeRole: $EmployeeRole
+    credentials: $Credentials
+    key: $Key
+  ) {
+    id
+    firstName
+    lastName
+    username
+    email
+    createdAt
+    updatedAt
+  }
+}

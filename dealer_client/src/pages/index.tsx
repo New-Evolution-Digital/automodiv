@@ -1,4 +1,6 @@
+import { useRouter } from 'next/router'
 import React, { FC } from 'react'
+import { useMeQuery } from '../generated/types'
 
 import { Public } from '../layout'
 
@@ -42,6 +44,22 @@ const Hero: FC = () => {
 }
 
 const index: FC = () => {
+  const me = useMeQuery()
+  const { push } = useRouter()
+  if (me.data) {
+    const { dealershipOrganization, username } = me.data.me
+    if (!!dealershipOrganization.key) {
+      const orgKey = localStorage.getItem('organization')
+
+      if (!orgKey) {
+        localStorage.setItem('organization', dealershipOrganization.key)
+      }
+    }
+
+    if (username) {
+      push('/dealership')
+    }
+  }
   return <Public heroOverlay={<HeroOverlay />} hero={<Hero />} />
 }
 

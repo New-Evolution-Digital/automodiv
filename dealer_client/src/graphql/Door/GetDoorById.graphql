@@ -1,0 +1,14 @@
+query GetDoorById($doorId: Int!, $orgCredentials: orgIndexables!) {
+  getDoorById(doorId: $doorId, orgCredentials: $orgCredentials) {
+    id
+    createdAt
+    updatedAt
+    name
+    streetAddress
+    streetAddressTwo
+    city
+    state
+    zip
+    dealerNumber
+  }
+}

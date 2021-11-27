@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { MobileMenu, DesktopMenu, Nav } from '../components'
+import { Menu, Nav } from '../components'
 import joinClasses from '../utils/joinClasses'
 
 interface PublicProps {
@@ -12,7 +12,7 @@ interface PublicProps {
 const Public: FC<PublicProps> = ({ children, heroOverlay, hero }) => {
   return (
     <div className="bg-white flex flex-col min-h-screen">
-      <MobileMenu />
+      <Menu.Mobile />
       <div className={joinClasses('relative', !children ? 'h-screen' : '')}>
         {!!heroOverlay && heroOverlay}
         {/* Navigation */}
@@ -20,7 +20,7 @@ const Public: FC<PublicProps> = ({ children, heroOverlay, hero }) => {
           <nav aria-label="Top">
             {/* Top navigation */}
             <Nav.AuthBar />
-            <DesktopMenu light={!heroOverlay} />
+            <Menu.Desktop light={!heroOverlay} />
           </nav>
         </header>
         {hero}

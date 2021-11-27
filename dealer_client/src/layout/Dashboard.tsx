@@ -4,6 +4,7 @@ import { Disclosure } from '@headlessui/react'
 
 import joinClasses from '../utils/joinClasses'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const navigation: LinkTypes[] = [
   { name: 'Home', href: '/dealership' },
@@ -18,6 +19,7 @@ const Dashboard: FC<IDashboard> = ({
   children,
   dashboardTitle = 'Dashboard'
 }) => {
+  const { pathname } = useRouter()
   return (
     <div className="min-h-screen flex flex-col">
       {/* NavBar */}
@@ -39,7 +41,7 @@ const Dashboard: FC<IDashboard> = ({
                       <a
                         key={item.name}
                         className={joinClasses(
-                          false
+                          pathname === item.href
                             ? 'bg-gray-900 text-white'
                             : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                           'px-3 py-2 rounded-md text-sm font-medium'
