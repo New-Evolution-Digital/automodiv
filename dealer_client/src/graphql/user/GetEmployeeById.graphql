@@ -1,0 +1,12 @@
+query GetEmployeeById($EmployeeId: ID!, $OrgKey: String!) {
+  getEmployeeById(employeeId: $EmployeeId, orgKey: $OrgKey) {
+    id
+    firstName
+    lastName
+    username
+    email
+    role
+    createdAt
+    updatedAt
+  }
+}

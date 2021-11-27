@@ -28,3 +28,16 @@ export function allStringsToLowerCase<T>(
 export function makeDbSearchable(str: string): string {
   return str.trim().toLowerCase();
 }
+
+export function genPassword(): string {
+  let password = "";
+
+  const min = 32;
+  const max = 126;
+
+  for (let i = 0; i <= 24; i++) {
+    const char = Math.floor(Math.random() * (max - min + 1) + min);
+    password += String.fromCharCode(char);
+  }
+  return password;
+}

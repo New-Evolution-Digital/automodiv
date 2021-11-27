@@ -1,0 +1,12 @@
+query GetEmployeeByOrgKey($key: String!) {
+  getEmployeesByOrgKey(key: $key) {
+    id
+    firstName
+    lastName
+    username
+    email
+    role
+    createdAt
+    updatedAt
+  }
+}
