@@ -51,7 +51,7 @@ export class DealershipUser extends BaseEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  phone_number: string;
+  phone_number?: string;
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })
