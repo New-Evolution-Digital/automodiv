@@ -52,6 +52,10 @@ export class DealershipOrganization extends BaseEntity implements ILocation {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
+  phone_number?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   default_dealer_number?: string;
 
   @Field(() => [DealershipDoor], { nullable: true })
