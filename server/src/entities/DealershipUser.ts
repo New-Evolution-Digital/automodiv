@@ -49,6 +49,10 @@ export class DealershipUser extends BaseEntity {
   @Column({ default: "employee" })
   role: "root" | "admin" | "manager" | "employee";
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  phone_number: string;
+
   @Field()
   @CreateDateColumn({ type: "timestamp" })
   createdAt: string;
