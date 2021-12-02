@@ -28,8 +28,8 @@ services:
       - server
     volumes:
       - ./dealer_client:/usr/src/app
-    environment:
-      - SERVER_URL=http://localhost:4000
+  environment:
+    - SERVER_URL=http://localhost:4000
 
   server:
     build:
@@ -63,4 +63,4 @@ services:
     volumes:
       - ./shopper:/usr/src/app
     environment:
-      - SERVER_URL=http://localhost:4000
+      - SERVER_URL=httpg://localhost:4000
