@@ -1,4 +1,4 @@
-FROM node as base
+FROM node
 
 RUN apt-get update -y
 RUN apt install -y netcat
@@ -15,8 +15,6 @@ RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 
 COPY . .
-
-FROM base as dev
 
 EXPOSE 4000
 

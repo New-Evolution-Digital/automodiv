@@ -56,7 +56,7 @@ export class DealershipDoor extends BaseEntity implements ILocation {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  phone_number: string;
+  phone_number?: string;
 
   @ManyToOne(() => DealershipOrganization, (org) => org.dealershipDoors)
   dealershipOrganization: DealershipOrganization;

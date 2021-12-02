@@ -1,3 +1,3 @@
 #!/bin/bash
 
-exec npm start -- --port 3001
+exec npm run dev -- --port 3001

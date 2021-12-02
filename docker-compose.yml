@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 services:
   server_db:
     image: mysql:latest
@@ -16,10 +16,7 @@ services:
       - "6379:6379"
 
   dealer_client:
-    build:
-      context: ./dealer_client
-      dockerfile: Dockerfile
-      target: dev
+    build: ./dealer_client
     ports:
       - "3000:3000"
     expose:
@@ -28,18 +25,15 @@ services:
       - server
     volumes:
       - ./dealer_client:/usr/src/app
-  environment:
-    - SERVER_URL=http://localhost:4000
+    environment:
+      - SERVER_URL=http://localhost:4000
 
   server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-      target: dev
+    build: ./server
     ports:
       - "4000:4000"
     expose:
-      - 7000
+      - 4000
     depends_on:
       - server_db
       - server_redis
@@ -51,11 +45,9 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
 
   shopper:
-    build:
-      context: ./shopper
-      dockerfile: Dockerfile
-      target: dev
-    ports: -"3001:3001"
+    build: ./shopper
+    ports:
+      - "3001:3001"
     expose:
       - 3001
     depends_on:
