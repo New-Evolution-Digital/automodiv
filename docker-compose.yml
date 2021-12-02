@@ -49,3 +49,18 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
+
+  shopper:
+    build:
+      context: ./shopper
+      dockerfile: Dockerfile
+      target: dev
+    ports: -"3001:3001"
+    expose:
+      - 3001
+    depends_on:
+      - server
+    volumes:
+      - ./shopper:/usr/src/app
+    environment:
+      - SERVER_URL=http://localhost:4000
