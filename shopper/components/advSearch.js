@@ -2,22 +2,22 @@ import { useState } from 'react';
 import { gql, useLazyQuery } from '@apollo/client';
 import Link from 'next/link';
 
-const FEED_SEARCH_QUERY = gql`
-  query FeedSearchQuery($filter: String!) {
-    feed(filter: $filter) {
-      vehicles {
-        id
-        make
-        model
-        new
-        used
-      }
-  }
-`;
+// // const FEED_SEARCH_QUERY = gql`
+//   query FeedSearchQuery($filter: String!) {
+//     feed(filter: $filter) {
+//       vehicles {
+//         id
+//         make
+//         model
+//         new
+//         used
+//       }
+//   }
+// `;
 
 const AdvSearch = () => {
 	const [searchFilter, setSearchFilter] = useState('');
-	const [executeSearch, { data }] = useLazyQuery(FEED_SEARCH_QUERY);
+	// const [executeSearch, { data }] = useLazyQuery(FEED_SEARCH_QUERY);
 
 	return (
 		<>
@@ -29,11 +29,11 @@ const AdvSearch = () => {
 					onChange={(e) => setSearchFilter(e.target.value)}
 				/>
 				<button
-					onClick={() =>
-						executeSearch({
-							variables: { filter: searchFilter },
-						})
-					}
+					// onClick={() =>
+					// 	executeSearch({
+					// 		variables: { filter: searchFilter },
+					// 	})
+					// }
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -51,10 +51,10 @@ const AdvSearch = () => {
 					</svg>
 				</button>
 			</div>
-			{data &&
+			{/* {data &&
 				data.feed.vehicles.map((link, index) => (
 					<Link key={vehicles.id} link={link} index={index} />
-				))}
+				))} */}
 		</>
 	);
 };
