@@ -12,13 +12,34 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className='flex items-center flex-wrap bg-blue-500 p-3 '>
+      <nav className='navbar'>
+        <div className='navbar-container flex-1 justify-between align-center'>
+          <div className='navbar-logo w-50 h-50'>
+            <Link href='/'>
+              <img src='img/logo.png' alt='' />
+            </Link>
+          </div>
+          <ul className='navbar-nav-left uppercase flex-1 ml-20'>
+            <li>
+              <a href='#'>Home</a>
+            </li>
+            <li>
+              <a href='#'>Services</a>
+            </li>
+            <li>
+              <a href='#'>About Us</a>
+            </li>
+            <li>
+              <a href='#'>Contact</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+
+
+      {/* <nav className='flex items-center flex-wrap bg-blue-500 p-3 '>
         <Link href='/'>
-          <a className='inline-flex items-center p-2 mr-4 '>
-            <span className='text-xl text-white font-bold uppercase tracking-wide'>
-              Automodiv
-            </span>
-          </a>
         </Link>
 
         <button
@@ -67,7 +88,7 @@ const Navigation = () => {
           </div>
           <DarkModeSwitch />
         </div>
-      </nav>
+      </nav> */}
     </>
   );
 };

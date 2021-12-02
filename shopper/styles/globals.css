@@ -14,3 +14,19 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.navbar {
+  @apply w-full h-auto bg-white p-20 shadow-md;
+}
+
+.navbar ul {
+  @apply flex-1 align-center;
+}
+
+.navbar li {
+  @apply mx-15 font-bold;
+}
+
+.navbar a {
+  @apply text-black no-underline;
+}
