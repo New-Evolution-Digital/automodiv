@@ -4,41 +4,81 @@ import DarkModeSwitch from './darkSwitch';
 import Search from './search';
 
 const Navigation = () => {
-  const [active, setActive] = useState(false);
+	const [active, setActive] = useState(false);
 
-  const handleClick = () => {
-    setActive(!active);
-  };
+	const handleClick = () => {
+		setActive(!active);
+	};
 
-  return (
-    <>
-      <nav className='navbar'>
-        <div className='navbar-container flex-1 justify-between align-center'>
-          <div className='navbar-logo w-50 h-50'>
-            <Link href='/'>
-              <img src='img/logo.png' alt='' />
-            </Link>
-          </div>
-          <ul className='navbar-nav-left uppercase flex-1 ml-20'>
-            <li>
-              <a href='#'>Home</a>
-            </li>
-            <li>
-              <a href='#'>Services</a>
-            </li>
-            <li>
-              <a href='#'>About Us</a>
-            </li>
-            <li>
-              <a href='#'>Contact</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
+	return (
+		<>
+			<nav className="navbar w-full h-auto bg-black p-20 shadow-md">
+				<div className="navbar-container flex-1 justify-between align-center">
+					<div className="navbar-logo w-50 h-50">
+						<a className="text-white no-underline" href="#">
+							<img src="img/logo.png" alt="" />
+						</a>
+					</div>
+					<ul className="navbar-nav-left flex-1 align-center uppercase ml-20">
+						<li className="mx-15 font-bold">
+							<a className="text-white no-underline" href="/">
+								Home
+							</a>
+						</li>
+						<li className="mx-15 font-bold">
+							<a className="text-white no-underline" href="/services">
+								Services
+							</a>
+						</li>
+						<li className="mx-15 font-bold">
+							<a className="text-white no-underline" href="/about">
+								About Us
+							</a>
+						</li>
+						<li className="mx-15 font-bold">
+							<a className="text-white no-underline" href="/contact">
+								Contact
+							</a>
+						</li>
+					</ul>
+					<ul className="navbar-nav-right flex-1 align-center">
+						<li className="flex-1 align-center mx-15 font-bold">
+							<a className="text-white no-underline" href="/">
+								<svg
+									className="h-20 w-20 mr-10"
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-6 w-6"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+									/>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+									/>
+								</svg>
+								<span>Find a Dealer</span>
+							</a>
+						</li>
+						<li className="mx-15 font-bold">
+							<button className="btn btn-dark-outline">Sign In</button>
+						</li>
+						<li className="mx-15 font-bold">
+							<button className="btn btn-dark">Join Now</button>
+						</li>
+					</ul>
+				</div>
+			</nav>
 
-
-
-      {/* <nav className='flex items-center flex-wrap bg-blue-500 p-3 '>
+			{/* <nav className='flex items-center flex-wrap bg-blue-500 p-3 '>
         <Link href='/'>
         </Link>
 
@@ -89,8 +129,8 @@ const Navigation = () => {
           <DarkModeSwitch />
         </div>
       </nav> */}
-    </>
-  );
+		</>
+	);
 };
 
 export default Navigation;
