@@ -1,7 +1,7 @@
 FROM node
 
 RUN apt-get update -y
-RUN apt install -y netcat
+RUN apt-get install bash -y
 
 RUN mkdir /usr/src/cache
 WORKDIR /usr/src/cache
@@ -9,19 +9,16 @@ WORKDIR /usr/src/cache
 COPY package*.json ./
 
 RUN npm install
-RUN npm install -g ts-node
 
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 
 COPY . .
 
-EXPOSE 4000
+ENTRYPOINT [ "/bin/bash" ]
 
-RUN npm install -g nodemon
+EXPOSE 3001
 
 RUN npm install --only=dev
 
-ENTRYPOINT [ "sh", "-c" ]
-
-CMD [ "./install.sh && ./wait.sh server_db:3306 --timeout=1200 -- npm run dev" ]
+CMD ["./build-then-start.sh"]

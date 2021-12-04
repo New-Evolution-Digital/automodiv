@@ -1,4 +1,4 @@
-FROM node:lts as base
+FROM node:lts
 
 RUN apt-get update -y
 RUN apt-get install bash -y
@@ -17,8 +17,6 @@ WORKDIR /usr/src/app
 COPY . .
 
 ENTRYPOINT [ "/bin/bash" ]
-
-FROM base as dev
 
 EXPOSE 3000
 
