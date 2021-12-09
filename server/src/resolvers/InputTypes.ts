@@ -93,3 +93,15 @@ export class doorInputParams implements Partial<DealershipDoor> {
 
   [key: string]: string | undefined;
 }
+
+@InputType()
+export class updateUser implements Partial<DealershipUser> {
+  @Field()
+  readonly firstName: string;
+
+  @Field()
+  readonly lastName: string;
+
+  @Field()
+  readonly contact?: string;
+}
