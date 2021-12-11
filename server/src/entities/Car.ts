@@ -24,4 +24,28 @@ export class CarInventory {
   @ManyToOne(() => DealershipDoor)
   @JoinColumn({ name: "dealership_door_id" })
   dealership_door: DealershipDoor
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  year?: number
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  make?: string
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  model?: string
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  trim?: string
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  series?: string
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  transmission?: string
 }

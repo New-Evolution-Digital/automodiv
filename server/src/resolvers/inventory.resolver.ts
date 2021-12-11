@@ -13,6 +13,7 @@ import { DealershipDoor } from "../entities"
 import { CarInventory } from "../entities/Car"
 import DoorToItem from "../entities/DoorToItem"
 import { makeDbSearchable } from "../utils/misc"
+import { getVinResults } from "../utils/vinAPI"
 
 @Resolver()
 export class InventoryResolver {
@@ -39,10 +40,12 @@ export class InventoryResolver {
     const carRepo = getRepository(CarInventory)
 
     // Create the car
+    const params = await getVinResults(vin)
     const carInstance = carRepo.create({
       vin: makeDbSearchable(vin),
       dealership_door_id: foundDoor.id,
       dealership_door: foundDoor,
+      ...params,
     })
 
     const savedCar = await carRepo.save(carInstance)
@@ -129,6 +132,7 @@ export class InventoryResolver {
         if (!foundCar) {
           continue
         }
+
         inventory.push(foundCar)
       }
     }
