@@ -10,16 +10,23 @@ export class HandleJWT {
     this.secret = __jwt__.secret
   }
 
-  private createJWT(payload: PayloadType, options: CreateJWTOptionsType) {
+  private createJWT(payload: PayloadType, options?: CreateJWTOptionsType) {
     const token = jwt.sign(payload, this.secret, {
       ...options,
       algorithm: "HS512",
-      expiresIn: options.expiresIn || "24h",
+      expiresIn: options?.expiresIn || "24h",
     })
     return token
   }
 
-  public createIdJWT(payload: PayloadType, options: CreateIdOptionsType) {
+  public createIdJWT(payload: PayloadType, options?: CreateIdOptionsType) {
     return this.createJWT(payload, { ...options, jwtid: "AMD-ID" })
+  }
+
+  public verifyJWT(
+    token: string,
+    options: Omit<jwt.VerifyOptions, "complete">
+  ) {
+    return jwt.verify(token, this.secret, { ...options, complete: true })
   }
 }
