@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/jsonwebtoken": "^8.5.6",
     "apollo-server-express": "^3.5.0",
     "argon2": "^0.28.2",
     "axios": "^0.24.0",
