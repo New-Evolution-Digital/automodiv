@@ -95,13 +95,14 @@ export class doorInputParams implements Partial<DealershipDoor> {
 }
 
 @InputType()
-export class updateUser implements Partial<DealershipUser> {
-  @Field()
-  readonly firstName: string;
+export class UpdateUser implements Partial<DealershipUser> {
+  @Field({ nullable: true })
+  readonly firstName?: string;
 
-  @Field()
-  readonly lastName: string;
+  @Field({ nullable: true })
+  readonly lastName?: string;
 
-  @Field()
-  readonly contact?: string;
+  @Field({ nullable: true })
+  readonly phone_number?: string;
+  [key: string]: string | undefined;
 }
