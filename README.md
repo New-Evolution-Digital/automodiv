@@ -43,7 +43,7 @@ This does require that you have a .env file in the root. If you need a copy of w
 
 For now all branch naming conventions should follow this format:
 
-**This is due to change in January**
+**This is due to change in January, 2022**
 
 {service}/{feature-description}
 
