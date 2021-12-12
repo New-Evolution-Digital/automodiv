@@ -5,17 +5,10 @@ import {
   DealershipDoor,
   DealershipOrganization,
   DealershipUser,
-<<<<<<< HEAD
 } from "../entities"
 import { genPassword, makeDbSearchable } from "../utils/misc"
 import { InputNewUser, UpdateUser } from "./InputTypes"
 import _ from "lodash"
-=======
-} from "../entities";
-import { genPassword, makeDbSearchable } from "../utils/misc";
-import { InputNewUser, UpdateUser } from "./InputTypes";
-import _ from "lodash";
->>>>>>> baa9e62c76d87091834b933952b9993dbe0d5417
 
 @Resolver(() => DealershipUser)
 class EmployeeResolver {
