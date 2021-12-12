@@ -35,8 +35,6 @@ export const getVinResults = async (
     }
   }
 
-  console.log(car)
-
   return {
     year: car["Year"],
     make: car["Make"],

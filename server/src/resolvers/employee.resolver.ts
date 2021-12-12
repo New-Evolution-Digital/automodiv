@@ -1,14 +1,14 @@
-import { ApolloError } from "apollo-server-express";
-import { Arg, Ctx, ID, Mutation, Query, Resolver } from "type-graphql";
-import argon from "argon2";
+import { ApolloError } from "apollo-server-express"
+import { Arg, Ctx, ID, Mutation, Query, Resolver } from "type-graphql"
+import argon from "argon2"
 import {
   DealershipDoor,
   DealershipOrganization,
   DealershipUser,
-} from "../entities";
-import { genPassword, makeDbSearchable } from "../utils/misc";
-import { InputNewUser } from "./InputTypes";
-import _ from "lodash";
+} from "../entities"
+import { genPassword, makeDbSearchable } from "../utils/misc"
+import { InputNewUser } from "./InputTypes"
+import _ from "lodash"
 
 @Resolver(() => DealershipUser)
 class EmployeeResolver {
@@ -19,9 +19,9 @@ class EmployeeResolver {
     const org = await DealershipOrganization.findOne(
       { key },
       { relations: ["employees"] }
-    );
+    )
 
-    return org?.employees;
+    return org?.employees
   }
 
   @Query(() => DealershipUser, { nullable: true })
@@ -31,33 +31,29 @@ class EmployeeResolver {
     @Arg("employeeId", () => ID) empId: number
   ) {
     if (!req.session.userId) {
-      throw new ApolloError("Not authorized");
+      throw new ApolloError("Not authorized")
     }
 
     if (!orgKey || !empId) {
-      throw new ApolloError("None Found");
+      throw new ApolloError("None Found")
     }
 
     const org = await DealershipOrganization.findOne({
       where: [{ key: orgKey }],
       relations: ["employees"],
-    });
+    })
 
     if (org === undefined) {
-      throw new ApolloError("None Found");
+      throw new ApolloError("None Found")
     }
-
-    console.log("Employees", org.employees);
 
     if (!_.find(org.employees, { id: req.session.userId })) {
-      throw new ApolloError("Not Authorized");
+      throw new ApolloError("Not Authorized")
     }
 
-    const emp = await DealershipUser.findOne(empId);
-    console.log("employee id", empId);
-    console.log("Employee", emp);
+    const emp = await DealershipUser.findOne(empId)
 
-    return emp;
+    return emp
   }
 
   @Mutation(() => DealershipUser)
@@ -70,14 +66,14 @@ class EmployeeResolver {
     let foundOrg = await DealershipOrganization.findOne(
       { key },
       { relations: ["employees"] }
-    );
+    )
 
     if (!req.session.userId) {
-      throw new ApolloError("Not Authorized");
+      throw new ApolloError("Not Authorized")
     }
 
     if (!foundOrg) {
-      throw new ApolloError("No Matching Organization Credentials");
+      throw new ApolloError("No Matching Organization Credentials")
     }
 
     if (
@@ -85,10 +81,10 @@ class EmployeeResolver {
         return (
           emp.id === req.session.userId &&
           (emp.role === "admin" || emp.role === "root")
-        );
+        )
       })
     ) {
-      throw new ApolloError("No Matching Organization Credentials");
+      throw new ApolloError("No Matching Organization Credentials")
     }
 
     let params: Partial<InputNewUser> & { [key: string]: string } = {
@@ -96,16 +92,16 @@ class EmployeeResolver {
       lastName: "",
       username: "",
       email: "",
-    };
+    }
 
     for (const key in params) {
       if (Object.prototype.hasOwnProperty.call(params, key)) {
-        const element = credentials[key];
-        params[key] = makeDbSearchable(element);
+        const element = credentials[key]
+        params[key] = makeDbSearchable(element)
       }
     }
 
-    const password = await argon.hash(genPassword());
+    const password = await argon.hash(genPassword())
     const newEmployee = DealershipUser.create({
       firstName: params.firstName,
       lastName: params.lastName,
@@ -114,23 +110,22 @@ class EmployeeResolver {
       password,
       role: employeeRole,
       dealershipOrganization: foundOrg,
-    });
+    })
 
-    const saved = await newEmployee.save();
+    const saved = await newEmployee.save()
 
     if (!saved.id) {
-      throw new ApolloError("No user was created");
+      throw new ApolloError("No user was created")
     }
 
     if (!foundOrg.employees) {
-      await DealershipOrganization.update({ key }, { employees: [saved] });
+      await DealershipOrganization.update({ key }, { employees: [saved] })
     } else {
-      foundOrg.employees = [...foundOrg.employees, saved];
+      foundOrg.employees = [...foundOrg.employees, saved]
     }
-    console.log("saved user", saved.id);
-    await foundOrg.save();
-    return saved;
+    await foundOrg.save()
+    return saved
   }
 }
 
-export default EmployeeResolver;
+export default EmployeeResolver

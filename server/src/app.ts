@@ -14,7 +14,7 @@ import {
   OrgResolver,
   RootUserResolver,
 } from "./resolvers"
-import { __prod__, __mysql__ } from "./constants"
+import { __prod__, __mysql__, checkEnvVars, __redis__ } from "./constants"
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core"
 import { DealershipOrganization } from "./entities/DealershipOrganization"
 import { DealershipUser } from "./entities/DealershipUser"
@@ -24,13 +24,15 @@ import { CarInventory } from "./entities/Car"
 import DoorToItem from "./entities/DoorToItem"
 
 export const createServer = async () => {
+  checkEnvVars()
+
   await createConnection({
     type: "mysql",
     host: "automodiv_server_db_1",
     username: __mysql__.MYSQL_USER,
     port: 3306,
     password: __mysql__.MYSQL_PASSWORD,
-    database: "automodiv",
+    database: __mysql__.MYSQL_DATABASE,
     entities: [
       DealershipOrganization,
       DealershipUser,
@@ -39,13 +41,14 @@ export const createServer = async () => {
       DoorToItem,
     ],
     logging: !__prod__ && "all",
-    logger: "advanced-console",
+    logger: "debug",
     synchronize: !__prod__,
   })
 
   const redisStore = connectRedis(session)
   let redis: Redis.Redis
-  if (process.env.REDIS_URL) redis = new Redis(process.env.REDIS_URL)
+  if (!__redis__.REDIS_URL!.includes("automodiv_server_redis_1"))
+    redis = new Redis(__redis__.REDIS_URL)
   else redis = new Redis(6379, "automodiv_server_redis_1")
 
   const schema = await buildSchema({
@@ -79,7 +82,7 @@ export const createServer = async () => {
         sameSite: "lax",
         secure: __prod__,
       },
-      secret: "secret",
+      secret: __redis__.REDIS_SECRET!,
       resave: false,
       saveUninitialized: false,
     })
