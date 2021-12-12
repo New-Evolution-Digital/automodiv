@@ -15,5 +15,21 @@ export const __redis__ = {
 export const __mysql__ = {
   MYSQL_USER: process.env.MYSQL_USER,
   MYSQL_PASSWORD: process.env.MYSQL_PASSWORD,
-  MYSQL_DB: process.env.MYSQL_DB,
+  MYSQL_DATABASE: process.env.MYSQL_DATABASE,
+}
+
+const requiredEnvVars = [
+  "JWT_SECRET",
+  "REDIS_URL",
+  "MYSQL_USER",
+  "MYSQL_PASSWORD",
+  "MYSQL_DATABASE",
+]
+
+export const checkEnvVars = () => {
+  for (const key of requiredEnvVars) {
+    if (!!process.env[key]) {
+      throw new Error(`Missing ${key} environment variable`)
+    }
+  }
 }
