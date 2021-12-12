@@ -7,7 +7,7 @@ import {
   DealershipUser,
 } from "../entities";
 import { genPassword, makeDbSearchable } from "../utils/misc";
-import { InputNewUser } from "./InputTypes";
+import { InputNewUser, UpdateUser } from "./InputTypes";
 import _ from "lodash";
 
 @Resolver(() => DealershipUser)
@@ -71,7 +71,7 @@ class EmployeeResolver {
       { key },
       { relations: ["employees"] }
     );
-
+    console.log("req.session", req.session);
     if (!req.session.userId) {
       throw new ApolloError("Not Authorized");
     }
@@ -130,6 +130,30 @@ class EmployeeResolver {
     console.log("saved user", saved.id);
     await foundOrg.save();
     return saved;
+  }
+
+  @Mutation(() => DealershipUser)
+  async updateEmployeeById(
+    @Ctx() { req }: ServerContext,
+    @Arg("updatedUser", () => UpdateUser) updatedUser: UpdateUser
+  ): Promise<DealershipUser | null> {
+    console.log("req session", req.session);
+    if (!req.session.userId) {
+      throw new ApolloError("Not Authorized");
+    }
+    const user = await DealershipUser.findOne(req.session.userId, {
+      relations: ["dealershipOrganization", "dealershipOrganization.employees"],
+    });
+
+    for (const key in updatedUser) {
+      if (Object.prototype.hasOwnProperty.call(updatedUser, key)) {
+        if (!!updatedUser[key]) {
+          user[key] = makeDbSearchable(updatedUser[key] as string);
+        }
+      }
+    }
+
+    return await user.save();
   }
 }
 
