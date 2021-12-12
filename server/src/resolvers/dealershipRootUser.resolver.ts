@@ -1,4 +1,12 @@
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql"
+import {
+  Arg,
+  Ctx,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql"
 import argon from "argon2"
 import { DealershipUser } from "../entities/DealershipUser"
 import { InputNewUser, UserLogin } from "./InputTypes"
@@ -6,10 +14,11 @@ import * as misc from "../utils/misc"
 import { DealershipOrganization } from "../entities/DealershipOrganization"
 import { ApolloError } from "apollo-server-express"
 import { UserAuthReturn } from "./ReturnTypes"
-import { HandleJWT } from "../utils/jwtHandler"
+import { JwtHandler } from "../utils/jwtHandler"
+import { isLoggedIn } from "../utils/middleware"
 
 const createUserJWT = (id: number, key: string) => {
-  return new HandleJWT().createIdJWT({
+  return new JwtHandler().createIdJWT({
     userId: id,
     orgKey: key,
   })
@@ -18,7 +27,9 @@ const createUserJWT = (id: number, key: string) => {
 @Resolver(DealershipUser)
 class RootUserResolver {
   @Query(() => DealershipUser)
+  @UseMiddleware(isLoggedIn)
   async me(@Ctx() { req }: ServerContext) {
+    console.log(req.session)
     if (!req.session.userId) {
       return new ApolloError("No authenticated user")
     }
