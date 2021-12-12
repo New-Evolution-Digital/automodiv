@@ -8,6 +8,13 @@ import { ApolloError } from "apollo-server-express"
 import { UserAuthReturn } from "./ReturnTypes"
 import { HandleJWT } from "../utils/jwtHandler"
 
+const createUserJWT = (id: number, key: string) => {
+  return new HandleJWT().createIdJWT({
+    userId: id,
+    orgKey: key,
+  })
+}
+
 @Resolver(DealershipUser)
 class RootUserResolver {
   @Query(() => DealershipUser)
@@ -76,10 +83,10 @@ class RootUserResolver {
 
     req.session.userId = savedUser.id
 
-    const jwt = new HandleJWT().createIdJWT({
-      userId: savedUser.id,
-      orgKey: savedUser.dealershipOrganization.key,
-    })
+    const jwt = createUserJWT(
+      savedUser.id,
+      savedUser.dealershipOrganization.key
+    )
 
     return { user: savedUser, jwt }
   }
@@ -97,10 +104,7 @@ class RootUserResolver {
         ],
       })
 
-      const jwt = new HandleJWT().createIdJWT({
-        userId: user.id,
-        orgKey: user.dealershipOrganization.key,
-      })
+      const jwt = createUserJWT(user.id, user.dealershipOrganization.key)
 
       return { user, jwt }
     }
@@ -135,10 +139,10 @@ class RootUserResolver {
 
     req.session.userId = foundUser.id
 
-    const jwt = new HandleJWT().createIdJWT({
-      userId: foundUser.id,
-      orgKey: foundUser.dealershipOrganization.key,
-    })
+    const jwt = createUserJWT(
+      foundUser.id,
+      foundUser.dealershipOrganization.key
+    )
 
     return { user: foundUser, jwt }
   }
