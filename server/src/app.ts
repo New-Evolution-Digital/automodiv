@@ -14,7 +14,7 @@ import {
   OrgResolver,
   RootUserResolver,
 } from "./resolvers"
-import { __postgres__, __prod__, __mysql__ } from "./constants"
+import { __prod__, __mysql__ } from "./constants"
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core"
 import { DealershipOrganization } from "./entities/DealershipOrganization"
 import { DealershipUser } from "./entities/DealershipUser"

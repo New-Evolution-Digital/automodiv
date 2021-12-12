@@ -1,30 +1,32 @@
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
-import argon from "argon2";
-import { DealershipUser } from "../entities/DealershipUser";
-import { InputNewUser, UserLogin } from "./InputTypes";
-import * as misc from "../utils/misc";
-import { DealershipOrganization } from "../entities/DealershipOrganization";
-import { ApolloError } from "apollo-server-express";
+import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql"
+import argon from "argon2"
+import { DealershipUser } from "../entities/DealershipUser"
+import { InputNewUser, UserLogin } from "./InputTypes"
+import * as misc from "../utils/misc"
+import { DealershipOrganization } from "../entities/DealershipOrganization"
+import { ApolloError } from "apollo-server-express"
+import { UserAuthReturn } from "./ReturnTypes"
+import { HandleJWT } from "../utils/jwtHandler"
 
 @Resolver(DealershipUser)
 class RootUserResolver {
   @Query(() => DealershipUser)
   async me(@Ctx() { req }: ServerContext) {
     if (!req.session.userId) {
-      return new ApolloError("No authenticated user");
+      return new ApolloError("No authenticated user")
     }
 
     const user = await DealershipUser.findOne(req.session.userId, {
       relations: ["dealershipOrganization", "dealershipOrganization.employees"],
-    });
-    return user;
+    })
+    return user
   }
 
   @Query(() => [DealershipUser])
   async getAllRootUsers() {
     return await DealershipUser.find({
       relations: ["dealershipOrganization"],
-    });
+    })
   }
 
   /**
@@ -33,34 +35,34 @@ class RootUserResolver {
    * @param param1
    * @returns
    */
-  @Mutation(() => DealershipUser)
+  @Mutation(() => UserAuthReturn)
   async registerRootUser(
     @Arg("credentials")
     { firstName, lastName, username, email, password }: InputNewUser,
     @Ctx() { req }: ServerContext
-  ) {
+  ): Promise<UserAuthReturn | undefined> {
     if (password.length < 6) {
-      return new ApolloError("Password is too short");
+      throw new ApolloError("Password is too short")
     }
     const credentials = misc.allStringsToLowerCase(
       misc.trimStringsInObject({ firstName, lastName, username, email })
-    );
+    )
 
     if (credentials.username.length < 6) {
-      return new ApolloError("Username is too short");
+      throw new ApolloError("Username is too short")
     }
 
     if (/@\w+.\w+/g.test(credentials.username)) {
-      return new ApolloError("Username can't look like an email");
+      throw new ApolloError("Username can't look like an email")
     }
 
     if (!/@\w+.\w+/g.test(credentials.email)) {
-      return new ApolloError("Email may not be valid");
+      throw new ApolloError("Email may not be valid")
     }
-    const pw = await argon.hash(password);
+    const pw = await argon.hash(password)
 
-    const org = DealershipOrganization.create();
-    await org.save();
+    const org = DealershipOrganization.create()
+    await org.save()
     const newUser = DealershipUser.create({
       firstName: credentials.firstName,
       lastName: credentials.lastName,
@@ -69,67 +71,87 @@ class RootUserResolver {
       password: pw,
       dealershipOrganization: org,
       role: "root",
-    });
-    const savedUser = await newUser.save();
+    })
+    const savedUser = await newUser.save()
 
-    req.session.userId = savedUser.id;
+    req.session.userId = savedUser.id
 
-    return savedUser;
+    const jwt = new HandleJWT().createIdJWT({
+      userId: savedUser.id,
+      orgKey: savedUser.dealershipOrganization.key,
+    })
+
+    return { user: savedUser, jwt }
   }
 
-  @Mutation(() => DealershipUser)
+  @Mutation(() => UserAuthReturn)
   async login(
     @Ctx() { req }: ServerContext,
     @Arg("login") { password, username, email }: UserLogin
-  ) {
+  ): Promise<UserAuthReturn | undefined> {
     if (req.session.userId) {
-      return await DealershipUser.findOne(req.session.userId, {
+      const user = await DealershipUser.findOne(req.session.userId, {
         relations: [
           "dealershipOrganization",
           "dealershipOrganization.employees",
         ],
-      });
+      })
+
+      const jwt = new HandleJWT().createIdJWT({
+        userId: user.id,
+        orgKey: user.dealershipOrganization.key,
+      })
+
+      return { user, jwt }
     }
 
     if ((!email && !username) || !password) {
-      return new ApolloError("Missing Credentials");
+      throw new ApolloError("Missing Credentials")
     }
 
-    let found: DealershipUser | undefined;
+    let foundUser: DealershipUser | undefined
+    const options = {
+      relations: ["dealershipOrganization", "dealershipOrganization.employees"],
+    }
 
     if (email)
-      found = await DealershipUser.findOne({
+      foundUser = await DealershipUser.findOne({
+        ...options,
         where: { email: misc.makeDbSearchable(email) },
-      });
+      })
     else if (username)
-      found = await DealershipUser.findOne({
+      foundUser = await DealershipUser.findOne({
+        ...options,
         where: { username: misc.makeDbSearchable(username) },
-      });
+      })
 
-    if (!found) {
-      return new ApolloError("No user matching credentials");
+    if (!foundUser) {
+      throw new ApolloError("No user matching credentials")
     }
 
-    if (!(await argon.verify(found.password, password))) {
-      return new ApolloError("No user matching credentials");
+    if (!(await argon.verify(foundUser.password, password))) {
+      throw new ApolloError("No user matching credentials")
     }
 
-    req.session.userId = found.id;
+    req.session.userId = foundUser.id
 
-    return await DealershipUser.findOne(found.id, {
-      relations: ["dealershipOrganization", "dealershipOrganization.employees"],
-    });
+    const jwt = new HandleJWT().createIdJWT({
+      userId: foundUser.id,
+      orgKey: foundUser.dealershipOrganization.key,
+    })
+
+    return { user: foundUser, jwt }
   }
 
   @Mutation(() => Boolean)
   async deleteRootUser(@Arg("id", () => Int) id: number) {
     try {
-      await DealershipUser.delete(id);
-      return true;
+      await DealershipUser.delete(id)
+      return true
     } catch (error) {
-      return false;
+      return false
     }
   }
 }
 
-export default RootUserResolver;
+export default RootUserResolver
