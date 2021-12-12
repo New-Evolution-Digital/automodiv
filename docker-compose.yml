@@ -43,6 +43,8 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - REDIS_URL=${REDIS_URL}
+      - REDIS_SECRET=${REDIS_SECRET}
       - JWT_SECRET=${JWT_SECRET}
 
   shopper:

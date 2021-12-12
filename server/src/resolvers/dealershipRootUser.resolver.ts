@@ -29,7 +29,6 @@ class RootUserResolver {
   @Query(() => DealershipUser)
   @UseMiddleware(isLoggedIn)
   async me(@Ctx() { req }: ServerContext) {
-    console.log(req.session)
     if (!req.session.userId) {
       return new ApolloError("No authenticated user")
     }
