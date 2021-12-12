@@ -29,11 +29,11 @@ const AdvSearch = () => {
 					onChange={(e) => setSearchFilter(e.target.value)}
 				/>
 				<button
-					// onClick={() =>
-					// 	executeSearch({
-					// 		variables: { filter: searchFilter },
-					// 	})
-					// }
+				// onClick={() =>
+				// 	executeSearch({
+				// 		variables: { filter: searchFilter },
+				// 	})
+				// }
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
