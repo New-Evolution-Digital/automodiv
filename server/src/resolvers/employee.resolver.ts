@@ -5,10 +5,17 @@ import {
   DealershipDoor,
   DealershipOrganization,
   DealershipUser,
+<<<<<<< HEAD
 } from "../entities"
 import { genPassword, makeDbSearchable } from "../utils/misc"
 import { InputNewUser } from "./InputTypes"
 import _ from "lodash"
+=======
+} from "../entities";
+import { genPassword, makeDbSearchable } from "../utils/misc";
+import { InputNewUser, UpdateUser } from "./InputTypes";
+import _ from "lodash";
+>>>>>>> baa9e62c76d87091834b933952b9993dbe0d5417
 
 @Resolver(() => DealershipUser)
 class EmployeeResolver {
@@ -66,8 +73,13 @@ class EmployeeResolver {
     let foundOrg = await DealershipOrganization.findOne(
       { key },
       { relations: ["employees"] }
+<<<<<<< HEAD
     )
 
+=======
+    );
+    console.log("req.session", req.session);
+>>>>>>> baa9e62c76d87091834b933952b9993dbe0d5417
     if (!req.session.userId) {
       throw new ApolloError("Not Authorized")
     }
@@ -125,6 +137,30 @@ class EmployeeResolver {
     }
     await foundOrg.save()
     return saved
+  }
+
+  @Mutation(() => DealershipUser)
+  async updateEmployeeById(
+    @Ctx() { req }: ServerContext,
+    @Arg("updatedUser", () => UpdateUser) updatedUser: UpdateUser
+  ): Promise<DealershipUser | null> {
+    console.log("req session", req.session);
+    if (!req.session.userId) {
+      throw new ApolloError("Not Authorized");
+    }
+    const user = await DealershipUser.findOne(req.session.userId, {
+      relations: ["dealershipOrganization", "dealershipOrganization.employees"],
+    });
+
+    for (const key in updatedUser) {
+      if (Object.prototype.hasOwnProperty.call(updatedUser, key)) {
+        if (!!updatedUser[key]) {
+          user[key] = makeDbSearchable(updatedUser[key] as string);
+        }
+      }
+    }
+
+    return await user.save();
   }
 }
 
