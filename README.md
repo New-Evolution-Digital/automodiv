@@ -21,15 +21,21 @@ The install instruction are as follow:
        ![ConsoleScreenshot](./terminal_screenshot.png)
        - if install.sh does not have the permissions -rwxr-xr-x run the following command: `chmod +x install.sh`.
        - Check this for wait.sh
-3. First Time Building? Run `docker-compose build` in the root of the directory.
-4. Then run `docker-compose --env-file .env up`. Consult an admin for a copy of the .env
-5. If you have any issues, first `ctrl + c`, then run `docker-compose down`. Repeat steps 3 and 4.
+3. First Time Building? Run `./run.sh` in the root of the directory.
+4. Then select Option 2 to build the server. Consult an admin for a copy of the .env
+5. If you have any issues, first `ctrl + c`, then run option 1 to destroy, rebuild, and start.
 6. Then code
 7. Still having issues submit the issue to @kyleswillard or @jtamedrano with screen shots or screen record of your issue.
 
 ## Restarting Dev Server
 
-There is a sh script in the root of the project. By running the command `/bin/sh ./restart.sh` the server will do all the command above. This will also restart the database, so any data you have in your own container will disappear.
+There is a sh script in the root of the project. By running the command `./run.sh` the server will give a menu to select what option is needed for your convenience. 
+
+Options include the following:
+- Option 1) Destroy, Rebuild, Start: This command is perfect if you made changes to either a dockerfile or a to an entity in the backend.
+- Option 2) Rebuild and Start: Run this option if your build failed and you just want to make sure it was an accident or pulled from main (You never know if someone installed new modules)
+- Option 3) Starts server without destroying or rebuilding (quickest start as it doesn't need to install all the dependancies all over again.
+- Option 4) Abort
 
 This does require that you have a .env file in the root. If you need a copy of what the env should look like, please contact @jtamedrano.
 
