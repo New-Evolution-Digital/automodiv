@@ -25,7 +25,7 @@ export class JwtHandler {
 
   public verifyJWT(
     token: string,
-    options: Omit<jwt.VerifyOptions, "complete">
+    options?: Omit<jwt.VerifyOptions, "complete">
   ) {
     return jwt.verify(token, this.secret, { ...options, complete: true })
   }
