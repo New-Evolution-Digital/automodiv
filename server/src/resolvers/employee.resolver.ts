@@ -8,7 +8,7 @@ import {
 <<<<<<< HEAD
 } from "../entities"
 import { genPassword, makeDbSearchable } from "../utils/misc"
-import { InputNewUser } from "./InputTypes"
+import { InputNewUser, UpdateUser } from "./InputTypes"
 import _ from "lodash"
 =======
 } from "../entities";
@@ -73,13 +73,8 @@ class EmployeeResolver {
     let foundOrg = await DealershipOrganization.findOne(
       { key },
       { relations: ["employees"] }
-<<<<<<< HEAD
     )
 
-=======
-    );
-    console.log("req.session", req.session);
->>>>>>> baa9e62c76d87091834b933952b9993dbe0d5417
     if (!req.session.userId) {
       throw new ApolloError("Not Authorized")
     }
@@ -144,7 +139,7 @@ class EmployeeResolver {
     @Ctx() { req }: ServerContext,
     @Arg("updatedUser", () => UpdateUser) updatedUser: UpdateUser
   ): Promise<DealershipUser | null> {
-    console.log("req session", req.session);
+  
     if (!req.session.userId) {
       throw new ApolloError("Not Authorized");
     }
