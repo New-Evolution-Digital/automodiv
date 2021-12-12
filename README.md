@@ -39,11 +39,11 @@ Options include the following:
 
 This does require that you have a .env file in the root. If you need a copy of what the env should look like, please contact @jtamedrano.
 
-_This is useful if you want to restart your work, if you edit any dockerfiles, or if you just want a clean database_
-
 ## Branch Naming Conventions
 
 For now all branch naming conventions should follow this format:
+
+**This is due to change in January**
 
 {service}/{feature-description}
 
