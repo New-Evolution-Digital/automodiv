@@ -1,5 +1,4 @@
 import Navigation from './navigation';
-import AdvSearch from './advSearch';
 import CardContainer from './cardContainer';
 
 const DisplayContainer = () => {
