@@ -18,9 +18,7 @@ const findUserById = async (
 }
 
 const isLoggedIn: MiddlewareFn<ServerContext> = async ({ context }, next) => {
-  if (context.req.session.userId) {
-    return next()
-  }
+  if (context.req.session.userId) return next()
 
   const token = context.req.headers.authorization
   if (token) {
