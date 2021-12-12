@@ -4,7 +4,7 @@ import { __jwt__ } from "../constants"
 type PayloadType = string | object | Buffer
 type CreateJWTOptionsType = Omit<jwt.SignOptions, "algorithm">
 type CreateIdOptionsType = Omit<CreateJWTOptionsType, "jwtId">
-export class HandleJWT {
+export class JwtHandler {
   private secret: string
   constructor() {
     this.secret = __jwt__.secret
