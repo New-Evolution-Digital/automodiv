@@ -16,6 +16,8 @@ import { ApolloError } from "apollo-server-express"
 import { UserAuthReturn } from "./ReturnTypes"
 import { JwtHandler } from "../utils/jwtHandler"
 import { isLoggedIn } from "../utils/middleware"
+import { SignUpReturn } from "../types/AuthTypes"
+import { FieldError } from "../types/ErrorTypes"
 
 const createUserJWT = (id: number, key: string) => {
   return new JwtHandler().createIdJWT({
@@ -52,30 +54,40 @@ class RootUserResolver {
    * @param param1
    * @returns
    */
-  @Mutation(() => UserAuthReturn)
+  @Mutation(() => SignUpReturn)
   async registerRootUser(
     @Arg("credentials")
     { firstName, lastName, username, email, password }: InputNewUser,
     @Ctx() { req }: ServerContext
-  ): Promise<UserAuthReturn | undefined> {
+  ): Promise<SignUpReturn | undefined> {
+    const errors: FieldError[] = []
+
     if (password.length < 6) {
-      throw new ApolloError("Password is too short")
+      errors.push({ message: "Password is too short", field: "password" })
     }
     const credentials = misc.allStringsToLowerCase(
       misc.trimStringsInObject({ firstName, lastName, username, email })
     )
 
     if (credentials.username.length < 6) {
-      throw new ApolloError("Username is too short")
+      errors.push({ message: "Username is too short", field: "username" })
     }
 
     if (/@\w+.\w+/g.test(credentials.username)) {
-      throw new ApolloError("Username can't look like an email")
+      errors.push({
+        message: "Username can't look like an email",
+        field: "username",
+      })
     }
 
     if (!/@\w+.\w+/g.test(credentials.email)) {
-      throw new ApolloError("Email may not be valid")
+      errors.push({ message: "Email is not valid", field: "email" })
     }
+
+    if (errors.length > 0) {
+      return { errors }
+    }
+
     const pw = await argon.hash(password)
 
     const org = DealershipOrganization.create()
@@ -89,7 +101,12 @@ class RootUserResolver {
       dealershipOrganization: org,
       role: "root",
     })
+
     const savedUser = await newUser.save()
+
+    if (!savedUser) {
+      return { errors: [{ message: "Failed to save user", code: "503" }] }
+    }
 
     req.session.userId = savedUser.id
 
@@ -98,7 +115,7 @@ class RootUserResolver {
       savedUser.dealershipOrganization.key
     )
 
-    return { user: savedUser, jwt }
+    return { user: { data: savedUser, jwt } }
   }
 
   @Mutation(() => UserAuthReturn)

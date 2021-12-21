@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ID, ObjectType } from "type-graphql"
 import {
   BaseEntity,
   Column,
@@ -8,34 +8,34 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
-import { DealershipOrganization } from "./DealershipOrganization";
+} from "typeorm"
+import { DealershipOrganization } from "./DealershipOrganization"
 
 @Entity()
 @ObjectType()
 export class DealershipUser extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  readonly id: number;
+  readonly id: number
 
   @Field()
   @Column("text")
-  firstName: string;
+  firstName: string
 
   @Field()
   @Column("text")
-  lastName: string;
+  lastName: string
 
   @Field()
   @Column({ unique: true })
-  username: string;
+  username: string
 
   @Field()
   @Column({ unique: true })
-  email: string;
+  email: string
 
   @Column()
-  password: string;
+  password: string
 
   @Field(() => DealershipOrganization)
   @ManyToOne(() => DealershipOrganization, (org) => org.employees, {
@@ -43,21 +43,21 @@ export class DealershipUser extends BaseEntity {
     cascade: true,
   })
   @JoinColumn()
-  dealershipOrganization: DealershipOrganization;
+  dealershipOrganization: DealershipOrganization
 
   @Field()
   @Column({ default: "employee" })
-  role: "root" | "admin" | "manager" | "employee";
+  role: "root" | "admin" | "manager" | "employee"
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  phone_number?: string;
+  phone_number?: string
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })
-  createdAt: string;
+  createdAt: string
 
   @Field()
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: string;
+  updatedAt: string
 }
