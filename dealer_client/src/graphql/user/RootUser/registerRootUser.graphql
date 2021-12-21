@@ -1,0 +1,17 @@
+mutation RegisterRootUser($credentials: InputNewUser!) {
+  registerRootUser(credentials: $credentials) {
+    errors {
+      message
+      field
+      code
+    }
+    user {
+      data {
+        dealershipOrganization {
+          key
+        }
+      }
+      jwt
+    }
+  }
+}

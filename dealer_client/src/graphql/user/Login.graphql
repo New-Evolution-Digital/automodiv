@@ -1,29 +1,11 @@
-mutation Login($userLogin: UserLogin!) {
-  login(login: $userLogin) {
-    id
-    firstName
-    lastName
-    email
-    username
-    dealershipOrganization {
+mutation Login($login: UserLogin!) {
+  login(login: $login) {
+    user {
       id
-      key
-      streetAddress
-      streetAddressTwo
-      city
-      state
-      zip
-      name
-      default_dealer_number
-      updatedAt
-      createdAt
-      employees {
-        id
-        firstName
-        lastName
+      dealershipOrganization {
+        key
       }
     }
-    createdAt
-    updatedAt
+    jwt
   }
 }

@@ -102,20 +102,32 @@ class RootUserResolver {
       role: "root",
     })
 
-    const savedUser = await newUser.save()
+    try {
+      const savedUser = await newUser.save()
 
-    if (!savedUser) {
-      return { errors: [{ message: "Failed to save user", code: "503" }] }
+      if (!savedUser) {
+        return { errors: [{ message: "Failed to save user", code: "503" }] }
+      }
+
+      req.session.userId = savedUser.id
+
+      const jwt = createUserJWT(
+        savedUser.id,
+        savedUser.dealershipOrganization.key
+      )
+
+      return { user: { data: savedUser, jwt } }
+    } catch (error: any) {
+      console.log(error)
+      if (error.code === "ER_DUP_ENTRY") {
+        return {
+          errors: [
+            { message: "Email or Username already in use", code: "400" },
+          ],
+        }
+      }
+      return { errors: [{ message: "Something went wrong", code: "503" }] }
     }
-
-    req.session.userId = savedUser.id
-
-    const jwt = createUserJWT(
-      savedUser.id,
-      savedUser.dealershipOrganization.key
-    )
-
-    return { user: { data: savedUser, jwt } }
   }
 
   @Mutation(() => UserAuthReturn)
