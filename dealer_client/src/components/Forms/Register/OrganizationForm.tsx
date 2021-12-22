@@ -1,5 +1,9 @@
-import router from 'next/router'
+import { XCircleIcon } from '@heroicons/react/outline'
+import classNames from 'classnames'
 import React, { ChangeEvent, FC, FormEvent, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { submitOrgInfo } from 'reducers/RootRegistration/actions'
+import { getRootRegState } from 'reducers/RootRegistration/selectors'
 import { useUpdateDealerOrgMutation } from '../../../generated/types'
 
 import { Input, InputWrapper, Label, Panel } from '../../library'
@@ -16,7 +20,9 @@ const OrganizationForm: FC<OrganizationFormProps> = () => {
     zip: '',
     default_dealer_number: ''
   })
-  const [orgUpdate] = useUpdateDealerOrgMutation()
+  const { loading, errors } = getRootRegState()
+  const [updateOrgInfo] = useUpdateDealerOrgMutation()
+  const dispatch = useDispatch()
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setParams({ ...params, [e.target.name]: e.target.value })
@@ -24,16 +30,7 @@ const OrganizationForm: FC<OrganizationFormProps> = () => {
 
   const submit = async (e: FormEvent) => {
     e.preventDefault()
-    orgUpdate({
-      variables: {
-        DealerKey: localStorage.getItem('organization') || '',
-        OrganizationInput: params
-      }
-    }).then((res) => {
-      if (res.data) {
-        router.replace(`/dealership`)
-      }
-    })
+    dispatch(submitOrgInfo({ updateOrgInfo, options: params }))
   }
 
   return (
@@ -42,6 +39,34 @@ const OrganizationForm: FC<OrganizationFormProps> = () => {
         <h2 className="text-center text-3xl text-gray-900 pb-4">
           Organization Details
         </h2>
+        {errors.length > 0 && (
+          <div className="rounded-md bg-red-50 p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <XCircleIcon
+                  className="h-5 w-5 text-red-400"
+                  aria-hidden="true"
+                />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-red-800">
+                  There{' '}
+                  {errors.length > 1
+                    ? `were ${errors.length} errors`
+                    : 'was 1 error'}{' '}
+                  with your submission
+                </h3>
+                <div className="mt-2 text-sm text-red-700">
+                  <ul role="list" className="list-disc pl-5 space-y-1">
+                    {errors.map((error) => (
+                      <li key={error.message}>{error.message}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <form className="grid grid-cols-6 gap-y-6 gap-x-2" onSubmit={submit}>
           <InputWrapper className="col-span-6">
             <Label className="sr-only" htmlFor="name">
@@ -135,7 +160,10 @@ const OrganizationForm: FC<OrganizationFormProps> = () => {
           </InputWrapper>
           <div className="col-span-6 rounded-md shadow cursor-default">
             <span
-              className="flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-150 cursor-default"
+              className={classNames(
+                'flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-150 cursor-default',
+                { ['opacity-90']: loading }
+              )}
               onClick={submit}
             >
               Continue

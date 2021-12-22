@@ -1,12 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { Maybe } from 'graphql/jsutils/Maybe'
+import { RootState } from 'reducers'
 import {
   DealershipOrganization,
+  FieldError,
+  OrganizationInput,
   RegisterRootUserMutationFn,
   RegisterRootUserMutationOptions,
   SignUpReturn,
-  UpdateDealerOrgMutationFn,
-  UpdateDealerOrgMutationOptions
+  UpdateDealerOrgMutationFn
 } from '../../generated/types'
 
 export const submitRegistration = createAsyncThunk<
@@ -29,12 +31,26 @@ export const submitOrgInfo = createAsyncThunk<
   Maybe<DealershipOrganization>,
   {
     updateOrgInfo: UpdateDealerOrgMutationFn
-    options: UpdateDealerOrgMutationOptions
+    options: OrganizationInput
   }
 >(
   'SUBMIT_ORG_REGISTRATION',
-  async ({ updateOrgInfo, options }, { rejectWithValue }) => {
-    const { data, errors } = await updateOrgInfo(options)
+  async ({ updateOrgInfo, options }, { rejectWithValue, getState }) => {
+    const { rootRegistration } = getState() as RootState
+
+    if (!rootRegistration.org_key) {
+      const error: [FieldError] = [
+        { message: 'Error - Failed editing organization' }
+      ]
+      return rejectWithValue(error)
+    }
+
+    const { data, errors } = await updateOrgInfo({
+      variables: {
+        DealerKey: rootRegistration.org_key,
+        OrganizationInput: options
+      }
+    })
 
     if (errors) return rejectWithValue(errors)
 

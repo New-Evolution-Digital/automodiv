@@ -52,7 +52,10 @@ const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
           mode: 'cors'
         },
         credentials: 'include',
-        fetch: enhancedFetch
+        fetch: enhancedFetch,
+        headers: {
+          Authorization: `bearer ${window.localStorage.getItem('oid')}`
+        }
       })
     ]),
     cache: new InMemoryCache()

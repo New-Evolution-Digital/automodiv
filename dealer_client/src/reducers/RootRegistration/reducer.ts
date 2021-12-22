@@ -64,5 +64,23 @@ export const RootRegistrationReducer = createReducer(initialState, (root) => {
 
       return { ...state, loading: false, routeTo: '/dealership' }
     })
+    .addCase(submitOrgInfo.rejected, (state, { payload }) => {
+      let retOptions: Partial<IRootRegistrationState> = { loading: false }
+      if (payload) {
+        let errors = payload as FieldError[]
+
+        if (
+          errors.some(
+            (e) => e.message === 'Error - Failed editing organization'
+          )
+        ) {
+          retOptions.routeTo = '/dealership'
+        }
+
+        retOptions.errors = errors
+      }
+
+      return { ...state, ...retOptions }
+    })
     .addDefaultCase((state: IRootRegistrationState) => state)
 })

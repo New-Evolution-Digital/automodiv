@@ -1,4 +1,5 @@
 import { ERegistrationSteps } from 'models/registerForm'
+import router from 'next/router'
 import { FC } from 'react'
 import { getRootRegState } from 'reducers/RootRegistration/selectors'
 
@@ -8,7 +9,11 @@ import RootUserForm from './RootUser'
 interface IRootRegisterForm {}
 
 const RootRegisterForm: FC<IRootRegisterForm> = () => {
-  const { currentStep } = getRootRegState()
+  const { currentStep, routeTo } = getRootRegState()
+
+  if (routeTo) {
+    router.replace(routeTo)
+  }
 
   switch (currentStep) {
     case ERegistrationSteps.ROOT_USER: {
