@@ -1,26 +1,29 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { ERegistrationSteps } from 'models/registerForm'
-import { submitRegistration } from './actions'
+import { submitOrgInfo, submitRegistration } from './actions'
 import { FieldError } from 'generated/types'
 
 export interface IRootRegistrationState {
   currentStep: ERegistrationSteps
-  userForm: {
-    loading: boolean
-    errors: FieldError[]
-  }
+  org_key: string | null
+  loading: boolean
+  errors: FieldError[]
+  routeTo: string | null
 }
 
 const initialState: IRootRegistrationState = {
   currentStep: ERegistrationSteps.ROOT_USER,
-  userForm: { loading: false, errors: [] }
+  org_key: null,
+  loading: false,
+  errors: [],
+  routeTo: null
 }
 
 export const RootRegistrationReducer = createReducer(initialState, (root) => {
   root
     .addCase(submitRegistration.pending, () => ({
       ...initialState,
-      userForm: { ...initialState.userForm, loading: true }
+      userForm: { ...initialState, loading: true, errors: [] }
     }))
     .addCase(submitRegistration.fulfilled, (state, { payload }) => {
       if (!payload) {
@@ -28,9 +31,8 @@ export const RootRegistrationReducer = createReducer(initialState, (root) => {
       }
 
       const { errors, user } = payload
-      const defUserFormState = state.userForm
       if (errors && errors.length > 0) {
-        return { ...state, userForm: { ...defUserFormState, errors } }
+        return { ...state, errors, loading: false }
       }
 
       if (user) {
@@ -42,11 +44,25 @@ export const RootRegistrationReducer = createReducer(initialState, (root) => {
         window.localStorage.setItem('oid', user.jwt)
         return {
           ...state,
-          userFor: { ...defUserFormState },
+          loading: false,
+          org_key: user.data.dealershipOrganization.key,
           currentStep: ERegistrationSteps.ORG_INFO
         }
       }
 
       return state
     })
+    .addCase(submitOrgInfo.pending, (state) => ({
+      ...state,
+      loading: true,
+      errors: []
+    }))
+    .addCase(submitOrgInfo.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        return { ...state, loading: false }
+      }
+
+      return { ...state, loading: false, routeTo: '/dealership' }
+    })
+    .addDefaultCase((state: IRootRegistrationState) => state)
 })

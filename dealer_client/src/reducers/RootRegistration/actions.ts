@@ -1,9 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { Maybe } from 'graphql/jsutils/Maybe'
 import {
+  DealershipOrganization,
   RegisterRootUserMutationFn,
   RegisterRootUserMutationOptions,
-  SignUpReturn
+  SignUpReturn,
+  UpdateDealerOrgMutationFn,
+  UpdateDealerOrgMutationOptions
 } from '../../generated/types'
 
 export const submitRegistration = createAsyncThunk<
@@ -20,5 +23,21 @@ export const submitRegistration = createAsyncThunk<
     if (errors) return rejectWithValue(errors)
 
     return data?.registerRootUser as Maybe<SignUpReturn>
+  }
+)
+export const submitOrgInfo = createAsyncThunk<
+  Maybe<DealershipOrganization>,
+  {
+    updateOrgInfo: UpdateDealerOrgMutationFn
+    options: UpdateDealerOrgMutationOptions
+  }
+>(
+  'SUBMIT_ORG_REGISTRATION',
+  async ({ updateOrgInfo, options }, { rejectWithValue }) => {
+    const { data, errors } = await updateOrgInfo(options)
+
+    if (errors) return rejectWithValue(errors)
+
+    return data?.updateDealerOrg as Maybe<DealershipOrganization>
   }
 )

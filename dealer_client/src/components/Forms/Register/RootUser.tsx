@@ -4,8 +4,8 @@ import { Input, InputWrapper, Label, Panel } from 'components/library'
 import { getRootRegState } from 'reducers/RootRegistration/selectors'
 import { submitRegistration } from 'reducers/RootRegistration/actions'
 import { useDispatch } from 'react-redux'
-import cn from 'classnames'
 import { InputNewUser, useRegisterRootUserMutation } from 'generated/types'
+import cn from 'classnames'
 
 interface RootUserFormProps {}
 
@@ -20,7 +20,7 @@ const RootUserForm: FC<RootUserFormProps> = () => {
     password: '',
     confirmPassword: ''
   })
-  const { errors, loading } = getRootRegState().userForm
+  const { errors, loading } = getRootRegState()
   const dispatch = useDispatch()
   const [register] = useRegisterRootUserMutation()
 
