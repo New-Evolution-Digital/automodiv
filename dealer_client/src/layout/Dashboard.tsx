@@ -37,9 +37,8 @@ const Dashboard: FC<IDashboard> = ({
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
                   {navigation.map((item) => (
-                    <Link href={item.href} passHref>
+                    <Link key={item.name} href={item.href} passHref>
                       <a
-                        key={item.name}
                         className={joinClasses(
                           pathname === item.href
                             ? 'bg-gray-900 text-white'

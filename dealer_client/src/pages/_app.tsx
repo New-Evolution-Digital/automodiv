@@ -2,6 +2,7 @@ import { ApolloProvider } from '@apollo/client'
 import { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
 
+import 'antd/dist/antd.css'
 import '../styles/main.css'
 import { useApollo } from '../utils/useApollo'
 import { store } from 'reducers'

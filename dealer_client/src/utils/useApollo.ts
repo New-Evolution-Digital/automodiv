@@ -21,12 +21,14 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | undefined
 
 const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
   const enhancedFetch = (url: RequestInfo, init: RequestInit) => {
+    const oid = window.localStorage.getItem('oid')
     return fetch(url, {
       ...init,
       headers: {
         ...init.headers,
         'Access-Control-Allow-Origin': '*',
-        Cookie: headers?.cookie ?? ''
+        Cookie: headers?.cookie ?? '',
+        Authorization: oid ? `bearer ${oid}` : ''
       }
     }).then((response) => response)
   }
@@ -52,10 +54,7 @@ const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
           mode: 'cors'
         },
         credentials: 'include',
-        fetch: enhancedFetch,
-        headers: {
-          Authorization: `bearer ${window.localStorage.getItem('oid')}`
-        }
+        fetch: enhancedFetch
       })
     ]),
     cache: new InMemoryCache()

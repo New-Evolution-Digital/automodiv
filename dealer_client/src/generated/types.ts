@@ -112,6 +112,7 @@ export type Mutation = {
   registerRootUser: SignUpReturn;
   updateDealerOrg: DealershipOrganization;
   updateDoorById?: Maybe<DealershipDoor>;
+  updateEmployeeById: DealershipUser;
 };
 
 
@@ -163,6 +164,11 @@ export type MutationUpdateDealerOrgArgs = {
 export type MutationUpdateDoorByIdArgs = {
   doorId: Scalars['ID'];
   doorParameters: DoorInputParams;
+};
+
+
+export type MutationUpdateEmployeeByIdArgs = {
+  updatedUser: UpdateUser;
 };
 
 export type OrganizationInput = {
@@ -218,6 +224,12 @@ export type SignUpReturn = {
   __typename?: 'SignUpReturn';
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<AuthUserReturn>;
+};
+
+export type UpdateUser = {
+  firstName?: InputMaybe<Scalars['String']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  phone_number?: InputMaybe<Scalars['String']>;
 };
 
 export type UserAuthReturn = {
@@ -312,7 +324,7 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Us
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'DealershipUser', username: string, dealershipOrganization: { __typename?: 'DealershipOrganization', id: string, key: string, streetAddress?: string | null | undefined, streetAddressTwo?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, name?: string | null | undefined, default_dealer_number?: string | null | undefined, createdAt: string, updatedAt: string } } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'DealershipUser', id: string, firstName: string, lastName: string, username: string, email: string, role: string, phone_number?: string | null | undefined, createdAt: string, updatedAt: string, dealershipOrganization: { __typename?: 'DealershipOrganization', key: string, streetAddress?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, name?: string | null | undefined, phone_number?: string | null | undefined, default_dealer_number?: string | null | undefined, dealershipDoors?: Array<{ __typename?: 'DealershipDoor', id: number, createdAt: string, updatedAt: string, name?: string | null | undefined, streetAddress?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zip?: string | null | undefined, dealerNumber?: string | null | undefined, phone_number?: string | null | undefined }> | null | undefined } } };
 
 export type RegisterRootUserMutationVariables = Exact<{
   credentials: InputNewUser;
@@ -677,19 +689,35 @@ export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, Log
 export const MeDocument = gql`
     query Me {
   me {
+    id
+    firstName
+    lastName
     username
+    email
+    role
+    phone_number
+    createdAt
+    updatedAt
     dealershipOrganization {
-      id
       key
       streetAddress
-      streetAddressTwo
       city
       state
-      zip
       name
+      phone_number
       default_dealer_number
-      createdAt
-      updatedAt
+      dealershipDoors {
+        id
+        createdAt
+        updatedAt
+        name
+        streetAddress
+        city
+        state
+        zip
+        dealerNumber
+        phone_number
+      }
     }
   }
 }

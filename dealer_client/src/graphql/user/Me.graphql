@@ -1,18 +1,34 @@
 query Me {
   me {
+    id
+    firstName
+    lastName
     username
+    email
+    role
+    phone_number
+    createdAt
+    updatedAt
     dealershipOrganization {
-      id
       key
       streetAddress
-      streetAddressTwo
       city
       state
-      zip
       name
+      phone_number
       default_dealer_number
-      createdAt
-      updatedAt
+      dealershipDoors {
+        id
+        createdAt
+        updatedAt
+        name
+        streetAddress
+        city
+        state
+        zip
+        dealerNumber
+        phone_number
+      }
     }
   }
 }
