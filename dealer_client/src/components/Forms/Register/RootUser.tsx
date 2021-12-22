@@ -1,16 +1,18 @@
 import React, { ChangeEvent, FC, FormEvent, useState } from 'react'
-import { useRegisterRootUserMutation } from '../../../generated/types'
+import { XCircleIcon } from '@heroicons/react/outline'
+import { Input, InputWrapper, Label, Panel } from 'components/library'
+import { getRootRegState } from 'reducers/RootRegistration/selectors'
+import { submitRegistration } from 'reducers/RootRegistration/actions'
+import { useDispatch } from 'react-redux'
+import cn from 'classnames'
+import { InputNewUser, useRegisterRootUserMutation } from 'generated/types'
 
-import { Input, InputWrapper, Label, Panel } from '../../library'
+interface RootUserFormProps {}
 
-interface RootUserFormProps {
-  handleSubmit: () => void
-}
-
-const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
-  const [register] = useRegisterRootUserMutation()
-
-  const [credentials, setCredentials] = useState({
+const RootUserForm: FC<RootUserFormProps> = () => {
+  const [credentials, setCredentials] = useState<
+    InputNewUser & { confirmPassword?: string }
+  >({
     firstName: '',
     lastName: '',
     email: '',
@@ -18,6 +20,9 @@ const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
     password: '',
     confirmPassword: ''
   })
+  const { errors, loading } = getRootRegState().userForm
+  const dispatch = useDispatch()
+  const [register] = useRegisterRootUserMutation()
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value.trim() })
@@ -29,24 +34,11 @@ const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
       return
     }
 
-    await register({
-      variables: {
-        credentials: {
-          email: credentials.email,
-          username: credentials.username,
-          firstName: credentials.firstName,
-          lastName: credentials.lastName,
-          password: credentials.password
-        }
-      }
-    }).then((res) => {
-      if (res.data)
-        window.localStorage.setItem(
-          'organization',
-          res.data.registerRootUser.dealershipOrganization.key
-        )
-      handleSubmit()
-    })
+    delete credentials.confirmPassword
+
+    dispatch(
+      submitRegistration({ register, options: { variables: { credentials } } })
+    )
   }
 
   return (
@@ -55,6 +47,34 @@ const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
         <h2 className="text-center text-3xl font-extralight text-gray-900">
           New User Registration
         </h2>
+        {errors.length > 0 && (
+          <div className="rounded-md bg-red-50 p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <XCircleIcon
+                  className="h-5 w-5 text-red-400"
+                  aria-hidden="true"
+                />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-red-800">
+                  There{' '}
+                  {errors.length > 1
+                    ? `were ${errors.length} errors`
+                    : 'was 1 error'}{' '}
+                  with your submission
+                </h3>
+                <div className="mt-2 text-sm text-red-700">
+                  <ul role="list" className="list-disc pl-5 space-y-1">
+                    {errors.map((error) => (
+                      <li key={error.message}>{error.message}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <form className="space-y-6" onSubmit={submit}>
           <div className="grid grid-cols-2 items-stretch gap-4">
             <InputWrapper>
@@ -133,7 +153,7 @@ const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
                 autoComplete="new-password"
                 placeholder="Password"
                 required
-                value={credentials.password}
+                value={credentials.password!}
                 onChange={handleOnChange}
               />
             </InputWrapper>
@@ -156,7 +176,10 @@ const RootUserForm: FC<RootUserFormProps> = ({ handleSubmit }) => {
           </div>
           <div>
             <button
-              className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600"
+              className={cn(
+                'w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600',
+                { ['bg-blue-600 text-gray-200 opacity-80']: loading }
+              )}
               type="submit"
             >
               Submit

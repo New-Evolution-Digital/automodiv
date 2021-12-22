@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -89,14 +90,14 @@ export type FieldError = {
   __typename?: 'FieldError';
   code?: Maybe<Scalars['String']>;
   field?: Maybe<Scalars['String']>;
-  message: Scalars['String'];
+  message?: Maybe<Scalars['String']>;
 };
 
 export type InputNewUser = {
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
-  password?: Maybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
   username: Scalars['String'];
 };
 
@@ -165,13 +166,13 @@ export type MutationUpdateDoorByIdArgs = {
 };
 
 export type OrganizationInput = {
-  city?: Maybe<Scalars['String']>;
-  default_dealer_number?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
-  streetAddress?: Maybe<Scalars['String']>;
-  streetAddressTwo?: Maybe<Scalars['String']>;
-  zip?: Maybe<Scalars['String']>;
+  city?: InputMaybe<Scalars['String']>;
+  default_dealer_number?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  state?: InputMaybe<Scalars['String']>;
+  streetAddress?: InputMaybe<Scalars['String']>;
+  streetAddressTwo?: InputMaybe<Scalars['String']>;
+  zip?: InputMaybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -215,7 +216,7 @@ export type QueryGetInventoryArgs = {
 
 export type SignUpReturn = {
   __typename?: 'SignUpReturn';
-  errors?: Maybe<FieldError>;
+  errors?: Maybe<Array<FieldError>>;
   user?: Maybe<AuthUserReturn>;
 };
 
@@ -226,24 +227,24 @@ export type UserAuthReturn = {
 };
 
 export type UserLogin = {
-  email?: Maybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
   password: Scalars['String'];
-  username?: Maybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 export type DoorInputParams = {
-  city?: Maybe<Scalars['String']>;
-  dealerNumber?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
-  streetAddress?: Maybe<Scalars['String']>;
-  streetAddressTwo?: Maybe<Scalars['String']>;
-  zip?: Maybe<Scalars['String']>;
+  city?: InputMaybe<Scalars['String']>;
+  dealerNumber?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  state?: InputMaybe<Scalars['String']>;
+  streetAddress?: InputMaybe<Scalars['String']>;
+  streetAddressTwo?: InputMaybe<Scalars['String']>;
+  zip?: InputMaybe<Scalars['String']>;
 };
 
 export type OrgIndexables = {
-  id?: Maybe<Scalars['ID']>;
-  key?: Maybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  key?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateDoorMutationVariables = Exact<{
@@ -318,7 +319,7 @@ export type RegisterRootUserMutationVariables = Exact<{
 }>;
 
 
-export type RegisterRootUserMutation = { __typename?: 'Mutation', registerRootUser: { __typename?: 'SignUpReturn', errors?: { __typename?: 'FieldError', message: string, field?: string | null | undefined, code?: string | null | undefined } | null | undefined, user?: { __typename?: 'AuthUserReturn', jwt: string, data: { __typename?: 'DealershipUser', dealershipOrganization: { __typename?: 'DealershipOrganization', key: string } } } | null | undefined } };
+export type RegisterRootUserMutation = { __typename?: 'Mutation', registerRootUser: { __typename?: 'SignUpReturn', errors?: Array<{ __typename?: 'FieldError', message?: string | null | undefined, field?: string | null | undefined, code?: string | null | undefined }> | null | undefined, user?: { __typename?: 'AuthUserReturn', jwt: string, data: { __typename?: 'DealershipUser', dealershipOrganization: { __typename?: 'DealershipOrganization', key: string } } } | null | undefined } };
 
 
 export const CreateDoorDocument = gql`

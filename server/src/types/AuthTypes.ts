@@ -13,7 +13,7 @@ export class AuthUserReturn {
 
 @ObjectType()
 export class SignUpReturn {
-  @Field(() => FieldError, { nullable: true })
+  @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[]
 
   @Field(() => AuthUserReturn, { nullable: true })
