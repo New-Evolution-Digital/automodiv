@@ -8,16 +8,16 @@ import {
   UseMiddleware,
 } from "type-graphql"
 import argon from "argon2"
-import { DealershipUser } from "../entities/DealershipUser"
-import { InputNewUser, UserLogin } from "./InputTypes"
-import * as misc from "../utils/misc"
-import { DealershipOrganization } from "../entities/DealershipOrganization"
+import { DealershipUser } from "./DealershipUser.entity"
+import { InputNewUser, UserLogin } from "../../resolvers/InputTypes"
+import * as misc from "../../utils/misc"
+import { DealershipOrganization } from "../../entities/DealershipOrganization.entity"
 import { ApolloError } from "apollo-server-express"
-import { UserAuthReturn } from "./ReturnTypes"
-import { JwtHandler } from "../utils/jwtHandler"
-import { isLoggedIn } from "../utils/middleware"
-import { SignUpReturn } from "../types/AuthTypes"
-import { FieldError } from "../types/ErrorTypes"
+import { UserAuthReturn } from "../../resolvers/ReturnTypes"
+import { JwtHandler } from "../../utils/jwtHandler"
+import { isLoggedIn } from "../../utils/middleware"
+import { SignUpReturn } from "../../types/AuthTypes"
+import { FieldError } from "../../types/ErrorTypes"
 
 const createUserJWT = (id: number, key: string) => {
   return new JwtHandler().createIdJWT({

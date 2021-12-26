@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ID, ObjectType } from "type-graphql"
 import {
   BaseEntity,
   Column,
@@ -9,54 +9,55 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
-import { ILocation } from "../interfaces/ILocation";
-import { DealershipDoor } from "./DealershipDoor";
-import { DealershipUser } from "./DealershipUser";
+} from "typeorm"
+import { ILocation } from "../interfaces/ILocation"
+import { CarInventory } from "../services/InventoryService/car.entity"
+import { DealershipDoor } from "./DealershipDoor.entity"
+import { DealershipUser } from "../services/UserService/DealershipUser.entity"
 
 @Entity()
 @ObjectType()
 export class DealershipOrganization extends BaseEntity implements ILocation {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Field()
   @Generated("uuid")
   @Column()
-  key: string;
+  key: string
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  streetAddress?: string;
+  streetAddress?: string
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  streetAddressTwo?: string;
+  streetAddressTwo?: string
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  city?: string;
+  city?: string
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  state?: string;
+  state?: string
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  zip?: string;
+  zip?: string
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  name?: string;
+  name?: string
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  phone_number?: string;
+  phone_number?: string
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  default_dealer_number?: string;
+  default_dealer_number?: string
 
   @Field(() => [DealershipDoor], { nullable: true })
   @OneToMany(
@@ -64,7 +65,7 @@ export class DealershipOrganization extends BaseEntity implements ILocation {
     (doors: DealershipDoor) => doors.dealershipOrganization,
     { onDelete: "CASCADE", onUpdate: "CASCADE", nullable: true, eager: true }
   )
-  dealershipDoors: DealershipDoor[];
+  dealershipDoors: DealershipDoor[]
 
   @Field(() => [DealershipUser])
   @OneToMany(
@@ -72,13 +73,18 @@ export class DealershipOrganization extends BaseEntity implements ILocation {
     (employee) => employee.dealershipOrganization
   )
   @JoinColumn()
-  employees: DealershipUser[];
+  employees: DealershipUser[]
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })
-  createdAt: string;
+  createdAt: string
 
   @Field()
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: string;
+  updatedAt: string
+
+  @OneToMany(() => CarInventory, (car) => car.dealership_org, {
+    nullable: true,
+  })
+  dealership_cars: CarInventory[]
 }

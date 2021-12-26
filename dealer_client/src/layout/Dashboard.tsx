@@ -1,13 +1,14 @@
 import React, { FC } from 'react'
 
 import { Disclosure } from '@headlessui/react'
-
-import joinClasses from '../utils/joinClasses'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+import joinClasses from '../utils/joinClasses'
+
 const navigation: LinkTypes[] = [
   { name: 'Home', href: '/dealership' },
+  { name: 'Vehicles', href: '/dealership/vehicles' },
   { name: 'Settings', href: '/dealership/settings' }
 ]
 
@@ -61,7 +62,9 @@ const Dashboard: FC<IDashboard> = ({
           <h1 className="text-3xl font-bold text-gray-900">{dashboardTitle}</h1>
         </div>
       </header>
-      <main className="h-full py-6 sm:px-6 lg:px-8 flex-grow">{children}</main>
+      <main className="max-w-7xl mx-auto w-full h-full py-6 sm:px-6 lg:px-8 flex-grow">
+        {children}
+      </main>
       <footer className="bg-gray-800 flex-shrink">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
           <p className="text-white">Automodiv</p>

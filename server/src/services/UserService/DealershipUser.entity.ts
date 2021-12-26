@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { DealershipOrganization } from "./DealershipOrganization"
+import { DealershipOrganization } from "../../entities/DealershipOrganization.entity"
 
 @Entity()
 @ObjectType()

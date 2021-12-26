@@ -1,0 +1,3 @@
+query GetModels($year: String!, $make: String!) {
+  getModelsWithYearMake(year: $year, make: $make)
+}

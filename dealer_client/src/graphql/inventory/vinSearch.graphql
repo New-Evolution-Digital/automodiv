@@ -1,0 +1,11 @@
+query SearchVin($vin: String!) {
+  searchVin(vin: $vin) {
+    vin
+    year
+    make
+    model
+    trim
+    series
+    transmission
+  }
+}

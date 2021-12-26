@@ -7,21 +7,8 @@ import connectRedis from "connect-redis"
 import session from "express-session"
 import Redis from "ioredis"
 import morgan from "morgan"
-
-import {
-  DoorResolver,
-  EmployeeResolver,
-  OrgResolver,
-  RootUserResolver,
-} from "./resolvers"
 import { __prod__, __mysql__, checkEnvVars, __redis__ } from "./constants"
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core"
-import { DealershipOrganization } from "./entities/DealershipOrganization"
-import { DealershipUser } from "./entities/DealershipUser"
-import { DealershipDoor } from "./entities/DealershipDoor"
-import { InventoryResolver } from "./resolvers/inventory.resolver"
-import { CarInventory } from "./entities/Car"
-import DoorToItem from "./entities/DoorToItem"
 
 export const createServer = async () => {
   checkEnvVars()
@@ -33,13 +20,7 @@ export const createServer = async () => {
     port: 3306,
     password: __mysql__.MYSQL_PASSWORD,
     database: __mysql__.MYSQL_DATABASE,
-    entities: [
-      DealershipOrganization,
-      DealershipUser,
-      DealershipDoor,
-      CarInventory,
-      DoorToItem,
-    ],
+    entities: [__dirname + "/**/*.entity.ts"],
     logging: !__prod__ && "all",
     logger: "debug",
     synchronize: !__prod__,
@@ -52,13 +33,7 @@ export const createServer = async () => {
   else redis = new Redis(6379, "automodiv_server_redis_1")
 
   const schema = await buildSchema({
-    resolvers: [
-      OrgResolver,
-      RootUserResolver,
-      EmployeeResolver,
-      DoorResolver,
-      InventoryResolver,
-    ],
+    resolvers: [__dirname + "/**/*.resolver.ts"],
     dateScalarMode: "timestamp",
   })
 

@@ -7,17 +7,20 @@ import {
   ObjectType,
   Query,
   Resolver,
+  UseMiddleware,
 } from "type-graphql"
 import { getRepository } from "typeorm"
-import { DealershipDoor } from "../entities"
-import { CarInventory } from "../entities/Car"
-import DoorToItem from "../entities/DoorToItem"
-import { makeDbSearchable } from "../utils/misc"
-import { getVinResults } from "../utils/vinAPI"
+import { DealershipDoor } from "../../entities"
+import { CarInventory } from "./car.entity"
+import DoorToItem from "../../entities/DoorToItem"
+import { isLoggedIn } from "../../utils/middleware"
+import { makeDbSearchable } from "../../utils/misc"
+import { getVinResults } from "../../utils/vinAPI"
 
 @Resolver()
 export class InventoryResolver {
   @Mutation(() => CarInventory)
+  @UseMiddleware([isLoggedIn])
   async addCarToDealership(
     @Arg("dealership_id", () => Int) dealership_id: number,
     @Arg("vin") vin: string
@@ -27,7 +30,9 @@ export class InventoryResolver {
       throw new ApolloError("No Door Found", "404")
     }
 
-    const foundDoor = await DealershipDoor.findOne(dealership_id)
+    const foundDoor = await DealershipDoor.findOne(dealership_id, {
+      relations: ["dealershipOrganization"],
+    })
 
     if (!foundDoor) {
       throw new ApolloError("No Door Found", "404")

@@ -1,3 +1,3 @@
-export * from "./DealershipOrganization";
-export * from "./DealershipUser";
-export * from "./DealershipDoor";
+export * from "./DealershipOrganization.entity"
+export * from "../services/UserService/DealershipUser.entity"
+export * from "./DealershipDoor.entity"

@@ -1,0 +1,19 @@
+query GetOrgInventory {
+  me {
+    dealershipOrganization {
+      getInventory {
+        __typename
+        ... on CarInventory {
+          id
+          vin
+          year
+          make
+          model
+          trim
+          series
+          transmission
+        }
+      }
+    }
+  }
+}

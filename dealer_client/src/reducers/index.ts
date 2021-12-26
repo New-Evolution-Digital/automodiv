@@ -1,9 +1,12 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
+
+import { vehiclePageReducer } from './dealershipVehiclePage/reducer'
 import { RootRegistrationReducer } from './RootRegistration/reducer'
 
 export const store = configureStore({
   reducer: {
-    rootRegistration: RootRegistrationReducer
+    rootRegistration: RootRegistrationReducer,
+    vehiclePage: vehiclePageReducer
   }
 })
 

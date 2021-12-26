@@ -1,6 +1,6 @@
 import axios from "axios"
-import { CarInventory } from "../entities/Car"
-import { makeDbSearchable } from "./misc"
+import { CarInventory } from "../services/InventoryService/car.entity"
+import { makeDbSearchable, valuesNotNull } from "./misc"
 
 export const getVinResults = async (
   vin: string
@@ -13,37 +13,56 @@ export const getVinResults = async (
     `https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vin}?format=json`
   )
 
-  let car: any = {}
+  const car: any = data.Results.reduce(
+    (obj: any, { Variable, Value }: { [key: string]: string }) =>
+      valuesNotNull(Variable, Value)
+        ? { ...obj, [Variable]: makeDbSearchable(Value || "") }
+        : obj,
+    {}
+  )
 
-  for (const detail of data.Results) {
-    const { Variable, Value } = detail
-    if (!Variable && !Value) {
-      continue
-    }
-
-    if (Value === null) {
-      continue
-    }
-
-    if (Variable === "Model Year") {
-      car = { ...car, ["Year"]: Value }
-    } else {
-      car = {
-        ...car,
-        [Variable]: Value !== "" ? makeDbSearchable(Value) : undefined,
-      }
-    }
-  }
+  console.log(car)
 
   return {
-    year: car["Year"],
-    make: car["Make"],
-    model: car["Model"],
-    trim: car["Trim"],
-    series: car["Series"],
+    year: car["Model Year"] || null,
+    make: car["Make"] || null,
+    model: car["Model"] || null,
+    trim: car["Trim"] || null,
+    series: car["Series"] || null,
     transmission:
       !!car["Transmission Style"] && !!car["Transmission Speed"]
         ? `${car["Transmission Style"]} - ${car["Transmission Speed"]}`
         : undefined,
   }
+}
+
+const sorter =
+  (a: string, b: string) => (option: "ascending" | "descending") => {
+    if (option === "descending") return a > b ? -1 : 1
+    return a > b ? 1 : -1
+  }
+
+export const getMakes: (
+  vehicle_type: string,
+  sort?: "ascending" | "descending"
+) => Promise<string[]> = async (vehicle_type = "car", sort = "ascending") => {
+  const { data } = await axios.get(
+    `https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/${vehicle_type}?format=json`
+  )
+
+  const makes: string[] = data.Results.map((res: any) => res.MakeName)
+  return makes.sort((a, b) => sorter(a, b)(sort))
+}
+
+export const getModels: (
+  year: string,
+  make: string,
+  sort?: "ascending" | "descending"
+) => Promise<string[]> = async (year, make, sort = "ascending") => {
+  const { data } = await axios.get(
+    `https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformakeyear/make/${make}/modelyear/${year}?format=json`
+  )
+  const models: string[] = data.Results.map((res: any) => res.Model_Name)
+
+  return models.sort((a, b) => sorter(a, b)(sort))
 }

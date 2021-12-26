@@ -17,6 +17,18 @@ query Me {
       name
       phone_number
       default_dealer_number
+      getInventory {
+        ... on CarInventory {
+          id
+          vin
+          year
+          make
+          model
+          trim
+          series
+          transmission
+        }
+      }
       dealershipDoors {
         id
         createdAt

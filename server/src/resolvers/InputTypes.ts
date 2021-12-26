@@ -1,108 +1,108 @@
-import { Field, ID, InputType } from "type-graphql";
-import { DealershipDoor } from "../entities";
-import { DealershipOrganization } from "../entities/DealershipOrganization";
-import { DealershipUser } from "../entities/DealershipUser";
+import { Field, ID, InputType } from "type-graphql"
+import { DealershipDoor } from "../entities"
+import { DealershipOrganization } from "../entities/DealershipOrganization.entity"
+import { DealershipUser } from "../services/UserService/DealershipUser.entity"
 
 @InputType()
 export class InputNewUser implements Partial<DealershipUser> {
   @Field()
-  readonly firstName: string;
+  readonly firstName: string
 
   @Field()
-  readonly lastName: string;
+  readonly lastName: string
 
   @Field()
-  readonly email: string;
+  readonly email: string
 
   @Field()
-  readonly username: string;
+  readonly username: string
 
   @Field({ nullable: true })
   readonly password: string;
 
-  [key: string]: string;
+  [key: string]: string
 }
 
 @InputType()
 export class OrganizationInput implements Partial<DealershipOrganization> {
   @Field({ nullable: true })
-  readonly name?: string;
+  readonly name?: string
 
   @Field({ nullable: true })
-  readonly streetAddress?: string;
+  readonly streetAddress?: string
 
   @Field({ nullable: true })
-  readonly streetAddressTwo?: string;
+  readonly streetAddressTwo?: string
 
   @Field({ nullable: true })
-  readonly city?: string;
+  readonly city?: string
 
   @Field({ nullable: true })
-  readonly state?: string;
+  readonly state?: string
 
   @Field({ nullable: true })
-  readonly zip?: string;
+  readonly zip?: string
 
   @Field({ nullable: true })
-  readonly default_dealer_number?: string;
+  readonly default_dealer_number?: string
 }
 
 @InputType()
 export class UserLogin {
   @Field({ nullable: true })
-  readonly username?: string;
+  readonly username?: string
 
   @Field({ nullable: true })
-  readonly email?: string;
+  readonly email?: string
 
   @Field()
-  readonly password!: string;
+  readonly password!: string
 }
 
 @InputType()
 export class orgIndexables {
   @Field(() => ID, { nullable: true })
-  readonly id?: number;
+  readonly id?: number
 
   @Field({ nullable: true })
-  readonly key?: string;
+  readonly key?: string
 }
 
 @InputType()
 export class doorInputParams implements Partial<DealershipDoor> {
   @Field({ nullable: true })
-  readonly name?: string;
+  readonly name?: string
 
   @Field({ nullable: true })
-  readonly streetAddress?: string;
+  readonly streetAddress?: string
 
   @Field({ nullable: true })
-  readonly streetAddressTwo?: string;
+  readonly streetAddressTwo?: string
 
   @Field({ nullable: true })
-  readonly city?: string;
+  readonly city?: string
 
   @Field({ nullable: true })
-  readonly state?: string;
+  readonly state?: string
 
   @Field({ nullable: true })
-  readonly zip?: string;
+  readonly zip?: string
 
   @Field({ nullable: true })
   readonly dealerNumber?: string;
 
-  [key: string]: string | undefined;
+  [key: string]: string | undefined
 }
 
 @InputType()
 export class UpdateUser implements Partial<DealershipUser> {
   @Field({ nullable: true })
-  readonly firstName?: string;
+  readonly firstName?: string
 
   @Field({ nullable: true })
-  readonly lastName?: string;
+  readonly lastName?: string
 
   @Field({ nullable: true })
   readonly phone_number?: string;
-  [key: string]: string | undefined;
+  [key: string]: string | undefined
 }
