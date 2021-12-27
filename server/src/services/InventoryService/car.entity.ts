@@ -16,8 +16,8 @@ export class CarInventory extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Field()
-  @Column({ unique: true, nullable: false })
+  @Field({ nullable: true })
+  @Column({ unique: true, nullable: true })
   vin?: string
 
   @Column({ type: "int", nullable: true })
@@ -59,4 +59,8 @@ export class CarInventory extends BaseEntity {
   @Field({ nullable: true })
   @Column({ nullable: true })
   transmission?: string
+
+  @Field({ nullable: true, defaultValue: "pending" })
+  @Column({ nullable: false, default: "pending" })
+  status: string = "pending"
 }

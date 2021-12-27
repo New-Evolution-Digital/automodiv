@@ -1,5 +1,5 @@
 import { MaxLength } from "class-validator"
-import { ArgsType, Field, InputType } from "type-graphql"
+import { Field, InputType } from "type-graphql"
 
 @InputType()
 export class VehicleSearchInput {
@@ -15,16 +15,10 @@ export class VehicleSearchInput {
 }
 
 @InputType()
-export class AddVehicle {
-  @Field({ nullable: true })
-  vin?: string
+export class AddVehicleInput {
+  @Field(() => String, { nullable: true })
+  vin?: string = undefined
 
   @Field(() => VehicleSearchInput, { nullable: true })
-  manual?: VehicleSearchInput
-}
-
-@ArgsType()
-export class QuickAddInput {
-  @Field(() => AddVehicle)
-  info: AddVehicle
+  manual?: VehicleSearchInput = undefined
 }

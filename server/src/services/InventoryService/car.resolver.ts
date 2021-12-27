@@ -7,13 +7,12 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql"
-import { DealershipOrganization } from "../../entities"
-import { JwtHandler } from "../../utils/jwtHandler"
+import { DealershipUser } from "../UserService/DealershipUser.entity"
 import { isLoggedIn } from "../../utils/middleware"
 import { makeDbSearchable } from "../../utils/misc"
 import { getVinResults, getMakes, getModels } from "../../utils/vinAPI"
 import { CarInventory } from "./car.entity"
-import { QuickAddInput } from "./types"
+import { AddVehicleInput } from "./types"
 
 @Resolver(CarInventory)
 export default class CarResolver {
@@ -40,23 +39,21 @@ export default class CarResolver {
   @UseMiddleware([isLoggedIn])
   async quickAddCar(
     @Ctx() { req }: ServerContext,
-    @Arg("details", () => QuickAddInput) { info }: QuickAddInput
-  ): Promise<CarInventory> {
-    const { vin, manual } = info
-
-    if (!vin && !manual) {
+    @Arg("details", () => AddVehicleInput) { vin, manual }: AddVehicleInput
+  ): Promise<CarInventory | undefined> {
+    if (vin === undefined && manual === undefined) {
       throw new ApolloError("No information provided")
     }
 
-    const orgKey =
-      req.headers.authorization &&
-      new JwtHandler().verifyJWT(req.headers.authorization)
-    const org = await DealershipOrganization.findOne({
-      where: [{ employees: [{ id: req.session.userId }] }, { key: orgKey }],
-    })
+    const user: DealershipUser | undefined = await DealershipUser.findOne(
+      req.session.userId,
+      {
+        relations: ["dealershipOrganization"],
+      }
+    )
 
-    if (!org) {
-      throw new ApolloError("Not assignable to an organization")
+    if (!user) {
+      throw new ApolloError("No Authorized User")
     }
 
     const manualDetails: Partial<CarInventory> = !manual
@@ -68,10 +65,22 @@ export default class CarResolver {
           }
         }, {})
 
-    let carInstance = vin
-      ? await this.searchVin(vin)
-      : CarInventory.create({ ...manualDetails })
-    carInstance.dealership_org = org
-    return await carInstance.save()
+    let carInstance =
+      vin !== undefined
+        ? await this.searchVin(vin)
+        : CarInventory.create({ ...manualDetails })
+    carInstance.dealership_org = user.dealershipOrganization
+    carInstance.dealership_org_id = user.dealershipOrganization.id
+    console.log(carInstance)
+
+    try {
+      return await carInstance.save()
+    } catch (error: any) {
+      if (error.message.includes("Duplicate")) {
+        throw new ApolloError("Duplicate VIN")
+      }
+
+      throw new ApolloError(error.message)
+    }
   }
 }
