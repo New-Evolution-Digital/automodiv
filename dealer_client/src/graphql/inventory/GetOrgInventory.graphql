@@ -12,6 +12,7 @@ query GetOrgInventory {
           trim
           series
           transmission
+          status
         }
       }
     }

@@ -1,0 +1,11 @@
+mutation QuickAddCar($details: AddVehicleInput!) {
+  quickAddCar(details: $details) {
+    id
+    vin
+    year
+    make
+    model
+    series
+    transmission
+  }
+}

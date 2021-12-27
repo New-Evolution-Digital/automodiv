@@ -1,0 +1,39 @@
+.quickAdd {
+  @apply px-8 py-4 rounded-lg shadow-md border-transparent bg-gray-400 bg-opacity-75 mb-2;
+
+  > .headerText {
+    @apply mb-4 text-lg font-semibold;
+  }
+}
+
+.infoForm {
+  @apply flex space-x-2 items-center relative;
+
+  > .vinInput {
+    @apply flex-1;
+  }
+
+  > .formInput {
+    @apply m-0 rounded-md;
+  }
+
+  > .submitButton {
+    @apply self-stretch;
+  }
+}
+
+.formInput input {
+  @apply rounded-md border-transparent;
+}
+
+.makeSelector {
+  @apply flex-1;
+
+  & [type='search'] {
+    @apply focus:ring-transparent;
+  }
+}
+
+.submitButton {
+  @apply bg-blue-900 text-white flex justify-center items-center px-4 py-2 font-semibold rounded-md hover:bg-blue-800 transition-colors duration-200;
+}
