@@ -1,0 +1,13 @@
+.rootView {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 80px 1fr;
+  min-height: 100vh;
+}
+
+.pageNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+}
