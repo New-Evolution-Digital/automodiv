@@ -1,6 +1,6 @@
 import { Link, Route, Routes } from 'react-router-dom'
 
-import { DealerLanding } from './Public/DealerLanding'
+import { DealerLanding } from './Public/DealerLanding/DealerLanding'
 import { PublicDealer } from './Public/PublicLayout'
 
 export const DealerRoutes = () => {

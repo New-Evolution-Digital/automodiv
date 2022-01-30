@@ -13,7 +13,9 @@ export const PublicDealer: FC = () => {
           <NavLink to="/dealer/login">Login</NavLink>
         </div>
       </nav>
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
     </>
   )
 }
