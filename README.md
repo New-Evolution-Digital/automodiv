@@ -12,5 +12,5 @@ For now all branch naming conventions should follow this format:
 
 {reference-title}/{ticket-type}/{ticket-number}
 
-example 1 - web/bug/AMD-123
-example 2 - dealer/story/AMD-456
+- example 1: web/bug/AMD-123
+- example 2: dealer/story/AMD-456
