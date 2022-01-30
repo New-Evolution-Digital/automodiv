@@ -1,10 +1,13 @@
-import router from 'next/router'
 import React, { ChangeEvent, FormEvent, useState } from 'react'
-import { Label } from '../../../components'
+
+import router from 'next/router'
+
+import { Label } from 'javascript/library'
+
 import { useCreateDoorMutation } from '../../../generated/types'
 import { Dashboard } from '../../../layout'
 
-const add = () => {
+const Add = () => {
   const [params, setParams] = useState({
     name: '',
     dealerNumber: '',
@@ -136,4 +139,4 @@ const add = () => {
   )
 }
 
-export default add
+export default Add

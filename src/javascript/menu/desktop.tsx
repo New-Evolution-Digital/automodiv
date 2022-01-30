@@ -5,7 +5,7 @@ import { MenuIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 
 import joinClasses from '../../utils/joinClasses'
-import { PopOverMenu } from '../index'
+import { Panel, MenuItem } from '../PopOverMenu'
 import { useMenuState } from './useMenuState'
 
 interface IDesktopMenu {
@@ -77,9 +77,9 @@ const DesktopMenu: FC<IDesktopMenu> = ({ light }) => {
                             </Popover.Button>
                           </div>
 
-                          <PopOverMenu.Panel>
+                          <Panel>
                             {category.featured.map((item) => (
-                              <PopOverMenu.MenuItem
+                              <MenuItem
                                 key={item.name}
                                 href="#"
                                 linkText={item.name}
@@ -89,7 +89,7 @@ const DesktopMenu: FC<IDesktopMenu> = ({ light }) => {
                                 }}
                               />
                             ))}
-                          </PopOverMenu.Panel>
+                          </Panel>
                         </>
                       )}
                     </Popover>

@@ -1,14 +1,14 @@
 import React from 'react'
 
-import { Form } from '../../components'
-import { Public } from '../../layout'
-import RegLayout from '../../layout/RegLayout'
+import { Register } from 'javascript/Forms'
+import { Public } from 'layout'
+import RegLayout from 'layout/RegLayout'
 
 const JoinView = () => {
   return (
     <Public>
       <RegLayout>
-        <Form.Register />
+        <Register />
       </RegLayout>
     </Public>
   )

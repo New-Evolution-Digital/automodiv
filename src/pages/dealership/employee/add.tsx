@@ -1,8 +1,11 @@
+import React, { ChangeEvent, FC, FormEvent, Fragment, useState } from 'react'
+
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/outline'
-import { useRouter } from 'next/router'
-import React, { ChangeEvent, FC, FormEvent, Fragment, useState } from 'react'
-import { Label } from '../../../components'
+import { useNavigate } from 'react-router-dom'
+
+import { Label } from 'javascript/library'
+
 import { useAddEmployeeByOrgKeyMutation } from '../../../generated/types'
 import { Dashboard } from '../../../layout'
 import joinClasses from '../../../utils/joinClasses'
@@ -37,7 +40,7 @@ const roles: RoleType[] = [
   }
 ]
 
-const add: FC = () => {
+const Add: FC = () => {
   const [params, setParams] = useState({
     firstName: '',
     lastName: '',
@@ -55,7 +58,7 @@ const add: FC = () => {
           'User who is able to add employees to an organization and can manage all employees'
       }
   )
-  const router = useRouter()
+  const navigate = useNavigate()
   const orgKey = localStorage.getItem('organization') || ''
   const [add] = useAddEmployeeByOrgKeyMutation()
 
@@ -82,7 +85,7 @@ const add: FC = () => {
         Key: orgKey
       }
     }).then(() => {
-      router.push('/dealership')
+      navigate('/dealership')
     })
   }
 
@@ -266,4 +269,4 @@ const add: FC = () => {
   )
 }
 
-export default add
+export default Add
