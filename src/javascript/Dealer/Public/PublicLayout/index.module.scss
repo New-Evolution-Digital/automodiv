@@ -1,0 +1,7 @@
+.landingNav {
+  @apply flex justify-between px-2 py-3;
+}
+
+.navGroup {
+  @apply hidden sm:block space-x-4;
+}

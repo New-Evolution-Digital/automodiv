@@ -2,12 +2,14 @@ import { FC } from 'react'
 
 import { NavLink, Outlet } from 'react-router-dom'
 
+import style from './index.module.scss'
+
 export const PublicDealer: FC = () => {
   return (
-    <>
-      <nav>
+    <div className="container mx-auto">
+      <nav className={style.landingNav}>
         <NavLink to="/">Automodiv</NavLink>
-        <div>
+        <div className={style.navGroup}>
           <NavLink to="/dealer">Home</NavLink>
           <NavLink to="/dealer/join">Register A Dealer</NavLink>
           <NavLink to="/dealer/login">Login</NavLink>
@@ -16,6 +18,6 @@ export const PublicDealer: FC = () => {
       <main>
         <Outlet />
       </main>
-    </>
+    </div>
   )
 }
