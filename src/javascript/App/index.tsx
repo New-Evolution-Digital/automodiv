@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { DealerRoutes } from 'javascript/Dealer/DealerRoutes'
-import { LandingPage } from 'javascript/LandingPage'
+import { Root } from 'javascript/Root'
 import { store } from 'state'
 import { useApollo } from 'utils/useApollo'
 
@@ -18,7 +18,7 @@ export const App: FC = () => {
         <Provider store={store}>
           <Routes>
             <Route path="/dealer/*" element={<DealerRoutes />} />
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<Root />} />
             <Route
               path="*"
               element={
