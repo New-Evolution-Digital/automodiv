@@ -17,7 +17,7 @@ export const App: FC = () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <Routes>
-            <Route path="/dealer" element={<DealerRoutes />} />
+            <Route path="/dealer/*" element={<DealerRoutes />} />
             <Route path="/" element={<LandingPage />} />
             <Route
               path="*"
