@@ -10,6 +10,7 @@ For now all branch naming conventions should follow this format:
 
 **This is due to change in January, 2022**
 
-{service}/{feature-description}
+{reference-title}/{ticket-type}/{ticket-number}
 
-example: server/dealer-employees-registration
+- example 1: web/bug/AMD-123
+- example 2: dealer/story/AMD-456
