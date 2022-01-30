@@ -4,7 +4,7 @@ import { XCircleIcon } from '@heroicons/react/outline'
 import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 
-import { Input, InputWrapper, Label, Panel } from 'components/library'
+import { Input, InputWrapper, Label, Panel } from 'javascript/library'
 import { InputNewUser, useRegisterRootUserMutation } from 'generated/types'
 import { submitRegistration } from 'state/RootRegistration/actions'
 import { useRootRegState } from 'state/RootRegistration/selectors'

@@ -2,7 +2,7 @@ import React from 'react'
 
 import ReactDOM from 'react-dom'
 
-import { App } from './components/App'
+import { App } from './javascript/App'
 import reportWebVitals from './reportWebVitals'
 
 ReactDOM.render(
