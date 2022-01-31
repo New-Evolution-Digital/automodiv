@@ -1,12 +1,14 @@
 import { Link, Route, Routes } from 'react-router-dom'
 
 import { DealerLanding } from './Public/DealerLanding/DealerLanding'
+import { DealerRegistrationPage } from './Public/DealerRegistration'
 import { PublicDealer } from './Public/PublicLayout'
 
 export const DealerRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<PublicDealer />}>
+        <Route path="join" element={<DealerRegistrationPage />} />
         <Route index element={<DealerLanding />} />
       </Route>
       <Route
