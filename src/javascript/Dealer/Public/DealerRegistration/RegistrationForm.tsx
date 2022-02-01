@@ -22,7 +22,6 @@ export const RegistrationForm = () => {
             required
             value={''}
             className={styles.formInput}
-            // onChange={}
           />
         </InputWrapper>
         <InputWrapper className={cn(styles.formItem, 'col-span-3')}>
@@ -38,7 +37,6 @@ export const RegistrationForm = () => {
             required
             className={styles.formInput}
             value={''}
-            // onChange={}
           />
         </InputWrapper>
         <InputWrapper className={cn(styles.formItem, 'col-span-6')}>
@@ -54,8 +52,6 @@ export const RegistrationForm = () => {
             placeholder="Email"
             required
             className={styles.formInput}
-            // value={credentials.email}
-            // onChange={handleOnChange}
           />
         </InputWrapper>
         <InputWrapper className={cn(styles.formItem, 'col-span-6')}>
@@ -70,8 +66,6 @@ export const RegistrationForm = () => {
             placeholder="Username"
             required
             className={styles.formInput}
-            // value={credentials.username}
-            // onChange={handleOnChange}
           />
         </InputWrapper>
         <InputWrapper className={cn(styles.formItem, 'col-span-3')}>
@@ -87,8 +81,6 @@ export const RegistrationForm = () => {
             placeholder="Password"
             required
             className={styles.formInput}
-            // value={credentials.password!}
-            // onChange={handleOnChange}
           />
         </InputWrapper>
         <InputWrapper className={cn(styles.formItem, 'col-span-3')}>
@@ -104,8 +96,6 @@ export const RegistrationForm = () => {
             placeholder="Confirm password"
             required
             className={styles.formInput}
-            // value={credentials.confirmPassword}
-            // onChange={handleOnChange}
           />
         </InputWrapper>
       </div>
@@ -120,8 +110,6 @@ export const RegistrationForm = () => {
             name="name"
             id="name"
             className={styles.formInput}
-            // value={params.name}
-            // onChange={handleOnChange}
             required
           />
         </InputWrapper>
@@ -134,8 +122,6 @@ export const RegistrationForm = () => {
             id="streetAddress"
             name="streetAddress"
             className={styles.formInput}
-            // value={params.streetAddress}
-            // onChange={handleOnChange}
             required
           />
         </InputWrapper>
@@ -148,8 +134,6 @@ export const RegistrationForm = () => {
             id="streetAddressTwo"
             name="streetAddressTwo"
             className={styles.formInput}
-            // value={params.streetAddressTwo}
-            // onChange={handleOnChange}
           />
         </InputWrapper>
         <InputWrapper className={cn(styles.formItem, 'col-span-2')}>
@@ -161,8 +145,6 @@ export const RegistrationForm = () => {
             id="city"
             name="city"
             className={styles.formInput}
-            // value={params.city}
-            // onChange={handleOnChange}
             required
           />
         </InputWrapper>
@@ -175,8 +157,6 @@ export const RegistrationForm = () => {
             id="state"
             name="state"
             className={styles.formInput}
-            // value={params.state}
-            // onChange={handleOnChange}
             required
           />
         </InputWrapper>
@@ -190,8 +170,6 @@ export const RegistrationForm = () => {
             name="zip"
             maxLength={5}
             className={styles.formInput}
-            // value={params.zip}
-            // onChange={handleOnChange}
             required
           />
         </InputWrapper>
@@ -204,8 +182,6 @@ export const RegistrationForm = () => {
             id="default_dealer_number"
             name="default_dealer_number"
             className={styles.formInput}
-            // value={params.default_dealer_number}
-            // onChange={handleOnChange}
           />
         </InputWrapper>
       </div>
