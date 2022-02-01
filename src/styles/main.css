@@ -1,5 +1,9 @@
 @tailwind base;
 
+* {
+  @apply text-gray-900;
+}
+
 a {
   @apply border-b-2 border-transparent text-blue-700 transition-all duration-200;
 }

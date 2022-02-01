@@ -1,8 +1,8 @@
-import { PlusCircleIcon } from '@heroicons/react/outline'
-import Link from 'next/link'
 import React, { FC } from 'react'
-import { useRouter } from 'next/router'
-import { EmptyState } from '../../components'
+
+import { PlusCircleIcon } from '@heroicons/react/outline'
+import { Link, useNavigate } from 'react-router-dom'
+
 import {
   useGetDoorsByOrgIdQuery,
   useGetEmployeeByOrgKeyQuery,
@@ -12,8 +12,8 @@ import { Dashboard } from '../../layout'
 import * as su from '../../utils/stringUtils'
 
 const DealershipDashboard: FC = () => {
-  const { replace } = useRouter()
-  const me = useMeQuery({
+  const navigate = useNavigate()
+  const meQuery = useMeQuery({
     onCompleted: ({ me }) => {
       return { myself: me.username, org: me.dealershipOrganization }
     }
@@ -21,59 +21,60 @@ const DealershipDashboard: FC = () => {
 
   const orgKey =
     localStorage.getItem('organization') ||
-    me.data?.me.dealershipOrganization.key
+    meQuery.data?.me.dealershipOrganization.key
+  const doors = useGetDoorsByOrgIdQuery({
+    variables: { OrgCredenials: { key: orgKey } }
+  })
+  const employees = useGetEmployeeByOrgKeyQuery({
+    variables: { key: orgKey ?? '' }
+  })
 
   if (!orgKey) {
     localStorage.clear()
     sessionStorage.clear()
-    replace('/')
+    navigate('/', { replace: true })
     return <></>
   }
 
-  const doors = useGetDoorsByOrgIdQuery({
-    variables: { OrgCredenials: { key: orgKey } }
-  })
-
-  const employees = useGetEmployeeByOrgKeyQuery({ variables: { key: orgKey } })
-
   const doorsExist = () => {
-    if (!doors.data) return
+    if (!doors.data) return false
 
     const doorGroup = doors.data.getDoorsByOrgId
 
-    if (doorGroup === undefined) return
+    if (doorGroup === undefined) return undefined
 
-    if (doorGroup.length === 0) return
+    if (doorGroup.length === 0) return undefined
 
     return true
   }
 
   const employeesExist = () => {
-    if (!employees.data) return
+    if (!employees.data) return false
     const empGroup = employees.data.getEmployeesByOrgKey
 
-    if (empGroup === null || empGroup === undefined) return
+    if (empGroup === null || empGroup === undefined) return false
 
-    if (empGroup.length === 0) return
+    if (empGroup.length === 0) return false
 
     return true
   }
 
-  if (!me.loading) {
+  if (!meQuery.loading) {
     return (
       <Dashboard
         dashboardTitle={`${su.capitalize(
-          me.data?.me.dealershipOrganization.name || ''
+          meQuery.data?.me.dealershipOrganization.name || ''
         )}`}
       >
         <div className="max-w-7xl mx-auto py-4">
           <h2>
             Welcome To Your Dealership,{' '}
-            {!!me.data?.me.username && (
+            {!!meQuery.data?.me.username && (
               <span>
-                <span className="capitalize">{me.data?.me.username}</span> -{' '}
+                <span className="capitalize">{meQuery.data?.me.username}</span>{' '}
+                -{' '}
                 <span className="capitalize">
-                  {me.data?.me.dealershipOrganization.name}
+                  {meQuery.data?.me.dealershipOrganization.name}
                 </span>
               </span>
             )}
@@ -83,11 +84,11 @@ const DealershipDashboard: FC = () => {
           <div className="w-full">
             <div className="flex gap-3">
               <h2 className="text-3xl mb-3">Doors</h2>
-              <Link href="/dealership/door/add" passHref>
-                <a className="flex items-center">
+              <Link to="/dealership/door/add">
+                <span className="flex items-center">
                   <PlusCircleIcon className="h-4 w-4 mr-2" />
                   <span>Add A Door</span>
-                </a>
+                </span>
               </Link>
             </div>
             <div className="flex flex-col">
@@ -125,7 +126,7 @@ const DealershipDashboard: FC = () => {
                           <>
                             {doors.data?.getDoorsByOrgId.map(
                               (door, doorIdx) => {
-                                const id = door.id
+                                const { id } = door
                                 return (
                                   <tr
                                     key={`${door.id}-${doorIdx}`}
@@ -147,13 +148,10 @@ const DealershipDashboard: FC = () => {
                                       )}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                      <Link
-                                        href={`/dealership/door/${id}`}
-                                        passHref
-                                      >
-                                        <a className="text-blue-600 hover:text-blue-900">
+                                      <Link to={`/dealership/door/${id}`}>
+                                        <span className="text-blue-600 hover:text-blue-900">
                                           View
-                                        </a>
+                                        </span>
                                       </Link>
                                     </td>
                                   </tr>
@@ -163,9 +161,7 @@ const DealershipDashboard: FC = () => {
                           </>
                         ) : (
                           <tr className="text-center">
-                            <td colSpan={4}>
-                              <EmptyState.DealerDoor />
-                            </td>
+                            <td colSpan={4}></td>
                           </tr>
                         )}
                       </tbody>
@@ -178,11 +174,11 @@ const DealershipDashboard: FC = () => {
           <div className="w-full">
             <div className="flex gap-3">
               <h2 className="text-3xl mb-3">Employees</h2>
-              <Link href="/dealership/employee/add" passHref>
-                <a className="flex items-center">
+              <Link to="/dealership/employee/add">
+                <span className="flex items-center">
                   <PlusCircleIcon className="h-4 w-4 mr-2" />
                   <span>Add An Employee</span>
-                </a>
+                </span>
               </Link>
             </div>
             <div className="flex flex-col">
@@ -222,7 +218,9 @@ const DealershipDashboard: FC = () => {
                               (emp, empIdx) => {
                                 let name = `${emp.firstName} ${emp.lastName}`
 
-                                if (emp.username === me.data?.me.username) {
+                                if (
+                                  emp.username === meQuery.data?.me.username
+                                ) {
                                   name = 'Me'
                                 }
 
@@ -246,15 +244,11 @@ const DealershipDashboard: FC = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                       <Link
-                                        href={{
-                                          pathname: '/dealership/employee/[id]',
-                                          query: { id: emp.id }
-                                        }}
-                                        passHref
+                                        to={`/dealership/employee/${emp.id}`}
                                       >
-                                        <a className="text-blue-600 hover:text-blue-900">
+                                        <span className="text-blue-600 hover:text-blue-900">
                                           View
-                                        </a>
+                                        </span>
                                       </Link>
                                     </td>
                                   </tr>
@@ -264,9 +258,7 @@ const DealershipDashboard: FC = () => {
                           </>
                         ) : (
                           <tr className="text-center">
-                            <td colSpan={4}>
-                              <EmptyState.DealerEmployees />
-                            </td>
+                            <td colSpan={4}></td>
                           </tr>
                         )}
                       </tbody>
@@ -279,9 +271,8 @@ const DealershipDashboard: FC = () => {
         </div>
       </Dashboard>
     )
-  } else {
-    return <h1>Loading</h1>
   }
+  return <h1>Loading</h1>
 }
 
 export default DealershipDashboard

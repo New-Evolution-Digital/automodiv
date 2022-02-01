@@ -1,6 +1,8 @@
 import React, { FC } from 'react'
 
-import { Menu, Nav } from '../components'
+import { Mobile, Desktop } from 'javascript/menu'
+import { AuthBar } from 'javascript/nav'
+
 import joinClasses from '../utils/joinClasses'
 
 interface PublicProps {
@@ -12,15 +14,15 @@ interface PublicProps {
 const Public: FC<PublicProps> = ({ children, heroOverlay, hero }) => {
   return (
     <div className="bg-white flex flex-col min-h-screen">
-      <Menu.Mobile />
+      <Mobile />
       <div className={joinClasses('relative', !children ? 'h-screen' : '')}>
         {!!heroOverlay && heroOverlay}
         {/* Navigation */}
         <header className="relative z-10">
           <nav aria-label="Top">
             {/* Top navigation */}
-            <Nav.AuthBar />
-            <Menu.Desktop light={!heroOverlay} />
+            <AuthBar />
+            <Desktop light={!heroOverlay} />
           </nav>
         </header>
         {hero}

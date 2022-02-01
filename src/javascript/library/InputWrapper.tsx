@@ -17,9 +17,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
   return (
     <div
       className={
-        overrideClass
-          ? className
-          : joinClasses('rounded-md h-full flex', className)
+        overrideClass ? className : joinClasses('rounded-md', className)
       }
     >
       {children}

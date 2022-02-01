@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { VehicleTable, Form } from 'components/Dealership/Vehicles'
+import { VehicleTable, Form } from 'javascript/Dealership/Vehicles'
 import { Dashboard } from 'layout'
 
 const VehiclePage: FC = () => {
