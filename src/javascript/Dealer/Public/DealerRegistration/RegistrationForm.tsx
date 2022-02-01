@@ -211,10 +211,9 @@ export const RegistrationForm = () => {
       </div>
       <div>
         <button
-          className={cn(
-            'max-w-md w-full mx-auto flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600',
-            { 'bg-blue-600 text-gray-200 opacity-80': false }
-          )}
+          className={cn(styles.submitButton, {
+            [`${styles.pending}`]: false
+          })}
           type="submit"
         >
           Submit
