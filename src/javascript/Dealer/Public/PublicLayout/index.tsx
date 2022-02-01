@@ -6,7 +6,7 @@ import style from './index.module.scss'
 
 export const PublicDealer: FC = () => {
   return (
-    <div className="container mx-auto">
+    <div className={style.pageWrapper}>
       <nav className={style.landingNav}>
         <NavLink to="/">Automodiv</NavLink>
         <div className={style.navGroup}>

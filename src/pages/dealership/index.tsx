@@ -3,8 +3,6 @@ import React, { FC } from 'react'
 import { PlusCircleIcon } from '@heroicons/react/outline'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { DealerDoor, DealerEmployees } from 'javascript/EmptyState'
-
 import {
   useGetDoorsByOrgIdQuery,
   useGetEmployeeByOrgKeyQuery,
@@ -163,9 +161,7 @@ const DealershipDashboard: FC = () => {
                           </>
                         ) : (
                           <tr className="text-center">
-                            <td colSpan={4}>
-                              <DealerDoor />
-                            </td>
+                            <td colSpan={4}></td>
                           </tr>
                         )}
                       </tbody>
@@ -262,9 +258,7 @@ const DealershipDashboard: FC = () => {
                           </>
                         ) : (
                           <tr className="text-center">
-                            <td colSpan={4}>
-                              <DealerEmployees />
-                            </td>
+                            <td colSpan={4}></td>
                           </tr>
                         )}
                       </tbody>

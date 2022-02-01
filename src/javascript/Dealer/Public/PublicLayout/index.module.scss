@@ -1,3 +1,11 @@
+.pageWrapper {
+  display: grid;
+  grid-template-rows: 50px 1fr;
+  min-height: 100vh;
+
+  @apply container mx-auto;
+}
+
 .landingNav {
   @apply flex justify-between px-2 py-3;
 }
