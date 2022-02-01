@@ -1,9 +1,9 @@
 import { Link, Route, Routes } from 'react-router-dom'
 
-import { DealerLanding } from './Public/DealerLanding/DealerLanding'
-import { DealerLoginPage } from './Public/DealerLogin'
-import { DealerRegistrationPage } from './Public/DealerRegistration'
+import { DealerLanding } from './Public/DealerLanding'
+import { DealerLoginPage } from './Public/LoginPage'
 import { PublicDealer } from './Public/PublicLayout'
+import { DealerRegistrationPage } from './Public/RegPage'
 
 export const DealerRoutes = () => {
   return (
