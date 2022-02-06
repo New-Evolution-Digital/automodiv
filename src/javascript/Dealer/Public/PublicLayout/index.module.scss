@@ -3,11 +3,11 @@
   grid-template-rows: 50px 1fr;
   min-height: 100vh;
 
-  @apply container mx-auto;
+  @apply bg-gray-100;
 }
 
 .landingNav {
-  @apply flex justify-between px-2 py-3;
+  @apply flex justify-between px-2 py-3 container mx-auto;
 }
 
 .navGroup {

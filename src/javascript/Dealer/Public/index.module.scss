@@ -1,9 +1,14 @@
-.DealerRegistration {
+.dealerHero {
+  @apply flex flex-col items-center justify-center h-full;
+}
+
+.DealerRegistration,
+.DealerLogin {
   @apply flex items-center min-h-full;
 }
 
 .formContainer {
-  @apply max-w-5xl mx-auto space-y-6 py-4 w-full;
+  @apply max-w-xl mx-auto space-y-6 py-4 w-full shadow-lg px-8 py-12 rounded-md bg-white;
 
   > .formTitle {
     @apply text-center text-2xl font-medium;
