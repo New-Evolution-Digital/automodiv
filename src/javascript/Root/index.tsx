@@ -9,14 +9,26 @@ export const Root: FC = () => (
   <div className={pageStyle.rootView}>
     <div className={pageStyle.pageNav}>
       <h1 className={pageStyle.navBrand}>Automodiv</h1>
-      <NavLink
-        to={RootPageViews.DEALER}
-        onClickCapture={() =>
-          window.localStorage.setItem('window_type', RootPageViews.DEALER)
-        }
-      >
-        For Dealers
-      </NavLink>
+      <div>
+        <NavLink
+          className="m-1 p-2 border-2 border-gray-400 rounded"
+          to={RootPageViews.SHOPPER}
+          onClickCapture={() =>
+            window.localStorage.setItem('window_type', RootPageViews.SHOPPER)
+          }
+        >
+          For Shoppers
+        </NavLink>
+        <NavLink
+          className="m-1 "
+          to={RootPageViews.DEALER}
+          onClickCapture={() =>
+            window.localStorage.setItem('window_type', RootPageViews.DEALER)
+          }
+        >
+          For Dealers
+        </NavLink>
+      </div>
     </div>
     <main className={pageStyle.mainContainer}>
       <div className={pageStyle.Hero}>

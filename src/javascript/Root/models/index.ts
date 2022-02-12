@@ -1,4 +1,5 @@
 export enum RootPageViews {
   ROOT = '/',
-  DEALER = '/dealer'
+  DEALER = '/dealer',
+  SHOPPER = '/shopper'
 }

@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { DealerRoutes } from 'javascript/Dealer/DealerRoutes'
 import { Root } from 'javascript/Root'
+import ShopperRoutes from 'javascript/Shopper/ShopperRoutes'
 import { store } from 'state'
 import { useApollo } from 'utils/useApollo'
 
@@ -18,6 +19,7 @@ export const App: FC = () => {
         <Provider store={store}>
           <Routes>
             <Route path="/dealer/*" element={<DealerRoutes />} />
+            <Route path="/shopper/*" element={<ShopperRoutes />} />
             <Route path="/" element={<Root />} />
             <Route
               path="*"
