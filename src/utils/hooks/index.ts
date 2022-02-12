@@ -1,6 +1,23 @@
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
 
-import { AppDispatch, RootState } from 'state'
+import { useDispatch } from 'react-redux'
 
-export const useAppDispatch = () => useDispatch<AppDispatch>()
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+// Redux Global Hooks
+export const useAppDispatch = () => useDispatch()
+
+export const useAuth = () => {
+  const [isAuthed, setIsAuthed] = useState(false)
+
+  const setAuth = (authParams: Record<string, string> = {}) => {
+    if (authParams)
+      window.localStorage.setItem('ent', JSON.stringify(authParams))
+    setIsAuthed(true)
+  }
+
+  const clearAuth = () => {
+    window.localStorage.removeItem('ent')
+    setIsAuthed(false)
+  }
+
+  return { isAuthed, setAuth, clearAuth }
+}
