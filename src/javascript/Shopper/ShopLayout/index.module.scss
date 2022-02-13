@@ -1,0 +1,15 @@
+.pageWrapper {
+  display: grid;
+  grid-template-rows: 50px 1fr;
+  min-height: 100vh;
+
+  @apply bg-gray-100;
+}
+
+.landingNav {
+  @apply flex justify-between px-2 py-3 container mx-auto;
+}
+
+.navGroup {
+  @apply hidden sm:block space-x-4;
+}

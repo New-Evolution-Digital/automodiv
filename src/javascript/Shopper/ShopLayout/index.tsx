@@ -2,14 +2,16 @@ import { FC } from 'react'
 
 import { NavLink, Outlet } from 'react-router-dom'
 
-const ShopNav: FC = () => {
+import style from './index.module.scss'
+
+const ShopLayout: FC = () => {
   return (
-    <div className="flex w-screen h-auto justify-evenly">
-      <nav className="flex">
+    <div className={style.pageWrapper}>
+      <nav className={style.landingNav}>
         <NavLink className="px-10" to="/">
           Automodiv
         </NavLink>
-        <div className="flex justify-self-end justify-between">
+        <div className={style.navGroup}>
           <NavLink className="px-10" to="/shopper">
             Home
           </NavLink>
@@ -28,4 +30,4 @@ const ShopNav: FC = () => {
   )
 }
 
-export default ShopNav
+export default ShopLayout
